@@ -1,4 +1,4 @@
-package com.mjs.virtual_class_universitas_nurdin_hamzah
+package com.mjs.virtualclassuniversitasnurdinhamzah
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

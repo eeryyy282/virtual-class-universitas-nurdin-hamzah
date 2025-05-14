@@ -1,4 +1,4 @@
-package com.mjs.virtual_class_universitas_nurdin_hamzah.ui.home
+package com.mjs.virtualclassuniversitasnurdinhamzah.ui.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.mjs.virtual_class_universitas_nurdin_hamzah.databinding.FragmentHomeBinding
+
 
 class HomeFragment : Fragment() {
 

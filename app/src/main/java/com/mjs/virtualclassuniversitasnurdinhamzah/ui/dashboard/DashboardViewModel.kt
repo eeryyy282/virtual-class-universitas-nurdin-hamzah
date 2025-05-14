@@ -1,4 +1,4 @@
-package com.mjs.virtual_class_universitas_nurdin_hamzah.ui.dashboard
+package com.mjs.virtualclassuniversitasnurdinhamzah.ui.dashboard
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

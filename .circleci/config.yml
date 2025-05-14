@@ -32,22 +32,22 @@ jobs:
           name: Check Code Style with Ktlint
           command: ./gradlew ktlintCheck
       - store_artifacts:
-          path: app/build/reports/ktlint/
-          destination: code-style-report
+          path: app/build/reports/ktlint/report.txt
+          destination: ktlint-report
       - run:
           name: Run Build
           command: ./gradlew build
       - store_artifacts:
-          path: app/build/reports
-          destination: reports
+          path: app/build/outputs/apk/debug/
+          destination: apk-debug
       - run:
           name: Run Tests
           command: ./gradlew lint test
       - store_test_results:
           path: app/build/test-results
       - store_artifacts:
-          path: app/build/outputs/apk/debug/
-          destination: artifact-file
+          path: app/build/reports
+          destination: test-reports
 
 workflows:
   build_and_test:

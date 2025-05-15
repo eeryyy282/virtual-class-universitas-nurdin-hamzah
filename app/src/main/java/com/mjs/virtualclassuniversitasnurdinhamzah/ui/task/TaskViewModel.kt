@@ -1,13 +1,13 @@
-package com.mjs.virtual_class_universitas_nurdin_hamzah.ui.home
+package com.mjs.virtualclassuniversitasnurdinhamzah.ui.task
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class HomeViewModel : ViewModel() {
+class TaskViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+        value = "This is task Fragment"
     }
     val text: LiveData<String> = _text
 }

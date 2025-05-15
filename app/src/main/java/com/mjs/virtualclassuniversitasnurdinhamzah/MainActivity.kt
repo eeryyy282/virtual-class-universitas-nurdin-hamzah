@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
             setOf(
                 R.id.navigation_home,
                 R.id.navigation_task,
-                R.id.navigation_notifications
+                R.id.navigation_schedule
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

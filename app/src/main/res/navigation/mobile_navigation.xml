@@ -18,8 +18,8 @@
         tools:layout="@layout/fragment_task" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.mjs.virtualclassuniversitasnurdinhamzah.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_schedule"
+        android:name="com.mjs.virtualclassuniversitasnurdinhamzah.ui.schedule.ScheduleFragment"
+        android:label="@string/title_schedule"
+        tools:layout="@layout/fragment_schedule" />
 </navigation>

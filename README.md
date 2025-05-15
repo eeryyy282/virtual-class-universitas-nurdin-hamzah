@@ -1,5 +1,5 @@
 <!-- Badges -->
-[![Status](https://img.shields.io/badge/status-dev-orange)]()  [![Kotlin](https://img.shields.io/badge/Kotlin-1.6.10-blue)]()  [![API](https://img.shields.io/badge/API-REST-green)]()
+[![Status](https://img.shields.io/badge/status-dev-orange)]()  [![Kotlin](https://img.shields.io/badge/Kotlin-2.1.21-blue)]()  [![API](https://img.shields.io/badge/API-REST-green)]()
 
 <img src="https://i.ibb.co.com/P050Rn7/logo-unh.png" alt="logo-unh" border="0" height="150">
 

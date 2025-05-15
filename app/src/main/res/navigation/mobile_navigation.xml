@@ -12,10 +12,10 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.mjs.virtualclassuniversitasnurdinhamzah.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_task"
+        android:name="com.mjs.virtualclassuniversitasnurdinhamzah.ui.task.TaskFragment"
+        android:label="@string/title_task"
+        tools:layout="@layout/fragment_task" />
 
     <fragment
         android:id="@+id/navigation_notifications"

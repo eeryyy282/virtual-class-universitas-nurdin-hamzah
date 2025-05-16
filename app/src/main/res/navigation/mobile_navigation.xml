@@ -22,4 +22,12 @@
         android:name="com.mjs.virtualclassuniversitasnurdinhamzah.ui.schedule.ScheduleFragment"
         android:label="@string/title_schedule"
         tools:layout="@layout/fragment_schedule" />
+
+    <fragment
+        android:id="@+id/classroomFragment"
+        android:name="com.mjs.virtualclassuniversitasnurdinhamzah.ui.classroom.ClassroomFragment"
+        android:label="fragment_classroom"
+        tools:layout="@layout/fragment_classroom" />
+
+
 </navigation>

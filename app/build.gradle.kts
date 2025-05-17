@@ -40,6 +40,7 @@ android {
         viewBinding = true
         buildConfig = true
     }
+    dynamicFeatures += setOf(":onboarding")
 }
 
 dependencies {

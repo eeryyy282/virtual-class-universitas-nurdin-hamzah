@@ -29,5 +29,11 @@
         android:label="@string/title_classroom"
         tools:layout="@layout/fragment_classroom" />
 
+    <fragment
+        android:id="@+id/navigation_setting"
+        android:name="com.mjs.virtualclassuniversitasnurdinhamzah.ui.setting.SettingFragment"
+        android:label="@string/title_setting"
+        tools:layout="@layout/fragment_setting" />
+
 
 </navigation>

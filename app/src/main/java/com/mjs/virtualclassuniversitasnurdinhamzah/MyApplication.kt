@@ -1,4 +1,3 @@
 package com.mjs.virtualclassuniversitasnurdinhamzah
 
-class MyApplication {
-}
+class MyApplication

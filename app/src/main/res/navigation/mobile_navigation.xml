@@ -24,9 +24,9 @@
         tools:layout="@layout/fragment_schedule" />
 
     <fragment
-        android:id="@+id/classroomFragment"
+        android:id="@+id/navigation_classroom"
         android:name="com.mjs.virtualclassuniversitasnurdinhamzah.ui.classroom.ClassroomFragment"
-        android:label="fragment_classroom"
+        android:label="@string/title_classroom"
         tools:layout="@layout/fragment_classroom" />
 
 

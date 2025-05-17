@@ -4,25 +4,37 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.mjs.virtual_class_universitas_nurdin_hamzah.R
+import androidx.lifecycle.ViewModelProvider
+import com.mjs.virtual_class_universitas_nurdin_hamzah.databinding.FragmentClassroomBinding
 
 class ClassroomFragment : Fragment() {
 
-    companion object {
-    }
+    private var _binding: FragmentClassroomBinding? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
-    }
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_classroom, container, false)
+        val classroomViewModel = ViewModelProvider(this)[ClassroomViewModel::class.java]
+
+        _binding = FragmentClassroomBinding.inflate(inflater, container, false)
+        val root: View = binding.root
+
+        val textView: TextView = binding.textClassroom
+
+        classroomViewModel.text.observe(viewLifecycleOwner) {
+            textView.text = it
+        }
+        return root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

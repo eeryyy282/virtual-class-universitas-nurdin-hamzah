@@ -1,12 +1,13 @@
-package com.mjs.virtualclassuniversitasnurdinhamzah.ui.classroom
+package com.mjs.virtualclassuniversitasnurdinhamzah.presentation.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class ClassroomViewModel : ViewModel() {
+class HomeViewModel : ViewModel() {
+
     private val _text = MutableLiveData<String>().apply {
-        value = "This is classroom Fragment"
+        value = "This is home Fragment"
     }
     val text: LiveData<String> = _text
 }

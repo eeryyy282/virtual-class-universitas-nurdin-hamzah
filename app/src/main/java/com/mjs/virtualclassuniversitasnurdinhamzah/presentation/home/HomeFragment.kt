@@ -1,4 +1,4 @@
-package com.mjs.virtualclassuniversitasnurdinhamzah.ui.schedule
+package com.mjs.virtualclassuniversitasnurdinhamzah.presentation.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.mjs.virtual_class_universitas_nurdin_hamzah.databinding.FragmentScheduleBinding
+import com.mjs.virtual_class_universitas_nurdin_hamzah.databinding.FragmentHomeBinding
 
-class ScheduleFragment : Fragment() {
+class HomeFragment : Fragment() {
 
-    private var _binding: FragmentScheduleBinding? = null
+    private var _binding: FragmentHomeBinding? = null
+
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -19,14 +20,13 @@ class ScheduleFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val scheduleViewModel =
-            ViewModelProvider(this)[ScheduleViewModel::class.java]
+        val homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
-        _binding = FragmentScheduleBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textSchedule
-        scheduleViewModel.text.observe(viewLifecycleOwner) {
+        val textView: TextView = binding.textHome
+        homeViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
         return root

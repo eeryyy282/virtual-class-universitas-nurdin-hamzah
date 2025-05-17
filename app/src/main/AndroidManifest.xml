@@ -13,7 +13,7 @@
         android:theme="@style/Theme.VirtualClassUniversitasNurdinHamzah"
         tools:targetApi="31">
         <activity
-            android:name="com.mjs.virtualclassuniversitasnurdinhamzah.MainActivity"
+            android:name="com.mjs.virtualclassuniversitasnurdinhamzah.presentation.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

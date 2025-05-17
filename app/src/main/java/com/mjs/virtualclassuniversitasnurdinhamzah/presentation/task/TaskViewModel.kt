@@ -1,4 +1,4 @@
-package com.mjs.virtualclassuniversitasnurdinhamzah.ui.task
+package com.mjs.virtualclassuniversitasnurdinhamzah.presentation.task
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

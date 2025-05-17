@@ -1,4 +1,4 @@
-package com.mjs.virtualclassuniversitasnurdinhamzah
+package com.mjs.virtualclassuniversitasnurdinhamzah.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

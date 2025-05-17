@@ -1,4 +1,4 @@
-package com.mjs.virtualclassuniversitasnurdinhamzah.ui.schedule
+package com.mjs.virtualclassuniversitasnurdinhamzah.presentation.schedule
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

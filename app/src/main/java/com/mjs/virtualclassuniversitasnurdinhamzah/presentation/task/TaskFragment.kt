@@ -1,4 +1,4 @@
-package com.mjs.virtualclassuniversitasnurdinhamzah.ui.task
+package com.mjs.virtualclassuniversitasnurdinhamzah.presentation.task
 
 import android.os.Bundle
 import android.view.LayoutInflater

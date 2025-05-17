@@ -3,19 +3,27 @@
     xmlns:dist="http://schemas.android.com/apk/distribution">
 
     <dist:module
-        dist:instant="false"
+        dist:instant="true"
         dist:title="@string/title_onboarding">
         <dist:delivery>
-            <dist:on-demand />
+            <dist:install-time />
         </dist:delivery>
 
-        <dist:fusing dist:include="true" />
+        <dist:fusing dist:include="false" />
     </dist:module>
 
-    <application>
+    <application android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".OnboardingActivity"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="onboarding"
+                    android:scheme="virtualclassuniversitasnurdinhamzah" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

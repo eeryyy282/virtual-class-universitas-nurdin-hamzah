@@ -1,9 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layoutDescription="@xml/activity_onboarding_scene"
     tools:context=".OnboardingActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/iv_logo_onboarding"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="17dp"
+        android:contentDescription="@string/image_description_unh_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo_unh" />
+
+    <TextView
+        android:id="@+id/tv_title_logo_onboarding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:fontFamily="@font/lato"
+        android:text="@string/title_logo_unh"
+        android:textColor="@color/text_color_title"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_logo_onboarding"
+        app:layout_constraintStart_toEndOf="@+id/iv_logo_onboarding"
+        app:layout_constraintTop_toTopOf="@+id/iv_logo_onboarding" />
+
+    <ImageView
+        android:id="@+id/iv_icon_change_theme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="-8dp"
+        android:contentDescription="@string/title_icon_change_theme"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_change_theme"
+        app:layout_constraintEnd_toStartOf="@+id/btn_change_theme"
+        app:layout_constraintTop_toTopOf="@+id/btn_change_theme"
+        app:srcCompat="@drawable/change_theme_icon"
+        app:tint="@color/text_color_themed" />
+
+    <Button
+        android:id="@+id/btn_change_theme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="9dp"
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/lato"
+        android:text="@string/title_change_theme_mode"
+        android:textAllCaps="false"
+        android:textColor="@color/text_color_themed"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_logo_onboarding"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/iv_logo_onboarding" />
+
+    <ImageView
+        android:id="@+id/iv_onboarding_1"
+        android:layout_width="290dp"
+        android:layout_height="194dp"
+        android:contentDescription="@string/onboarding_image_1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.35000002"
+        app:srcCompat="@drawable/onboarding_image_1" />
+
+    <TextView
+        android:id="@+id/tv_onboarding_1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
+        android:fontFamily="@font/lato"
+        android:text="@string/title_onboarding_1"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/iv_onboarding_1"
+        app:layout_constraintStart_toStartOf="@+id/iv_onboarding_1"
+        app:layout_constraintTop_toBottomOf="@+id/iv_onboarding_1" />
+
+    <Button
+        android:id="@+id/button_next_onboarding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/rounded_button_background"
+        android:fontFamily="@font/lato"
+        android:text="@string/title_button_next"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/skip_button_onboarding"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_onboarding_1"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/skip_button_onboarding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="@string/title_skip_button_onboarding"
+        android:textColor="@color/text_color_themed_variant"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

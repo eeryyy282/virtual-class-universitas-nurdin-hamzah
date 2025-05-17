@@ -7,7 +7,6 @@
     <color name="blue_gray">#608BC1</color>
     <color name="dodger_blue">#3D88FF</color>
     <color name="pale_gray">#C4C4C5</color>
-    <color name="dark_gray">#9E9E9E</color>
 
-    <color name="bottom_nav_background_themed">@color/white</color>
+    <color name="bottom_nav_background_themed">@color/black</color>
 </resources>

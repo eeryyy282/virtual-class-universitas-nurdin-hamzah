@@ -1,4 +1,4 @@
-package com.mjs.virtualclassuniversitasnurdinhamzah.ui.home
+package com.mjs.virtualclassuniversitasnurdinhamzah.presentation.home
 
 import android.os.Bundle
 import android.view.LayoutInflater

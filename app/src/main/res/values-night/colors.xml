@@ -6,6 +6,7 @@
     <color name="air_force_blue">#2665B3</color>
     <color name="blue_gray">#608BC1</color>
     <color name="dodger_blue">#3D88FF</color>
+    <color name="pale_gray">#C4C4C5</color>
 
     <color name="bottom_nav_background_themed">@color/black</color>
 </resources>

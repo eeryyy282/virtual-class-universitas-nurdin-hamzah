@@ -13,9 +13,9 @@
         android:theme="@style/Theme.Virtualclassuniversitasnurdinhamzah"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashScreenActivity"
             android:exported="true"
-            android:label="@string/app_name"
+            android:label="@string/title_activity_splash_screen"
             android:theme="@style/Theme.Virtualclassuniversitasnurdinhamzah">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,6 +23,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Virtualclassuniversitasnurdinhamzah" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

@@ -13,4 +13,9 @@
     <string name="title_onboarding_3">Kerjakan tugas dengan cepat\ndan tepat waktu bersama Virtual Class\nUniversitas Nurdin Hamzah</string>
     <string name="onboarding_image_4">On Boarding Image 4</string>
     <string name="title_onboarding_4">"Siap memulai langkah awal bersama\nVirtual Class\nUniversitas Nurdin Hamzah?</string>
+    <string name="register">Daftar</string>
+    <string name="have_an_account">Sudah memiliki akun?</string>
+    <string name="login_or_register_account_now">Masuk atau Daftar Akunmu Sekarang!</string>
+    <string name="login">Masuk</string>
+    <string name="login_as_dosen">Masuk Sebagai Dosen</string>
 </resources>

@@ -18,7 +18,6 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
@@ -28,6 +27,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
+        @Suppress("DEPRECATION")
         jvmTarget = "17"
     }
 

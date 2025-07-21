@@ -13,6 +13,7 @@ android {
     defaultConfig {
         applicationId = "com.mjs.virtual_class_universitas_nurdin_hamzah"
         minSdk = 24
+        //noinspection OldTargetApi
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -35,6 +36,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
+        @Suppress("DEPRECATION")
         jvmTarget = "17"
     }
     buildFeatures {

@@ -11,13 +11,13 @@
         android:id="@+id/iv_logo_splash_screen"
         android:layout_width="190dp"
         android:layout_height="190dp"
+        android:alpha="0"
         android:contentDescription="@string/image_description_unh_logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo_unh"
-        android:alpha="0"
         tools:alpha="1" />
 
     <androidx.cardview.widget.CardView
@@ -25,6 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="34dp"
+        android:alpha="0"
         app:cardBackgroundColor="@color/classic_blue"
         app:cardCornerRadius="16dp"
         app:cardElevation="0dp"
@@ -33,7 +34,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_logo_splash_screen"
         app:layout_constraintVertical_bias="1.0"
-        android:alpha="0"
         tools:alpha="1">
 
         <androidx.constraintlayout.widget.ConstraintLayout

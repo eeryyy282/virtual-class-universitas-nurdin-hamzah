@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.mjs.virtual_class_universitas_nurdin_hamzah"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.mjs.virtual_class_universitas_nurdin_hamzah"

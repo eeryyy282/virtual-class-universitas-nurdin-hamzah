@@ -8,6 +8,7 @@
     app:layoutDescription="@xml/activity_onboarding_scene"
     tools:context=".OnboardingActivity">
 
+    <!-- Header -->
     <ImageView
         android:id="@+id/iv_logo_onboarding"
         android:layout_width="50dp"
@@ -59,6 +60,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/iv_logo_onboarding" />
 
+    <!-- Slide 1 -->
     <ImageView
         android:id="@+id/iv_onboarding_1"
         android:layout_width="290dp"
@@ -73,7 +75,7 @@
 
     <TextView
         android:id="@+id/tv_onboarding_1"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="20dp"
@@ -86,6 +88,53 @@
         app:layout_constraintStart_toStartOf="@+id/iv_onboarding_1"
         app:layout_constraintTop_toBottomOf="@+id/iv_onboarding_1" />
 
+    <!-- Slide 2 -->
+    <ImageView
+        android:id="@+id/iv_onboarding_2"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:contentDescription="@string/onboarding_image_2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.35000002"
+        app:srcCompat="@drawable/onboarding_image_2" />
+
+    <TextView
+        android:id="@+id/tv_onboarding_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:text="@string/title_onboarding_2"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_onboarding_2" />
+
+    <!-- Slide 3 -->
+    <ImageView
+        android:id="@+id/iv_onboarding_3"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:contentDescription="@string/onboarding_image_3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.35000002"
+        app:srcCompat="@drawable/onboarding_image_3" />
+
+    <TextView
+        android:id="@+id/tv_onboarding_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:text="@string/title_onboarding_3"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_onboarding_3" />
+
+    <!-- Button for Next or Skip for Slide 1, 2, and 3 -->
     <Button
         android:id="@+id/button_next_onboarding"
         android:layout_width="wrap_content"
@@ -114,5 +163,96 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Slide 4 -->
+    <ImageView
+        android:id="@+id/iv_onboarding_4"
+        android:layout_width="335dp"
+        android:layout_height="335dp"
+        android:contentDescription="@string/onboarding_image_4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.25000002"
+        app:srcCompat="@drawable/onboarding_image_4" />
+
+    <TextView
+        android:id="@+id/tv_onboarding_4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:text="@string/title_onboarding_4"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_onboarding_4" />
+
+    <Button
+        android:id="@+id/btn_register_onboarding"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/lato"
+        android:textColor="@color/white"
+        android:text="Daftar"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        app:cornerRadius="16dp"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_login_or_register_acount_onboarding" />
+
+    <TextView
+        android:id="@+id/tv_have_an_account_onboarding"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textAlignment="center"
+        android:fontFamily="@font/lato"
+        android:text="Sudah memiliki akun?"
+        app:layout_constraintEnd_toEndOf="@+id/btn_register_onboarding"
+        app:layout_constraintStart_toStartOf="@+id/btn_register_onboarding"
+        app:layout_constraintTop_toBottomOf="@+id/btn_register_onboarding" />
+
+    <TextView
+        android:id="@+id/tv_title_login_or_register_acount_onboarding"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/lato"
+        android:textAlignment="center"
+        android:text="Masuk atau Daftar Akunmu Sekarang!"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_onboarding_4" />
+
+    <Button
+        android:id="@+id/btn_login_account_onboarding"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/air_force_blue"
+        android:fontFamily="@font/lato"
+        android:text="Masuk"
+        android:textAllCaps="false"
+        app:cornerRadius="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/btn_register_onboarding"
+        app:layout_constraintStart_toStartOf="@+id/btn_register_onboarding"
+        app:layout_constraintTop_toBottomOf="@+id/tv_have_an_account_onboarding" />
+
+    <Button
+        android:id="@+id/btn_login_as_dosen_onboarding"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/blue_gray"
+        android:textColor="@color/white"
+        android:fontFamily="@font/lato"
+        android:text="Masuk Sebagai Dosen"
+        android:textAllCaps="false"
+        app:cornerRadius="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/btn_login_account_onboarding"
+        app:layout_constraintStart_toStartOf="@+id/btn_login_account_onboarding"
+        app:layout_constraintTop_toBottomOf="@+id/btn_login_account_onboarding" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

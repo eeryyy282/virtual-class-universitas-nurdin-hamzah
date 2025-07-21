@@ -16,7 +16,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo_unh" />
+        app:srcCompat="@drawable/logo_unh"
+        android:alpha="0"
+        tools:alpha="1" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_copyright_splash_screen"
@@ -30,7 +32,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_logo_splash_screen"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintVertical_bias="1.0"
+        android:alpha="0"
+        tools:alpha="1">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

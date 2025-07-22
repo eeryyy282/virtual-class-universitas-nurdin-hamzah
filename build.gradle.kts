@@ -4,6 +4,6 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.android.dynamic.feature) apply false
-    id("org.jlleitschuh.gradle.ktlint") version "11.5.1"
-    id("com.google.devtools.ksp") version "2.1.21-2.0.1" apply false
+    id("org.jlleitschuh.gradle.ktlint") version "13.0.0"
+    id("com.google.devtools.ksp") version "2.2.0-2.0.2" apply false
 }

@@ -14,7 +14,7 @@
 
     <application android:icon="@mipmap/ic_launcher">
         <activity
-            android:name=".OnboardingActivity"
+            android:name=".ui.OnboardingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

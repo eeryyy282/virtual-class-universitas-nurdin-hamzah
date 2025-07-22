@@ -23,3 +23,4 @@ rootProject.name = "Virtual Class Universitas Nurdin Hamzah"
 include(":app")
 include(":core")
 include(":onboarding")
+include(":authentication")

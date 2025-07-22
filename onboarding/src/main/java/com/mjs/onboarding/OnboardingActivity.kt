@@ -1,9 +1,11 @@
 package com.mjs.onboarding
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.mjs.onboarding.databinding.ActivityOnboardingBinding
@@ -25,6 +27,27 @@ class OnboardingActivity : AppCompatActivity() {
         }
 
         changeTheme()
+        setupAction()
+    }
+
+    private fun setupAction() {
+        with(binding) {
+            btnLoginAccountOnboarding.setOnClickListener {
+                val uri = "authentication://login".toUri()
+                val intentLogin = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(intentLogin)
+            }
+            btnLoginAsDosenOnboarding.setOnClickListener {
+                val uri = "authentication://login_as_dosen".toUri()
+                val intentLoginAsDosen = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(intentLoginAsDosen)
+            }
+            btnRegisterOnboarding.setOnClickListener {
+                val uri = "authentication://register".toUri()
+                val intentRegister = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(intentRegister)
+            }
+        }
     }
 
     private fun changeTheme() {

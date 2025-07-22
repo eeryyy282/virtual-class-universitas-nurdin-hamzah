@@ -6,9 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.mjs.core.domain.usecase.pref.ThemeUseCase
 import kotlinx.coroutines.launch
 
-
 class OnBoardingViewModel(
-    private val themeUseCase: ThemeUseCase
+    private val themeUseCase: ThemeUseCase,
 ) : ViewModel() {
     val getThemeSetting = themeUseCase.getThemeSetting().asLiveData()
 

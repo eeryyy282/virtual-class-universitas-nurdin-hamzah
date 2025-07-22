@@ -6,8 +6,9 @@ import com.mjs.core.data.source.local.pref.ThemePreference
 import com.mjs.core.domain.repository.IThemeRepository
 import org.koin.dsl.module
 
-val repositoryModule = module {
-    single { LocalDataSource(get()) }
-    single { ThemePreference(get()) }
-    single<IThemeRepository> { ThemeRepository(get()) }
-}
+val repositoryModule =
+    module {
+        single { LocalDataSource(get()) }
+        single { ThemePreference(get()) }
+        single<IThemeRepository> { ThemeRepository(get()) }
+    }

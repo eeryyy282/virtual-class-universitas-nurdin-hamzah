@@ -17,8 +17,8 @@ class MyApplication : Application() {
             modules(
                 listOf(
                     repositoryModule,
-                    useCaseModule
-                )
+                    useCaseModule,
+                ),
             )
         }
     }

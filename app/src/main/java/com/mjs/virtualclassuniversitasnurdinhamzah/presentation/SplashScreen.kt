@@ -37,7 +37,7 @@ class SplashScreen : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             },
-            delaySplashScreen
+            delaySplashScreen,
         )
 
         playAnimation()
@@ -54,14 +54,16 @@ class SplashScreen : AppCompatActivity() {
     }
 
     private fun playAnimation() {
-        binding.ivLogoSplashScreen.animate()
+        binding.ivLogoSplashScreen
+            .animate()
             .setDuration(1500)
             .alpha(1f)
             .scaleX(1f)
             .scaleY(1f)
             .start()
 
-        binding.cvCopyrightSplashScreen.animate()
+        binding.cvCopyrightSplashScreen
+            .animate()
             .setDuration(1500)
             .translationY(0f)
             .alpha(1f)

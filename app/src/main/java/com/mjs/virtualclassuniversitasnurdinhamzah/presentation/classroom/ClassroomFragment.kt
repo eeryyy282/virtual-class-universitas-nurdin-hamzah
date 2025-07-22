@@ -10,15 +10,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.mjs.virtual_class_universitas_nurdin_hamzah.databinding.FragmentClassroomBinding
 
 class ClassroomFragment : Fragment() {
-
     private var _binding: FragmentClassroomBinding? = null
 
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         val classroomViewModel = ViewModelProvider(this)[ClassroomViewModel::class.java]
 

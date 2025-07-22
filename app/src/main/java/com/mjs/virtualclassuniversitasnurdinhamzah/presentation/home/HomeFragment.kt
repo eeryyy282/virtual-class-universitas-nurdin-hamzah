@@ -10,15 +10,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.mjs.virtual_class_universitas_nurdin_hamzah.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
-
     private var _binding: FragmentHomeBinding? = null
 
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         val homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 

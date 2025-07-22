@@ -10,14 +10,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.mjs.virtual_class_universitas_nurdin_hamzah.databinding.FragmentScheduleBinding
 
 class ScheduleFragment : Fragment() {
-
     private var _binding: FragmentScheduleBinding? = null
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         val scheduleViewModel =
             ViewModelProvider(this)[ScheduleViewModel::class.java]

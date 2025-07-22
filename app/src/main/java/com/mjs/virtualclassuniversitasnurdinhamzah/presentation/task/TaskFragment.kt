@@ -10,15 +10,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.mjs.virtual_class_universitas_nurdin_hamzah.databinding.FragmentTaskBinding
 
 class TaskFragment : Fragment() {
-
     private var _binding: FragmentTaskBinding? = null
 
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         val taskViewModel =
             ViewModelProvider(this)[TaskViewModel::class.java]

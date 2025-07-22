@@ -9,7 +9,6 @@ import androidx.core.view.WindowInsetsCompat
 import com.mjs.onboarding.databinding.ActivityOnboardingBinding
 
 class OnboardingActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityOnboardingBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -9,7 +9,6 @@ import com.mjs.virtual_class_universitas_nurdin_hamzah.R
 import com.mjs.virtual_class_universitas_nurdin_hamzah.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

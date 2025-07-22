@@ -7,14 +7,17 @@ import android.os.Handler
 import android.os.Looper
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.mjs.virtual_class_universitas_nurdin_hamzah.R
 import com.mjs.virtual_class_universitas_nurdin_hamzah.databinding.ActivitySplashScreenBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreen : AppCompatActivity() {
+    private val splashScreenViewModel: SplashScreenViewModel by viewModel()
     private lateinit var binding: ActivitySplashScreenBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +44,17 @@ class SplashScreen : AppCompatActivity() {
         )
 
         playAnimation()
+        checkDarkMode()
+    }
+
+    private fun checkDarkMode() {
+        splashScreenViewModel.getThemeSetting.observe(this) {
+            if (it) {
+                delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
+            } else {
+                delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_NO
+            }
+        }
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {

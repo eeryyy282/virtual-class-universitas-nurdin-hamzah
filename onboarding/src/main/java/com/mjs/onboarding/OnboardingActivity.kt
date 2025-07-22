@@ -1,5 +1,6 @@
 package com.mjs.onboarding
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -32,20 +33,27 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun setupAction() {
         with(binding) {
+            val options =
+                ActivityOptions.makeCustomAnimation(
+                    this@OnboardingActivity,
+                    android.R.anim.fade_in,
+                    android.R.anim.fade_out,
+                )
+
             btnLoginAccountOnboarding.setOnClickListener {
                 val uri = "authentication://login".toUri()
                 val intentLogin = Intent(Intent.ACTION_VIEW, uri)
-                startActivity(intentLogin)
+                startActivity(intentLogin, options.toBundle())
             }
             btnLoginAsDosenOnboarding.setOnClickListener {
                 val uri = "authentication://login_as_dosen".toUri()
                 val intentLoginAsDosen = Intent(Intent.ACTION_VIEW, uri)
-                startActivity(intentLoginAsDosen)
+                startActivity(intentLoginAsDosen, options.toBundle())
             }
             btnRegisterOnboarding.setOnClickListener {
                 val uri = "authentication://register".toUri()
                 val intentRegister = Intent(Intent.ACTION_VIEW, uri)
-                startActivity(intentRegister)
+                startActivity(intentRegister, options.toBundle())
             }
         }
     }

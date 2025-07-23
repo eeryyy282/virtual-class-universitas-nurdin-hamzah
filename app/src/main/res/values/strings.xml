@@ -38,4 +38,5 @@
     <string name="classroom_text">Ruang 0.0</string>
     <string name="see_more_detail_text">Lihat Selengkapnya</string>
     <string name="doesnt_have_an_schedule_text">Sepertinya tidak ada jadwal kelas untukmu hari ini.</string>
+    <string name="failed_to_get_statistic_text">Gagal memuat statistik anda.</string>
 </resources>

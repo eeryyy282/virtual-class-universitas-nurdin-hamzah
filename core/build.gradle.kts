@@ -67,7 +67,6 @@ dependencies {
 
     implementation(libs.datastore.preferences)
 
-    implementation(libs.sqlcipher)
     implementation(libs.sqliteKtx)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)

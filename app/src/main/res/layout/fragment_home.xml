@@ -363,11 +363,11 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:layout_height="190dp"
             android:layout_marginTop="12dp"
-            app:cardCornerRadius="16dp"
             android:layout_marginBottom="20dp"
+            app:cardCornerRadius="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/iv_statistic_icon"
             app:layout_constraintTop_toBottomOf="@+id/iv_statistic_icon">
@@ -377,6 +377,45 @@
                 android:layout_height="match_parent">
 
 
+                <ProgressBar
+                    android:id="@+id/progressBar_statistic"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminateTint="@color/outline_color_theme"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_doesnt_have_an_statistic"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="14dp"
+                    android:contentDescription="@string/doesnt_have_an_content_description"
+                    android:src="@drawable/doesnt_have_an_content_icon"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_doesnt_have_an_statistic"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/lato"
+                    android:text="@string/failed_to_get_statistic_text"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_color_themed"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_doesnt_have_an_statistic"
+                    app:layout_constraintVertical_bias="0.0" />
+
                 <ImageView
                     android:id="@+id/iv_fire_icon_statistic"
                     android:layout_width="64dp"
@@ -384,6 +423,7 @@
                     android:layout_marginTop="16dp"
                     android:contentDescription="@string/fire_icon_statistic_description"
                     android:src="@drawable/fire_icon"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -397,21 +437,23 @@
                     android:text="@string/statistic_streak_count"
                     android:textColor="@color/outline_color_theme"
                     android:textSize="24sp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/iv_fire_icon_statistic" />
 
                 <TextView
                     android:id="@+id/tv_streak_statistic"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginEnd="14dp"
                     android:layout_marginBottom="24dp"
                     android:fontFamily="@font/lato"
                     android:text="@string/streak_statistic_text"
                     android:textAlignment="center"
                     android:textColor="@color/text_color_themed"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -443,9 +485,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:indeterminateTint="@color/outline_color_theme"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:visibility="visible"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 

@@ -1,5 +1,7 @@
 package com.mjs.authentication.presentation.login.mahasiswa
 
+import android.app.ActivityOptions
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.mjs.authentication.R
 import com.mjs.authentication.databinding.ActivityLoginMahasiswaBinding
 import com.mjs.authentication.di.loginMahasiswaModule
+import com.mjs.authentication.presentation.register.RegisterActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
 
@@ -37,6 +40,18 @@ class LoginMahasiswaActivity : AppCompatActivity() {
             loginMahasiswaViewModel.saveThemeSetting(
                 loginMahasiswaViewModel.getThemeSetting.value == false,
             )
+        }
+
+        binding.btnRegisterLoginMahasiswa.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            val options =
+                ActivityOptions.makeCustomAnimation(
+                    this,
+                    android.R.anim.fade_in,
+                    android.R.anim.fade_out,
+                )
+            startActivity(intent, options.toBundle())
+            finish()
         }
     }
 

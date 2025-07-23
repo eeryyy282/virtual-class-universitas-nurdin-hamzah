@@ -59,6 +59,8 @@ dependencies {
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.activity)
+    implementation(libs.androidx.cardview)
+    implementation(libs.androidx.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -87,4 +89,6 @@ dependencies {
     implementation(libs.datastore.preferences)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+
+    implementation(libs.material)
 }

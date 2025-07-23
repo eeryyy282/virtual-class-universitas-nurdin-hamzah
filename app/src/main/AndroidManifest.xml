@@ -18,10 +18,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VirtualClassUniversitasNurdinHamzah"
         tools:targetApi="31">
-
         <activity
             android:name="com.mjs.virtualclassuniversitasnurdinhamzah.presentation.SplashScreen"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,7 +32,9 @@
 
         <activity
             android:name="com.mjs.virtualclassuniversitasnurdinhamzah.presentation.MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

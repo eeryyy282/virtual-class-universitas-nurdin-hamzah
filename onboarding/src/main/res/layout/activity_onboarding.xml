@@ -63,14 +63,16 @@
     <!-- Slide 1 -->
     <ImageView
         android:id="@+id/iv_onboarding_1"
-        android:layout_width="290dp"
+        android:layout_width="250dp"
         android:layout_height="194dp"
         android:contentDescription="@string/onboarding_image_1"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="H,16:9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.35000002"
+        app:layout_constraintWidth_percent="0.8"
         app:srcCompat="@drawable/onboarding_image_1" />
 
     <TextView
@@ -96,9 +98,11 @@
         android:layout_height="250dp"
         android:contentDescription="@string/onboarding_image_2"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="H,16:9"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.35000002"
+        app:layout_constraintWidth_percent="0.8"
         app:srcCompat="@drawable/onboarding_image_2" />
 
     <TextView
@@ -116,13 +120,15 @@
     <!-- Slide 3 -->
     <ImageView
         android:id="@+id/iv_onboarding_3"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="245dp"
+        android:layout_height="245dp"
         android:contentDescription="@string/onboarding_image_3"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="H,16:9"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.35000002"
+        app:layout_constraintWidth_percent="0.8"
         app:srcCompat="@drawable/onboarding_image_3" />
 
     <TextView
@@ -170,13 +176,15 @@
     <!-- Slide 4 -->
     <ImageView
         android:id="@+id/iv_onboarding_4"
-        android:layout_width="335dp"
-        android:layout_height="335dp"
+        android:layout_width="245dp"
+        android:layout_height="245dp"
         android:contentDescription="@string/onboarding_image_4"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="H,16:9"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.25000002"
+        app:layout_constraintVertical_bias="0.35000002"
+        app:layout_constraintWidth_percent="0.8"
         app:srcCompat="@drawable/onboarding_image_4" />
 
     <TextView
@@ -263,5 +271,4 @@
         app:layout_constraintEnd_toEndOf="@+id/btn_login_account_onboarding"
         app:layout_constraintStart_toStartOf="@+id/btn_login_account_onboarding"
         app:layout_constraintTop_toBottomOf="@+id/btn_login_account_onboarding" />
-
 </androidx.constraintlayout.motion.widget.MotionLayout>

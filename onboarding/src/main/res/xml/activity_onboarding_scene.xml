@@ -58,14 +58,16 @@
     <ConstraintSet android:id="@+id/scene_1">
         <Constraint
             android:id="@+id/iv_onboarding_1"
-            android:layout_width="290dp"
+            android:layout_width="250dp"
             android:layout_height="194dp"
             android:alpha="1"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="H,16:9"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.35" />
+            app:layout_constraintVertical_bias="0.35"
+            app:layout_constraintWidth_percent="0.8" />
         <Constraint
             android:id="@+id/tv_onboarding_1"
             android:layout_width="wrap_content"
@@ -190,10 +192,12 @@
             android:layout_height="250dp"
             android:alpha="1"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="H,16:9"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.35" />
+            app:layout_constraintVertical_bias="0.35"
+            app:layout_constraintWidth_percent="0.8" />
         <Constraint
             android:id="@+id/tv_onboarding_2"
             android:layout_width="wrap_content"
@@ -266,14 +270,16 @@
 
         <Constraint
             android:id="@+id/iv_onboarding_3"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_width="245dp"
+            android:layout_height="245dp"
             android:alpha="1"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="H,16:9"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.35" />
+            app:layout_constraintVertical_bias="0.35"
+            app:layout_constraintWidth_percent="0.8" />
         <Constraint
             android:id="@+id/tv_onboarding_3"
             android:layout_width="wrap_content"
@@ -372,14 +378,16 @@
 
         <Constraint
             android:id="@+id/iv_onboarding_4"
-            android:layout_width="335dp"
-            android:layout_height="335dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:alpha="1"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="H,16:9"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.25" />
+            app:layout_constraintVertical_bias="0.25"
+            app:layout_constraintWidth_percent="0.8" />
         <Constraint
             android:id="@+id/tv_onboarding_4"
             android:layout_width="wrap_content"

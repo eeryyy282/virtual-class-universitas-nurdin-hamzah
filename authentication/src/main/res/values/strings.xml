@@ -12,4 +12,12 @@
     <string name="doesnt_have_an_account_text">Belum memiliki akun?</string>
     <string name="register_text">Daftar</string>
     <string name="login_text">Masuk</string>
+    <string name="description_image_view_login_dosen">Image View Login Dosen</string>
+    <string name="tv_login_dosen_text">Selamat datang di Virtual Class,\nPahlawan Bangsa!</string>
+    <string name="hint_nip">NIP</string>
+    <string name="call_admin_text">Hubungi Admin</string>
+    <string name="description_image_view_register">Image View Register</string>
+    <string name="tv_register_text">Silahkan Daftar Akun Virtual Class\nnmenggunakan NIM-mu!</string>
+    <string name="have_an_account_text">Sudah Memiliki Akun?</string>
+    <string name="password_confirmation_hint">Konfirmasi Password</string>
 </resources>

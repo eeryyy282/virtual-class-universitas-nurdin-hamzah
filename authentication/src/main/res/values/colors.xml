@@ -14,4 +14,7 @@
     <color name="text_color_themed">@color/black</color>
     <color name="text_color_title">@color/classic_blue</color>
     <color name="text_color_themed_variant">@color/davy_gray</color>
+    <color name="background_color_theme">@color/white</color>
+    <color name="outline_color_theme">@color/classic_blue</color>
 </resources>
+

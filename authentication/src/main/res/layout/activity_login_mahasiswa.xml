@@ -58,4 +58,138 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/iv_logo_onboarding" />
 
+    <ImageView
+        android:id="@+id/iv_login_mahasiswa"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:contentDescription="@string/description_image_view_login_mahasiswa"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_logo_onboarding"
+        app:layout_constraintVertical_bias="0.10"
+        app:srcCompat="@drawable/login_image_mahasiswa" />
+
+    <TextView
+        android:id="@+id/tv_login_mahasiswa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:text="@string/tv_login_mahasiswa_text"
+        android:textAlignment="center"
+        android:textColor="@color/text_color_themed"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/iv_login_mahasiswa"
+        app:layout_constraintStart_toStartOf="@+id/iv_login_mahasiswa"
+        app:layout_constraintTop_toBottomOf="@+id/iv_login_mahasiswa" />
+
+    <EditText
+        android:id="@+id/et_nim"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/background_edit_text"
+        android:drawableStart="@drawable/profile_icon"
+        android:drawablePadding="12dp"
+        android:drawableTint="@color/outline_color_theme"
+        android:fontFamily="@font/lato"
+        android:hint="@string/hint_nim"
+        android:inputType="number"
+        android:padding="12dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:textColor="@color/text_color_themed"
+        android:textColorHint="#9E9E9E"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_login_mahasiswa" />
+
+    <EditText
+        android:id="@+id/et_password"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/background_edit_text"
+        android:drawableStart="@drawable/password_icon"
+        android:drawablePadding="12dp"
+        android:drawableTint="@color/outline_color_theme"
+        android:fontFamily="@font/lato"
+        android:hint="@string/password_hint"
+        android:inputType="textPassword"
+        android:padding="12dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:textColor="@color/text_color_themed"
+        android:textColorHint="#9E9E9E"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_nim" />
+
+    <Button
+        android:id="@+id/btn_forgot_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/lato"
+        android:paddingEnd="0dp"
+        android:text="@string/forgot_password_text"
+        android:textAlignment="textEnd"
+        android:textAllCaps="false"
+        android:textColor="@color/outline_color_theme"
+        app:layout_constraintEnd_toEndOf="@+id/et_password"
+        app:layout_constraintTop_toBottomOf="@+id/et_password"
+        tools:ignore="RtlSymmetry" />
+
+    <Button
+        android:id="@+id/btn_login_mahasiswa"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:fontFamily="@font/lato"
+        android:padding="14dp"
+        android:text="@string/login_text"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:cornerRadius="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/et_password"
+        app:layout_constraintStart_toStartOf="@+id/et_password"
+        app:layout_constraintTop_toBottomOf="@+id/btn_forgot_password" />
+
+    <TextView
+        android:id="@+id/tv_doenst_have_an_account"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:padding="10dp"
+        android:text="@string/doesnt_have_an_account_text"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/btn_register_login_mahasiswa"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_login_mahasiswa"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/btn_register_login_mahasiswa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/blue_gray"
+        android:fontFamily="@font/lato"
+        android:padding="14dp"
+        android:text="@string/register_text"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:cornerRadius="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

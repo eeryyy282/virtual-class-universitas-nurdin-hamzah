@@ -3,4 +3,13 @@
     <string name="title_icon_change_theme">Icon Change Theme</string>
     <string name="title_change_theme_mode"><u>Ubah Mode</u></string>
     <string name="title_logo_unh">Virtual Class</string>
+    <string name="description_image_view_login_mahasiswa">Image View Login Mahasiswa</string>
+    <string name="tv_login_mahasiswa_text">Silahkan Masuk menggunakan Akun\nVirtual Class-mu!</string>
+    <string name="hint_email_nim">Email/Nim</string>
+    <string name="hint_nim">NIM</string>
+    <string name="password_hint">Password</string>
+    <string name="forgot_password_text">Lupa Password?</string>
+    <string name="doesnt_have_an_account_text">Belum memiliki akun?</string>
+    <string name="register_text">Daftar</string>
+    <string name="login_text">Masuk</string>
 </resources>

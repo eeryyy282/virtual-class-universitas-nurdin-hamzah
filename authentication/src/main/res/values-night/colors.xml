@@ -14,4 +14,6 @@
     <color name="text_color_themed">@color/white</color>
     <color name="text_color_title">@color/white</color>
     <color name="text_color_themed_variant">@color/silver_sand</color>
+    <color name="background_color_theme">@color/black</color>
+    <color name="outline_color_theme">@color/white</color>
 </resources>

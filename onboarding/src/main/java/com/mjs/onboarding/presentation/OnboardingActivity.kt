@@ -74,7 +74,6 @@ class OnboardingActivity : AppCompatActivity() {
         }
     }
 
-
     private fun changeTheme() {
         binding.btnChangeTheme.setOnClickListener {
             onBoardingViewModel.saveThemeSetting(

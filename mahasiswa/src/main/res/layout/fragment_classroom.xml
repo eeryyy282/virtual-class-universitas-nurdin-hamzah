@@ -1,23 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.classroom.ClassroomFragment">
 
-    <TextView
-        android:id="@+id/text_classroom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="17dp"
+            android:contentDescription="@string/image_description_unh_logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/logo_unh" />
+
+        <TextView
+            android:id="@+id/tv_title_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/title_logo_unh"
+            android:textColor="@color/outline_color_theme"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_logo"
+            app:layout_constraintStart_toEndOf="@+id/iv_logo"
+            app:layout_constraintTop_toTopOf="@+id/iv_logo" />
+
+        <ImageView
+            android:id="@+id/iv_classroom"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="18dp"
+            android:contentDescription="@string/icon_task_description"
+            android:src="@drawable/classroom_icon"
+            app:layout_constraintStart_toStartOf="@+id/iv_logo"
+            app:layout_constraintTop_toBottomOf="@id/iv_logo"
+            app:tint="@color/outline_color_theme" />
+
+        <TextView
+            android:id="@+id/tv_title_classroom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/text_title_classroom"
+            android:textColor="@color/outline_color_theme"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/iv_classroom"
+            app:layout_constraintStart_toEndOf="@+id/iv_classroom"
+            app:layout_constraintTop_toTopOf="@+id/iv_classroom" />
+
+        <TextView
+            android:id="@+id/tv_description_classroom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="27dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/text_tv_description_classroom"
+            android:textColor="@color/text_color_themed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/iv_classroom"
+            app:layout_constraintTop_toBottomOf="@+id/iv_classroom" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/classic_blue"
+            app:layout_constraintStart_toStartOf="@+id/tv_description_classroom"
+            app:layout_constraintTop_toBottomOf="@id/tv_description_classroom"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card.RoundedExceptRightBottom">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_total_class_joined"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/zero"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_title_class_joined"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="14dp"
+                    android:fontFamily="@font/lato"
+                    android:text="@string/text_tv_title_class_joined"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_total_class_joined" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/tv_not_finding_class"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/text_tv_not_finding_class"
+            android:textColor="@color/outline_color_theme"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/tv_description_classroom"
+            app:layout_constraintStart_toEndOf="@+id/materialCardView4"
+            app:layout_constraintTop_toTopOf="@+id/materialCardView4" />
+
+        <Button
+            android:id="@+id/btn_enroll_class_classroom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:backgroundTint="@color/air_force_blue"
+            android:fontFamily="@font/lato"
+            android:text="@string/text_btn_enroll_class_classroom"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:cornerRadius="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/materialCardView4"
+            app:layout_constraintEnd_toEndOf="@+id/tv_not_finding_class"
+            app:layout_constraintStart_toStartOf="@+id/tv_not_finding_class"
+            app:layout_constraintTop_toBottomOf="@+id/tv_not_finding_class"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_classroom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/btn_enroll_class_classroom"
+            app:layout_constraintStart_toStartOf="@+id/materialCardView4"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView4" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</ScrollView>

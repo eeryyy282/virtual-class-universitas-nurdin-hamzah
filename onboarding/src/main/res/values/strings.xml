@@ -16,6 +16,6 @@
     <string name="register">Daftar</string>
     <string name="have_an_account">Sudah memiliki akun?</string>
     <string name="login_or_register_account_now">Masuk atau Daftar Akunmu Sekarang!</string>
-    <string name="login">Masuk</string>
+    <string name="login_as_mahasiswa">Masuk Sebagai Mahasiswa</string>
     <string name="login_as_dosen">Masuk Sebagai Dosen</string>
 </resources>

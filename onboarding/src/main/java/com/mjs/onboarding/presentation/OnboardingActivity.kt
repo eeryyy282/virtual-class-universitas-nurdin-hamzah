@@ -56,7 +56,7 @@ class OnboardingActivity : AppCompatActivity() {
                     android.R.anim.fade_out,
                 )
 
-            btnLoginAccountOnboarding.setOnClickListener {
+            btnLoginAsMahasiswaOnboarding.setOnClickListener {
                 val uri = "authentication://login_as_mahasiswa".toUri()
                 val intent = Intent(Intent.ACTION_VIEW, uri)
                 startActivity(intent, animationOptions.toBundle())

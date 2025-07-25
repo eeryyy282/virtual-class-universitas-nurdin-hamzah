@@ -43,7 +43,7 @@ android {
         viewBinding = true
         buildConfig = true
     }
-    dynamicFeatures += setOf(":onboarding", ":authentication", ":mahasiswa")
+    dynamicFeatures += setOf(":onboarding", ":authentication", ":mahasiswa", ":dosen")
 }
 
 dependencies {

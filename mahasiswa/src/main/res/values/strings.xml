@@ -12,9 +12,9 @@
     <string name="title_logo_unh">Virtual Class</string>
     <string name="profile_user_image_view">Profile User Image View</string>
     <string name="name_text_title">Nama</string>
-    <string name="name_text">Mahsiswa/Dosen</string>
+    <string name="name_text">Mahsiswa</string>
     <string name="id_text">0123456</string>
-    <string name="id_text_title">NIM/NIP</string>
+    <string name="id_text_title">NIM</string>
     <string name="title_mentor_user_text">Dosen Pembimbing Akademik</string>
     <string name="mentor_user">Dosen</string>
     <string name="icon_task_home_description">Icon Task Home</string>
@@ -40,4 +40,12 @@
     <string name="doesnt_have_an_schedule_text">Sepertinya tidak ada jadwal kelas untukmu hari ini.</string>
     <string name="failed_to_get_statistic_text">Gagal memuat statistik anda.</string>
     <string name="title_mahasiswa">Mahasiswa</string>
+    <string name="icon_task_description">Icon Task</string>
+    <string name="task_title_text">Tugas</string>
+    <string name="text_title_classroom">Ruang Kelas</string>
+    <string name="text_tv_description_classroom">Ruang kelas bersama teman sejawat, serta dosen pengampu.</string>
+    <string name="zero">0</string>
+    <string name="text_tv_title_class_joined">Kelas Bergabung</string>
+    <string name="text_tv_not_finding_class">Tidak menemukan kelas yang kamu cari?</string>
+    <string name="text_btn_enroll_class_classroom">Enroll Class</string>
 </resources>

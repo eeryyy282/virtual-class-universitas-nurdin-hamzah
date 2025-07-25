@@ -40,4 +40,5 @@
     <string name="doesnt_have_an_schedule_text">Sepertinya tidak ada jadwal kelas untukmu hari ini.</string>
     <string name="failed_to_get_statistic_text">Gagal memuat statistik anda.</string>
     <string name="title_mahasiswa">Mahasiswa</string>
+    <string name="title_dosen">Dosen</string>
 </resources>

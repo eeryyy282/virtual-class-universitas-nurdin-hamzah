@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.mjs.authentication.R
@@ -43,7 +44,7 @@ class LoginMahasiswaActivity : AppCompatActivity() {
         }
 
         binding.btnRegisterLoginMahasiswa.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
+            val intent = Intent(this@LoginMahasiswaActivity, RegisterActivity::class.java)
             val options =
                 ActivityOptions.makeCustomAnimation(
                     this,
@@ -51,6 +52,14 @@ class LoginMahasiswaActivity : AppCompatActivity() {
                     android.R.anim.fade_out,
                 )
             startActivity(intent, options.toBundle())
+            finish()
+        }
+
+        binding.btnLoginMahasiswa.setOnClickListener {
+            val uri = "mahasiswa://mainactivity".toUri()
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
             finish()
         }
     }

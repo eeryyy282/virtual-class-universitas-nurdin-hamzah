@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutDescription="@xml/activity_onboarding_scene"
-    tools:context=".ui.OnboardingActivity">
+    tools:context=".presentation.OnboardingActivity">
 
     <!-- Header -->
     <ImageView

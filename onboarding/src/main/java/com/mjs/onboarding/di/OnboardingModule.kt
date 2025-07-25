@@ -1,6 +1,6 @@
 package com.mjs.onboarding.di
 
-import com.mjs.onboarding.ui.OnBoardingViewModel
+import com.mjs.onboarding.presentation.OnBoardingViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 

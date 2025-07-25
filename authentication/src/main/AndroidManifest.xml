@@ -36,7 +36,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data
-                    android:host="login"
+                    android:host="login_as_mahasiswa"
                     android:scheme="authentication" />
             </intent-filter>
         </activity>

@@ -43,7 +43,8 @@
             android:contentDescription="@string/text_tv_icon_setting"
             android:src="@drawable/setting_icon"
             app:layout_constraintStart_toStartOf="@+id/iv_logo"
-            app:layout_constraintTop_toBottomOf="@+id/iv_logo" />
+            app:layout_constraintTop_toBottomOf="@+id/iv_logo"
+            app:tint="@color/outline_color_theme" />
 
         <TextView
             android:id="@+id/tv_title_setting"

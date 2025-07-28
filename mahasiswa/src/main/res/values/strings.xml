@@ -55,4 +55,11 @@
     <string name="text_tv_deadline_date">00.00 WIB | 01 Januari 2020</string>
     <string name="text_tv_icon_task">Icon Task</string>
     <string name="text_tv_description_title_task">Beberapa tugas aktif di kelas anda.</string>
+    <string name="text_tv_icon_schedule">Icon Schedule</string>
+    <string name="text_title_schedule">Jadwal</string>
+    <string name="text_tv_description_title_schedule">Jangan lupa untuk selalu mengecek jadwalmu, dan hadir tepat waktu.</string>
+    <string name="text_tv_icon_setting">Icon Setting</string>
+    <string name="text_title_setting">Pengaturan</string>
+    <string name="text_tv_subject_room">Ruang 0.0</string>
+    <string name="text_tv_dosen_subject">Dosen</string>
 </resources>

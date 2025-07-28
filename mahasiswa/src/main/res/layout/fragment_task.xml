@@ -34,7 +34,100 @@
             app:layout_constraintStart_toEndOf="@+id/iv_logo"
             app:layout_constraintTop_toTopOf="@+id/iv_logo" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/iv_icon_task"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="18dp"
+            android:contentDescription="@string/text_tv_icon_task"
+            android:src="@drawable/task_icon"
+            app:layout_constraintStart_toStartOf="@+id/iv_logo"
+            app:layout_constraintTop_toBottomOf="@+id/iv_logo" />
 
+        <TextView
+            android:id="@+id/tv_title_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/text_title_classroom"
+            android:textColor="@color/outline_color_theme"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/iv_icon_task"
+            app:layout_constraintStart_toEndOf="@+id/iv_icon_task"
+            app:layout_constraintTop_toTopOf="@+id/iv_icon_task" />
+
+        <TextView
+            android:id="@+id/tv_description_task"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="27dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/text_tv_description_title_task"
+            android:textColor="@color/text_color_themed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/iv_icon_task"
+            app:layout_constraintTop_toBottomOf="@+id/iv_icon_task" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_task_task"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tv_description_task"
+            app:layout_constraintStart_toStartOf="@+id/tv_description_task"
+            app:layout_constraintTop_toBottomOf="@+id/tv_description_task"
+            tools:listitem="@layout/item_task_detail" />
+
+        <ProgressBar
+            android:id="@+id/progressBar_task_task"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="128dp"
+            android:indeterminateTint="@color/outline_color_theme"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tv_description_task"
+            app:layout_constraintStart_toStartOf="@+id/tv_description_task"
+            app:layout_constraintTop_toBottomOf="@id/tv_description_task" />
+
+        <ImageView
+            android:id="@+id/iv_doesnt_have_an_task"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="84dp"
+            android:contentDescription="@string/doesnt_have_an_task_text"
+            android:src="@drawable/doesnt_have_an_content_icon"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/tv_description_task"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="@+id/tv_description_task"
+            app:layout_constraintTop_toBottomOf="@id/tv_description_task" />
+
+        <TextView
+            android:id="@+id/tv_doesnt_have_an_task"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/doesnt_have_an_task_text"
+            android:textAlignment="center"
+            android:textColor="@color/text_color_themed"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tv_description_task"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tv_description_task"
+            app:layout_constraintTop_toBottomOf="@+id/iv_doesnt_have_an_task"
+            app:layout_constraintVertical_bias="0.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

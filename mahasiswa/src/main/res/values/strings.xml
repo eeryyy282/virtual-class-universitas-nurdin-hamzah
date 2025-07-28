@@ -31,7 +31,7 @@
     <string name="fire_icon_statistic_description">Fire Icon For Statistic Counter</string>
     <string name="streak_statistic_text">Hari Berturut\nKehadiran Kelas</string>
     <string name="doesnt_have_an_content_description">Tidak Ada Konten Untuk Ditampilkan Icon</string>
-    <string name="doesnt_have_an_task_text">Sepertinya tidak ada tugas untukmu saat ini</string>
+    <string name="doesnt_have_an_task_text">Sepertinya tidak ada tugas untukmu saat ini.</string>
     <string name="schedule_icon_description">Schedule Icon</string>
     <string name="schedule_text_home">Jadwal Hari Ini</string>
     <string name="time_schedule">00.00 WIB</string>
@@ -48,4 +48,11 @@
     <string name="text_tv_title_class_joined">Kelas Bergabung</string>
     <string name="text_tv_not_finding_class">Tidak menemukan kelas yang kamu cari?</string>
     <string name="text_btn_enroll_class_classroom">Enroll Class</string>
+    <string name="text_tv_subject">Matakuliah</string>
+    <string name="text_tv_meeting_subject">Pertemuan</string>
+    <string name="text_tv_description_task">Deskripsi Tugas</string>
+    <string name="text_tv_deadline">Pengumpulan Terakhir</string>
+    <string name="text_tv_deadline_date">00.00 WIB | 01 Januari 2020</string>
+    <string name="text_tv_icon_task">Icon Task</string>
+    <string name="text_tv_description_title_task">Beberapa tugas aktif di kelas anda.</string>
 </resources>

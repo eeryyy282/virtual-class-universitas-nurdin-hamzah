@@ -18,5 +18,6 @@
     <color name="background_color_theme">@color/white</color>
     <color name="outline_color_theme">@color/classic_blue</color>
     <color name="smoky_gray">#848884</color>
+    <color name="backround_item_task">#CBDCEB</color>
 </resources>
 

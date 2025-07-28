@@ -63,4 +63,5 @@
     <string name="text_tv_subject_room">Ruang 0.0</string>
     <string name="text_tv_dosen_subject">Dosen</string>
     <string name="text_tv_day_schedule">Hari</string>
+    <string name="photo_profile">Photo Profile</string>
 </resources>

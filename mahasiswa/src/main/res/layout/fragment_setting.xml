@@ -61,7 +61,7 @@
             app:layout_constraintTop_toTopOf="@+id/iv_icon_setting" />
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/materialCardView6"
+            android:id="@+id/cv_profile_user"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_marginTop="24dp"
@@ -105,8 +105,8 @@
             android:textColor="@color/outline_color_theme"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/materialCardView6"
-            app:layout_constraintTop_toTopOf="@+id/materialCardView6" />
+            app:layout_constraintStart_toEndOf="@+id/cv_profile_user"
+            app:layout_constraintTop_toTopOf="@+id/cv_profile_user" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -147,6 +147,223 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/tv_title_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_title_name"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_setting_profile_user"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/classic_blue"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_name"
+            app:layout_constraintStart_toStartOf="@+id/cv_profile_user"
+            app:layout_constraintTop_toBottomOf="@+id/cv_profile_user">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="24dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="12dp">
+
+
+                <ImageView
+                    android:id="@+id/iv_icon_profile_setting"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:contentDescription="@string/description_icon_profile_setting"
+                    android:src="@drawable/profile_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/tv_title_icon_setting"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:fontFamily="@font/lato"
+                    android:text="@string/text_tv_title_icon_setting"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_icon_profile_setting"
+                    app:layout_constraintTop_toTopOf="@+id/iv_icon_profile_setting" />
+
+                <TextView
+                    android:id="@+id/tv_description_icon_setting"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/lato"
+                    android:maxLines="1"
+                    android:text="@string/text_tv_description_icon_setting"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_icon_profile_setting"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_title_icon_setting"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/tv_title_icon_setting"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_title_icon_setting"
+                    app:layout_constraintVertical_bias="0.0" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_setting_theme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/air_force_blue"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/cv_setting_profile_user"
+            app:layout_constraintStart_toStartOf="@+id/cv_setting_profile_user"
+            app:layout_constraintTop_toBottomOf="@+id/cv_setting_profile_user">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="24dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="12dp">
+
+
+                <ImageView
+                    android:id="@+id/iv_icon_theme"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:contentDescription="@string/description_icon_profile_theme"
+                    android:src="@drawable/change_theme_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/tv_title_icon_theme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:fontFamily="@font/lato"
+                    android:text="@string/text_tv_title_icon_theme"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_icon_theme"
+                    app:layout_constraintTop_toTopOf="@+id/iv_icon_theme" />
+
+                <TextView
+                    android:id="@+id/tv_description_icon_theme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/lato"
+                    android:maxLines="1"
+                    android:text="@string/text_tv_description_icon_theme"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_icon_theme"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_title_icon_theme"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/tv_title_icon_theme"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_title_icon_theme"
+                    app:layout_constraintVertical_bias="0.0" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_setting_language"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/classic_blue"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/cv_setting_theme"
+            app:layout_constraintStart_toStartOf="@+id/cv_setting_theme"
+            app:layout_constraintTop_toBottomOf="@+id/cv_setting_theme">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="24dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="12dp">
+
+
+                <ImageView
+                    android:id="@+id/iv_icon_language"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:contentDescription="@string/description_icon_profile_language"
+                    android:src="@drawable/language_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/tv_title_icon_language"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:fontFamily="@font/lato"
+                    android:text="@string/text_tv_title_icon_language"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_icon_language"
+                    app:layout_constraintTop_toTopOf="@+id/iv_icon_language" />
+
+                <TextView
+                    android:id="@+id/tv_description_icon_language"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/lato"
+                    android:maxLines="1"
+                    android:text="@string/text_tv_description_icon_language"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_icon_language"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_title_icon_language"
+                    app:layout_constraintStart_toStartOf="@+id/tv_title_icon_language"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_title_icon_language" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:backgroundTint="@color/red_mahogany"
+            android:fontFamily="@font/lato"
+            android:text="@string/text_logout"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:cornerRadius="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/cv_setting_language"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/cv_setting_language"
+            app:layout_constraintTop_toBottomOf="@+id/cv_setting_language"
             app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

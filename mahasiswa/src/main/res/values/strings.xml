@@ -64,4 +64,15 @@
     <string name="text_tv_dosen_subject">Dosen</string>
     <string name="text_tv_day_schedule">Hari</string>
     <string name="photo_profile">Photo Profile</string>
+    <string name="text_setting_profile">Profil</string>
+    <string name="description_icon_profile_setting">icon profile setting</string>
+    <string name="text_tv_title_icon_setting">Profil</string>
+    <string name="text_tv_description_icon_setting">Ubah foto profil, ganti nama, dan informasi pribadi.</string>
+    <string name="description_icon_profile_theme">Icon Theme</string>
+    <string name="text_tv_title_icon_theme">Tema</string>
+    <string name="text_tv_description_icon_theme">Mode saat ini</string>
+    <string name="description_icon_profile_language">Icon Language</string>
+    <string name="text_tv_title_icon_language">Bahasa</string>
+    <string name="text_tv_description_icon_language">Bahasa Indonesia (Bahasa Default)</string>
+    <string name="text_logout">Logout</string>
 </resources>

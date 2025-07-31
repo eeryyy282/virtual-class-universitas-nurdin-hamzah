@@ -19,5 +19,6 @@
     <color name="outline_color_theme">@color/classic_blue</color>
     <color name="smoky_gray">#848884</color>
     <color name="backround_item_task">#CBDCEB</color>
+    <color name="red_mahogany">#BF3131</color>
 </resources>
 

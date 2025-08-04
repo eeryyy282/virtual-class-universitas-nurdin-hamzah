@@ -1,9 +1,11 @@
 package com.mjs.authentication.presentation.login.dosen
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.mjs.authentication.R
@@ -40,6 +42,14 @@ class LoginDosenActivity : AppCompatActivity() {
             loginDosenViewModel.saveThemeSetting(
                 loginDosenViewModel.getThemeSetting.value == false,
             )
+        }
+
+        binding.btnLoginDosen.setOnClickListener {
+            val uri = "dosen://mainactivity".toUri()
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
         }
     }
 

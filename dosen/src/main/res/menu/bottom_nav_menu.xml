@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/home_icon"
+        android:title="@string/title_home" />
+
+    <item
+        android:id="@+id/navigation_task"
+        android:icon="@drawable/task_icon"
+        android:title="@string/title_task" />
+
+    <item
+        android:id="@+id/navigation_schedule"
+        android:icon="@drawable/schedule_icon"
+        android:title="@string/title_schedule" />
+
+    <item
+        android:id="@+id/navigation_classroom"
+        android:icon="@drawable/classroom_icon"
+        android:title="@string/title_classroom" />
+
+    <item
+        android:id="@+id/navigation_setting"
+        android:icon="@drawable/setting_icon"
+        android:title="@string/title_setting" />
+
+</menu>

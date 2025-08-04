@@ -41,4 +41,5 @@
     <string name="failed_to_get_statistic_text">Gagal memuat statistik anda.</string>
     <string name="title_mahasiswa">Mahasiswa</string>
     <string name="title_dosen">Dosen</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>

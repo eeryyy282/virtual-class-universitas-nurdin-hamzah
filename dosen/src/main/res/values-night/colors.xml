@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#1E201F</color>
+    <color name="white">#FCFCFE</color>
+    <color name="classic_blue">#133E87</color>
+    <color name="air_force_blue">#2665B3</color>
+    <color name="blue_gray">#608BC1</color>
+    <color name="dodger_blue">#3D88FF</color>
+    <color name="pale_gray">#C4C4C5</color>
+    <color name="dark_gray">#9E9E9E</color>
+    <color name="dark_jungle_green">#1E201F</color>
+    <color name="silver_sand">#BBC5C0</color>
+    <color name="bottom_nav_background_themed">@color/black</color>
+    <color name="text_color_themed">@color/white</color>
+    <color name="text_color_title">@color/white</color>
+    <color name="text_color_themed_variant">@color/silver_sand</color>
+    <color name="background_color_theme">@color/black</color>
+    <color name="outline_color_theme">@color/white</color>
+    <color name="smoky_gray">#848884</color>
+    <color name="backround_item_task">@color/white</color>
+</resources>

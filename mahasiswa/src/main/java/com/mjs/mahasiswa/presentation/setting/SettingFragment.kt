@@ -1,5 +1,6 @@
 package com.mjs.mahasiswa.presentation.setting
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.mjs.mahasiswa.R
 import com.mjs.mahasiswa.databinding.FragmentSettingBinding
@@ -66,6 +68,13 @@ class SettingFragment : Fragment() {
                             Toast.LENGTH_SHORT,
                         ).show()
                 }.show()
+        }
+
+        binding.cvSettingProfileUser.setOnClickListener {
+            val uri = "profile_settings://profile_settings_activity".toUri()
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
     }
 

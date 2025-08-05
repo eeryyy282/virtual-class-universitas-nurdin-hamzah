@@ -42,4 +42,5 @@
     <string name="title_mahasiswa">Mahasiswa</string>
     <string name="title_dosen">Dosen</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_profilesettings">Profile Settings</string>
 </resources>

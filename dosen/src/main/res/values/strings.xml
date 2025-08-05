@@ -17,8 +17,8 @@
     <string name="text_tv_description_icon_language">Bahasa Indonesia (Bahasa Default)</string>
     <string name="text_logout">Logout</string>
     <string name="change_language_maintenance_massage">Saat ini, aplikasi hanya dapat berjalan dalam Bahasa Indonesia.</string>
-    <string name="light_theme">Tema Light</string>
-    <string name="dark_theme">Tema Dark</string>
+    <string name="light_theme">Mode Terang</string>
+    <string name="dark_theme">Mode Gelap</string>
     <string name="choose_theme">Pilih Tema</string>
     <string name="theme_changed_to">Tema anda telah diubah ke</string>
     <string name="text_description_task_home_dosen">Beberapa tugas aktif di kelas anda.</string>

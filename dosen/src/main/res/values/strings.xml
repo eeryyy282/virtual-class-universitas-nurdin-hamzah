@@ -31,4 +31,7 @@
     <string name="text_tv_description_task">Deskripsi Tugas</string>
     <string name="text_tv_subject">Matakuliah</string>
     <string name="text_tv_meeting_subject">Pertemuan</string>
+    <string name="text_title_schedule">Jadwal</string>
+    <string name="text_tv_description_title_schedule">Jangan lupa untuk selalu mengecek jadwalmu, dan hadir tepat waktu.</string>
+    <string name="text_tv_icon_schedule">Icon Schedule</string>
 </resources>

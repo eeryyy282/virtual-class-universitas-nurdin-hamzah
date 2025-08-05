@@ -84,4 +84,5 @@
     <string name="histrory">Riwayat</string>
     <string name="not_finished_task">Tugas yang Belum Anda Selesaikan</string>
     <string name="late_task">Terlewat Batas Pengumpulan</string>
+    <string name="text_title_task">Tugas</string>
 </resources>

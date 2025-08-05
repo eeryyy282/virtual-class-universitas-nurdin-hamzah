@@ -1,33 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.schedule.ScheduleFragment">
 
-    <ImageView
-        android:id="@+id/iv_logo"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="9dp"
-        android:layout_marginTop="17dp"
-        android:contentDescription="@string/image_description_unh_logo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo_unh" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_title_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:fontFamily="@font/lato"
-        android:text="@string/title_logo_unh"
-        android:textColor="@color/outline_color_theme"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_logo"
-        app:layout_constraintStart_toEndOf="@+id/iv_logo"
-        app:layout_constraintTop_toTopOf="@+id/iv_logo" />
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="17dp"
+            android:contentDescription="@string/image_description_unh_logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/logo_unh" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_title_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/title_logo_unh"
+            android:textColor="@color/outline_color_theme"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_logo"
+            app:layout_constraintStart_toEndOf="@+id/iv_logo"
+            app:layout_constraintTop_toTopOf="@+id/iv_logo" />
+
+        <ImageView
+            android:id="@+id/iv_icon_schedule"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="18dp"
+            android:contentDescription="@string/text_tv_icon_schedule"
+            android:src="@drawable/schedule_icon"
+            app:layout_constraintStart_toStartOf="@+id/iv_logo"
+            app:layout_constraintTop_toBottomOf="@+id/iv_logo"
+            app:tint="@color/outline_color_theme" />
+
+        <TextView
+            android:id="@+id/tv_title_schedule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/text_title_schedule"
+            android:textColor="@color/outline_color_theme"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/iv_icon_schedule"
+            app:layout_constraintStart_toEndOf="@+id/iv_icon_schedule"
+            app:layout_constraintTop_toTopOf="@+id/iv_icon_schedule" />
+
+        <TextView
+            android:id="@+id/tv_description_schedule"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="27dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/text_tv_description_title_schedule"
+            android:textColor="@color/text_color_themed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/iv_icon_schedule"
+            app:layout_constraintTop_toBottomOf="@+id/iv_icon_schedule" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tv_description_schedule"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tv_description_schedule"
+            app:layout_constraintTop_toBottomOf="@+id/tv_description_schedule"
+            app:layout_constraintVertical_bias="0.0"
+            tools:listitem="@layout/item_schedule" />
+
+        <ProgressBar
+            android:id="@+id/progressBar_schedule"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="128dp"
+            android:indeterminateTint="@color/outline_color_theme"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tv_description_schedule"
+            app:layout_constraintStart_toStartOf="@+id/tv_description_schedule"
+            app:layout_constraintTop_toBottomOf="@+id/tv_description_schedule" />
+
+        <ImageView
+            android:id="@+id/iv_doesnt_have_an_schedule"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="84dp"
+            android:contentDescription="@string/doesnt_have_an_task_text"
+            android:src="@drawable/doesnt_have_an_content_icon"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/tv_description_schedule"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="@+id/tv_description_schedule"
+            app:layout_constraintTop_toBottomOf="@id/tv_description_schedule" />
+
+        <TextView
+            android:id="@+id/tv_doesnt_have_an_schedule"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/doesnt_have_an_schedule_text"
+            android:textAlignment="center"
+            android:textColor="@color/text_color_themed"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tv_description_schedule"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tv_description_schedule"
+            app:layout_constraintTop_toBottomOf="@+id/iv_doesnt_have_an_schedule"
+            app:layout_constraintVertical_bias="0.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

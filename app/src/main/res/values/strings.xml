@@ -12,9 +12,9 @@
     <string name="title_logo_unh">Virtual Class</string>
     <string name="profile_user_image_view">Profile User Image View</string>
     <string name="name_text_title">Nama</string>
-    <string name="name_text">Mahsiswa/Dosen</string>
+    <string name="name_text">Dosen</string>
     <string name="id_text">0123456</string>
-    <string name="id_text_title">NIM/NIP</string>
+    <string name="id_text_title">NIP</string>
     <string name="title_mentor_user_text">Dosen Pembimbing Akademik</string>
     <string name="mentor_user">Dosen</string>
     <string name="icon_task_home_description">Icon Task Home</string>

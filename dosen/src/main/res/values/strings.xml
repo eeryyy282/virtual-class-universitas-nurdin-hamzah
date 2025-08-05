@@ -1,5 +1,25 @@
 <resources>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="text_tv_icon_setting">Icon Setting</string>
+    <string name="text_title_setting">Pengaturan</string>
+    <string name="text_tv_subject_room">Ruang 0.0</string>
+    <string name="text_tv_dosen_subject">Dosen</string>
+    <string name="text_tv_day_schedule">Hari</string>
+    <string name="photo_profile">Photo Profile</string>
+    <string name="text_setting_profile">Profil</string>
+    <string name="description_icon_profile_setting">icon profile setting</string>
+    <string name="text_tv_title_icon_setting">Profil</string>
+    <string name="text_tv_description_icon_setting">Ubah foto profil, ganti nama, dan informasi pribadi.</string>
+    <string name="description_icon_profile_theme">Icon Theme</string>
+    <string name="text_tv_title_icon_theme">Tema</string>
+    <string name="text_tv_description_icon_theme">Mode saat ini</string>
+    <string name="description_icon_profile_language">Icon Language</string>
+    <string name="text_tv_title_icon_language">Bahasa</string>
+    <string name="text_tv_description_icon_language">Bahasa Indonesia (Bahasa Default)</string>
+    <string name="text_logout">Logout</string>
+    <string name="change_language_maintenance_massage">Saat ini, aplikasi hanya dapat berjalan dalam Bahasa Indonesia.</string>
+    <string name="light_theme">Tema Light</string>
+    <string name="dark_theme">Tema Dark</string>
+    <string name="choose_theme">Pilih Tema</string>
+    <string name="theme_changed_to">Tema anda telah diubah ke</string>
+    <string name="text_description_task_home_dosen">Beberapa tugas aktif di kelas anda.</string>
 </resources>

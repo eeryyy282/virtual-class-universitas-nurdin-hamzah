@@ -80,7 +80,6 @@ class SettingFragment : Fragment() {
         binding.cvSettingProfileUser.setOnClickListener {
             val uri = "profile_settings://profile_settings_activity".toUri()
             val intent = Intent(Intent.ACTION_VIEW, uri)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
     }

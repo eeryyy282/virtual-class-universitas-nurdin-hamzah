@@ -103,8 +103,10 @@
             app:layout_constraintTop_toBottomOf="@id/tv_name_title">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_profile_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 android:fontFamily="@font/lato"
                 android:inputType="textPersonName"
                 android:text="@string/text_nama" />
@@ -121,7 +123,7 @@
             android:textColor="@color/outline_color_theme"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/tv_name_title"
-            app:layout_constraintTop_toBottomOf="@+id/til_name" />
+            app:layout_constraintTop_toBottomOf="@id/til_name" />
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -140,8 +142,10 @@
             app:layout_constraintTop_toBottomOf="@id/tv_email_title">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_profile_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 android:fontFamily="@font/lato"
                 android:inputType="textEmailAddress"
                 android:text="@string/doesnt_have_an_email_text" />
@@ -149,14 +153,14 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/btn_save"
+            android:id="@+id/btn_edit_profile"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:backgroundTint="@color/classic_blue"
             android:fontFamily="@font/lato"
             android:paddingVertical="12dp"
-            android:text="@string/text_save"
+            android:text="@string/text_edit_profile"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textStyle="bold"
@@ -164,6 +168,24 @@
             app:layout_constraintEnd_toEndOf="@id/til_email"
             app:layout_constraintStart_toStartOf="@id/til_email"
             app:layout_constraintTop_toBottomOf="@id/til_email" />
+
+        <Button
+            android:id="@+id/btn_save_profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:backgroundTint="@color/green_light"
+            android:fontFamily="@font/lato"
+            android:paddingVertical="12dp"
+            android:text="@string/text_save_changes"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:cornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="@id/til_email"
+            app:layout_constraintStart_toStartOf="@id/til_email"
+            app:layout_constraintTop_toBottomOf="@+id/til_email" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

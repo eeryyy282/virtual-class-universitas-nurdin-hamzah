@@ -10,4 +10,12 @@
     <string name="text_save">Simpan</string>
     <string name="text_title_profile_settings">Pengaturan Profil</string>
     <string name="photo_profile">Foto Profil</string>
+    <string name="text_changes_saved">Perubahan Disimpan</string>
+    <string name="text_edit_profile">Edit Profil</string>
+    <string name="text_save_changes">Simpan Perubahan</string>
+    <string name="text_confirm_changes_title">Konfirmasi Perubahan</string>
+    <string name="text_confirm_changes_message">Apakah anda yakin ingin menyimpan data anda?</string>
+    <string name="text_yes">Simpan</string>
+    <string name="text_changes_saved_successfully">Perubahan berhasil disimpan!</string>
+    <string name="text_no">Batal</string>
 </resources>

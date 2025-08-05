@@ -9,6 +9,5 @@ class ThemeRepository(
 ) : IThemeRepository {
     override fun getThemeSetting(): Flow<Boolean> = localDataSource.getThemeSetting()
 
-    override suspend fun saveThemeSetting(isDarkModeActive: Boolean) =
-        localDataSource.saveThemeSetting(isDarkModeActive)
+    override suspend fun saveThemeSetting(isDarkModeActive: Boolean) = localDataSource.saveThemeSetting(isDarkModeActive)
 }

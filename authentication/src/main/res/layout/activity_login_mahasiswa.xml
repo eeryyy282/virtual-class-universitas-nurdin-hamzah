@@ -87,53 +87,62 @@
             app:layout_constraintStart_toStartOf="@+id/iv_login_mahasiswa"
             app:layout_constraintTop_toBottomOf="@+id/iv_login_mahasiswa" />
 
-        <EditText
-            android:id="@+id/et_nim"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_nim"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:layout_marginStart="32dp"
             android:layout_marginTop="64dp"
             android:layout_marginEnd="32dp"
-            android:background="@drawable/background_edit_text"
-            android:drawableStart="@drawable/profile_icon"
-            android:drawablePadding="12dp"
-            android:drawableTint="@color/outline_color_theme"
-            android:fontFamily="@font/lato"
             android:hint="@string/hint_nim"
-            android:inputType="number"
-            android:padding="12dp"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:textColor="@color/text_color_themed"
-            android:textColorHint="#9E9E9E"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_login_mahasiswa" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_login_mahasiswa">
 
-        <EditText
-            android:id="@+id/et_password"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_nim"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/profile_icon"
+                android:drawablePadding="12dp"
+                android:fontFamily="@font/lato"
+                android:inputType="number"
+                android:textColor="@color/text_color_themed" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_password"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:layout_marginStart="32dp"
             android:layout_marginTop="28dp"
             android:layout_marginEnd="32dp"
-            android:background="@drawable/background_edit_text"
-            android:drawableStart="@drawable/password_icon"
-            android:drawablePadding="12dp"
-            android:drawableTint="@color/outline_color_theme"
-            android:fontFamily="@font/lato"
             android:hint="@string/password_hint"
-            android:inputType="textPassword"
-            android:padding="12dp"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:textColor="@color/text_color_themed"
-            android:textColorHint="#9E9E9E"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:endIconMode="password_toggle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_nim" />
+            app:layout_constraintTop_toBottomOf="@+id/til_nim">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/password_icon"
+                android:drawablePadding="12dp"
+                android:fontFamily="@font/lato"
+                android:inputType="textPassword"
+                android:textColor="@color/text_color_themed" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/btn_forgot_password"
@@ -147,8 +156,8 @@
             android:textAlignment="textEnd"
             android:textAllCaps="false"
             android:textColor="@color/outline_color_theme"
-            app:layout_constraintEnd_toEndOf="@+id/et_password"
-            app:layout_constraintTop_toBottomOf="@+id/et_password"
+            app:layout_constraintEnd_toEndOf="@+id/til_password"
+            app:layout_constraintTop_toBottomOf="@+id/til_password"
             tools:ignore="RtlSymmetry" />
 
         <Button
@@ -162,8 +171,8 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             app:cornerRadius="16dp"
-            app:layout_constraintEnd_toEndOf="@+id/et_password"
-            app:layout_constraintStart_toStartOf="@+id/et_password"
+            app:layout_constraintEnd_toEndOf="@+id/til_password"
+            app:layout_constraintStart_toStartOf="@+id/til_password"
             app:layout_constraintTop_toBottomOf="@+id/btn_forgot_password" />
 
         <TextView

@@ -21,5 +21,14 @@
     <string name="dark_theme">Mode Gelap</string>
     <string name="choose_theme">Pilih Tema</string>
     <string name="theme_changed_to">Tema anda telah diubah ke</string>
-    <string name="text_description_task_home_dosen">Beberapa tugas aktif di kelas anda.</string>
+    <string name="text_description_task">Beberapa tugas aktif di kelas anda.</string>
+    <string name="text_tv_icon_task">Task Icon</string>
+    <string name="text_title_classroom">Tugas</string>
+    <string name="button_icon_history_description">Icon History</string>
+    <string name="histrory">Riwayat</string>
+    <string name="text_tv_deadline_date">00.00 WIB | 01 Januari 2020</string>
+    <string name="text_tv_deadline">Pengumpulan Terakhir</string>
+    <string name="text_tv_description_task">Deskripsi Tugas</string>
+    <string name="text_tv_subject">Matakuliah</string>
+    <string name="text_tv_meeting_subject">Pertemuan</string>
 </resources>

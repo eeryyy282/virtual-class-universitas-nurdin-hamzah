@@ -20,5 +20,6 @@
     <color name="smoky_gray">#848884</color>
     <color name="backround_item_task">#CBDCEB</color>
     <color name="red_mahogany">#BF3131</color>
+    <color name="background_color_card_view">#FFFFFF</color>
 </resources>
 

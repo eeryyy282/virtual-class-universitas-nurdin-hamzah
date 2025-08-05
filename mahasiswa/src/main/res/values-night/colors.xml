@@ -18,4 +18,5 @@
     <color name="outline_color_theme">@color/white</color>
     <color name="smoky_gray">#848884</color>
     <color name="backround_item_task">@color/white</color>
+    <color name="background_color_card_view">#292C2B</color>
 </resources>

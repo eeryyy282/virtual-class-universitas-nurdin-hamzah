@@ -14,20 +14,20 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingFragment : Fragment() {
     private var _binding: FragmentSettingBinding? = null
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
     private val settingViewModel: SettingViewModel by viewModel()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentSettingBinding.inflate(inflater, container, false)
-        val root: View = binding.root
         updateThemeDescription()
         setupAction()
 
-        return root
+        return binding.root
     }
 
     private fun updateThemeDescription() {

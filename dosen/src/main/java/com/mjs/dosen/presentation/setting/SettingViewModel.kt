@@ -7,7 +7,7 @@ import com.mjs.core.domain.usecase.pref.ThemeUseCase
 import kotlinx.coroutines.launch
 
 class SettingViewModel(
-    private val themeUseCase: ThemeUseCase
+    private val themeUseCase: ThemeUseCase,
 ) : ViewModel() {
     val getThemeSetting = themeUseCase.getThemeSetting().asLiveData()
 

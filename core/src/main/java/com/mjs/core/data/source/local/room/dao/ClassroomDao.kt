@@ -1,0 +1,31 @@
+package com.mjs.core.data.source.local.room.dao
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import com.mjs.core.data.source.local.entity.EnrollmentEntity
+import com.mjs.core.data.source.local.entity.KelasEntity
+import com.mjs.core.data.source.local.entity.MaterialEntity
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface ClassroomDao {
+    @Query("SELECT * FROM classes")
+    fun getAllKelas(): Flow<List<KelasEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertKelas(kelas: KelasEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertEnrollment(enrollment: EnrollmentEntity)
+
+    @Query("SELECT * FROM enrollments WHERE nim = :nim")
+    fun getEnrolledClasses(nim: String): Flow<List<EnrollmentEntity>>
+
+    @Query("SELECT * FROM materials WHERE kelas_id = :kelasId")
+    fun getMaterialsByClass(kelasId: Int): Flow<List<MaterialEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMaterial(material: MaterialEntity)
+}

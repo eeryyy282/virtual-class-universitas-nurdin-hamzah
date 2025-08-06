@@ -85,4 +85,10 @@
     <string name="not_finished_task">Tugas yang Belum Anda Selesaikan</string>
     <string name="late_task">Terlewat Batas Pengumpulan</string>
     <string name="text_title_task">Tugas</string>
+    <string name="code_subject">Kode Matakuliah</string>
+    <string name="classroom_location">Ruangan</string>
+    <string name="credits_classroom">SKS</string>
+    <string name="category_subject">Kategori</string>
+    <string name="teacher_classroom">Dosen Pengampu:</string>
+    <string name="doesnt_have_an_classroom_text">Sepertinya anda belum mendaftarkan ke kelas manampun.</string>
 </resources>

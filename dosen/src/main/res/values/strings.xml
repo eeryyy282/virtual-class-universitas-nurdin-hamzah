@@ -34,4 +34,15 @@
     <string name="text_title_schedule">Jadwal</string>
     <string name="text_tv_description_title_schedule">Jangan lupa untuk selalu mengecek jadwalmu, dan hadir tepat waktu.</string>
     <string name="text_tv_icon_schedule">Icon Schedule</string>
+    <string name="code_subject">Kode Matakuliah</string>
+    <string name="classroom_location">Ruangan</string>
+    <string name="credits_classroom">SKS</string>
+    <string name="category_subject">Kategori</string>
+    <string name="teacher_classroom">Dosen Pengampu:</string>
+    <string name="classroom_semester">Semester</string>
+    <string name="icon_task_description">Icon Task</string>
+    <string name="text_tv_description_classroom">Ruang kelas yang anda ampu.</string>
+    <string name="zero">0</string>
+    <string name="text_tv_title_class_joined">Kelas Tergabung</string>
+    <string name="doesnt_have_an_classroom_text">Sepertinya anda belum mendaftarkan ke kelas manampun.</string>
 </resources>

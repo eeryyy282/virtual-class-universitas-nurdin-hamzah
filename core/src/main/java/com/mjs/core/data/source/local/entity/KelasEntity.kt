@@ -25,4 +25,8 @@ data class KelasEntity(
     val deskripsi: String,
     val nidn: String,
     val jadwal: String,
+    val semester: String,
+    val credit: Int,
+    val category: String,
+    val classImage: String,
 )

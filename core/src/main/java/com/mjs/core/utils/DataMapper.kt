@@ -41,6 +41,10 @@ object DataMapper {
             deskripsi = input.deskripsi,
             nidn = input.nidn,
             jadwal = input.jadwal,
+            semester = input.semester,
+            credit = input.credit,
+            category = input.category,
+            classImage = input.classImage,
         )
 
     fun mapKelasEntitiesToDomains(input: List<KelasEntity>): List<Kelas> = input.map { mapKelasEntityToDomain(it) }

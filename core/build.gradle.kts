@@ -34,6 +34,10 @@ android {
         @Suppress("DEPRECATION")
         jvmTarget = "17"
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {

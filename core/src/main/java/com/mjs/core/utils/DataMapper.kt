@@ -68,7 +68,7 @@ object DataMapper {
 
     fun mapMateriEntitiesToDomains(input: List<MaterialEntity>): List<Materi> = input.map { mapMateriEntityToDomain(it) }
 
-    fun mapForumEntityToDomain(input: ForumEntity.ForumEntity): Forum =
+    fun mapForumEntityToDomain(input: ForumEntity): Forum =
         Forum(
             forumId = input.forumId,
             kelasId = input.kelasId,
@@ -78,7 +78,7 @@ object DataMapper {
 
     fun mapForumEntitiesToDomains(input: List<ForumEntity>): List<Forum> = input.map { mapForumEntityToDomain(it) }
 
-    fun mapPostinganEntityToDomain(input: PostEntity.PostEntity): Postingan =
+    fun mapPostinganEntityToDomain(input: PostEntity): Postingan =
         Postingan(
             postId = input.postId,
             forumId = input.forumId,

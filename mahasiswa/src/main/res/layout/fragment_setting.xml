@@ -80,6 +80,8 @@
                     android:layout_height="0dp"
                     android:layout_margin="4dp"
                     android:contentDescription="@string/photo_profile"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/profile_photo"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

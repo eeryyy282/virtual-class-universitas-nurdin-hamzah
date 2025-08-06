@@ -1,6 +1,7 @@
 package com.mjs.virtualclassuniversitasnurdinhamzah
 
 import android.app.Application
+import com.mjs.core.di.databaseModule
 import com.mjs.core.di.repositoryModule
 import com.mjs.virtualclassuniversitasnurdinhamzah.di.useCaseModule
 import com.mjs.virtualclassuniversitasnurdinhamzah.di.viewModelModule
@@ -17,9 +18,10 @@ class MyApplication : Application() {
             androidContext(this@MyApplication)
             modules(
                 listOf(
-                    repositoryModule,
                     useCaseModule,
                     viewModelModule,
+                    databaseModule,
+                    repositoryModule,
                 ),
             )
         }

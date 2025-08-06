@@ -16,16 +16,16 @@ import com.mjs.core.domain.model.Mahasiswa
 import com.mjs.core.domain.model.Materi
 import com.mjs.core.domain.model.Postingan
 import com.mjs.core.domain.model.Tugas
-import com.mjs.core.domain.repository.IRepository
+import com.mjs.core.domain.repository.IVirtualClassRepository
 import com.mjs.core.utils.DataMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
-class Repository(
+class VirtualClassRepository(
     private val localDataSource: LocalDataSource,
-) : IRepository {
+) : IVirtualClassRepository {
     override fun getMahasiswaByNim(nim: String): Flow<Resource<Mahasiswa>> =
         flow {
             emit(Resource.Loading())

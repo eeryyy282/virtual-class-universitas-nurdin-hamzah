@@ -1,4 +1,4 @@
-package com.mjs.core.domain.repository
+package com.mjs.core.domain.usecase.virtualclass
 
 import com.mjs.core.data.Resource
 import com.mjs.core.data.source.local.entity.AssignmentEntity
@@ -17,7 +17,7 @@ import com.mjs.core.domain.model.Postingan
 import com.mjs.core.domain.model.Tugas
 import kotlinx.coroutines.flow.Flow
 
-interface IRepository {
+interface VirtualClassUseCase {
     fun getMahasiswaByNim(nim: String): Flow<Resource<Mahasiswa>>
 
     fun getDosenByNidn(nidn: String): Flow<Resource<Dosen>>

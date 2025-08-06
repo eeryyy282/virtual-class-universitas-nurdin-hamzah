@@ -88,9 +88,9 @@ online education accessible and efficient for testing purposes.
 * **Programming Language**: Kotlin (Native Android)
 * **IDE**: Android Studio
 * **Build System**: Gradle Kotlin DSL
-* **UI Toolkit**: Android Jetpack Compose (if applicable, otherwise standard XML layouts)
+* **UI Toolkit**: Standard XML layouts
 * **Asynchronous Operations**: Kotlin Coroutines, Flow
-* **Dependency Injection**: Hilt (Dagger)
+* **Dependency Injection**: Koin
 * **Database**: Room Persistence Library (for local caching/data management)
 * **Image Loading**: Glide
 * **State Management**: Android Architecture Components (ViewModel, LiveData)
@@ -148,7 +148,7 @@ Key dependencies used in this project include:
 
 * **AndroidX Libraries**: Core components, AppCompat, ConstraintLayout, Lifecycle, Navigation.
 * **Kotlin Coroutines**: For asynchronous programming.
-* **Hilt/Dagger**: For dependency injection.
+* **Koin**: For dependency injection.
 * **Room**: For local database persistence.
 * **Glide**: For efficient image loading.
 * **Material Design Components**: For modern UI elements.

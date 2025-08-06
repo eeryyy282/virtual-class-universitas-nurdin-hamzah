@@ -21,6 +21,12 @@ import kotlinx.coroutines.flow.Flow
 class VirtualClassInteractor(
     private val virtualClassRepository: IVirtualClassRepository,
 ) : VirtualClassUseCase {
+    override fun getThemeSetting(): Flow<Boolean> = virtualClassRepository.getThemeSetting()
+
+    override suspend fun saveThemeSetting(isDarkModeActive: Boolean) {
+        virtualClassRepository.saveThemeSetting(isDarkModeActive)
+    }
+
     override fun getMahasiswaByNim(nim: String): Flow<Resource<Mahasiswa>> = virtualClassRepository.getMahasiswaByNim(nim)
 
     override fun getDosenByNidn(nidn: String): Flow<Resource<Dosen>> = virtualClassRepository.getDosenByNidn(nidn)

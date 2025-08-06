@@ -10,8 +10,23 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AuthDao {
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Query("SELECT * FROM mahasiswa WHERE nim = :nim AND password = :sandi")
+    suspend fun loginMahasiswa(
+        nim: String,
+        sandi: String,
+    ): MahasiswaEntity?
+
+    @Query("SELECT * FROM dosen WHERE nidn = :nidn AND password = :sandi")
+    suspend fun loginDosen(
+        nidn: String,
+        sandi: String,
+    ): DosenEntity?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun registerMahasiswa(mahasiswa: MahasiswaEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun registerDosen(dosen: DosenEntity)
 
     @Query("SELECT * FROM mahasiswa WHERE nim = :nim")
     fun getMahasiswaByNim(nim: String): Flow<MahasiswaEntity?>

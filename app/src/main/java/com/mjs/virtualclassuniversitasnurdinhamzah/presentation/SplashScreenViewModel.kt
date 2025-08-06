@@ -1,11 +1,17 @@
 package com.mjs.virtualclassuniversitasnurdinhamzah.presentation
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.mjs.core.domain.usecase.pref.ThemeUseCase
+import com.mjs.core.data.source.local.pref.AppPreference
+import kotlinx.coroutines.flow.Flow
 
 class SplashScreenViewModel(
-    themeUseCase: ThemeUseCase,
+    private val appPreference: AppPreference,
 ) : ViewModel() {
-    val getThemeSetting = themeUseCase.getThemeSetting().asLiveData()
+    val getThemeSetting: LiveData<Boolean> = appPreference.getThemeSetting().asLiveData()
+
+    fun getLoginStatus(): Flow<Boolean> = appPreference.getLoginStatus()
+
+    fun getUserType(): Flow<String?> = appPreference.getLoggedInUserType()
 }

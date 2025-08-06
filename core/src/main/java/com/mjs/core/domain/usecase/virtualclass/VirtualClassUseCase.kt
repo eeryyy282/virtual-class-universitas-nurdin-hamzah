@@ -18,6 +18,10 @@ import com.mjs.core.domain.model.Tugas
 import kotlinx.coroutines.flow.Flow
 
 interface VirtualClassUseCase {
+    fun getThemeSetting(): Flow<Boolean>
+
+    suspend fun saveThemeSetting(isDarkModeActive: Boolean)
+
     fun getMahasiswaByNim(nim: String): Flow<Resource<Mahasiswa>>
 
     fun getDosenByNidn(nidn: String): Flow<Resource<Dosen>>

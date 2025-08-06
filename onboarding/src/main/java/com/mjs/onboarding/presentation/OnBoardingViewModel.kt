@@ -3,17 +3,17 @@ package com.mjs.onboarding.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.mjs.core.domain.usecase.pref.ThemeUseCase
+import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
 import kotlinx.coroutines.launch
 
 class OnBoardingViewModel(
-    private val themeUseCase: ThemeUseCase,
+    private val virtualClassUseCase: VirtualClassUseCase,
 ) : ViewModel() {
-    val getThemeSetting = themeUseCase.getThemeSetting().asLiveData()
+    val getThemeSetting = virtualClassUseCase.getThemeSetting().asLiveData()
 
     fun saveThemeSetting(isDarkModeActive: Boolean) {
         viewModelScope.launch {
-            themeUseCase.saveThemeSetting(isDarkModeActive)
+            virtualClassUseCase.saveThemeSetting(isDarkModeActive)
         }
     }
 }

@@ -26,6 +26,10 @@ import kotlinx.coroutines.flow.map
 class VirtualClassRepository(
     private val localDataSource: LocalDataSource,
 ) : IVirtualClassRepository {
+    override fun getThemeSetting(): Flow<Boolean> = localDataSource.getThemeSetting()
+
+    override suspend fun saveThemeSetting(isDarkModeActive: Boolean) = localDataSource.saveThemeSetting(isDarkModeActive)
+
     override fun getMahasiswaByNim(nim: String): Flow<Resource<Mahasiswa>> =
         flow {
             emit(Resource.Loading())

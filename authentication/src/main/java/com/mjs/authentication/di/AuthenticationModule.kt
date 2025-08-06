@@ -6,14 +6,26 @@ import com.mjs.authentication.presentation.register.RegisterViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-val loginDeosenModule =
+val loginDosenModule =
     module {
-        viewModel { LoginDosenViewModel(get()) }
+        viewModel {
+            LoginDosenViewModel(
+                virtualClassUseCase = get(),
+                authDao = get(),
+                appPreference = get(),
+            )
+        }
     }
 
 val loginMahasiswaModule =
     module {
-        viewModel { LoginMahasiswaViewModel(get()) }
+        viewModel {
+            LoginMahasiswaViewModel(
+                virtualClassUseCase = get(),
+                authDao = get(),
+                appPreference = get(),
+            )
+        }
     }
 
 val registerModule =

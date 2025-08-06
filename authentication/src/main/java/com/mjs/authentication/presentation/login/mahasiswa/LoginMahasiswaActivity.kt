@@ -3,6 +3,7 @@ package com.mjs.authentication.presentation.login.mahasiswa
 import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -13,6 +14,7 @@ import com.mjs.authentication.R
 import com.mjs.authentication.databinding.ActivityLoginMahasiswaBinding
 import com.mjs.authentication.di.loginMahasiswaModule
 import com.mjs.authentication.presentation.register.RegisterActivity
+import com.mjs.authentication.presentation.utils.LoginResult
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
 
@@ -34,6 +36,7 @@ class LoginMahasiswaActivity : AppCompatActivity() {
 
         checkDarkMode()
         setupAction()
+        observeLoginResult()
     }
 
     private fun setupAction() {
@@ -56,11 +59,34 @@ class LoginMahasiswaActivity : AppCompatActivity() {
         }
 
         binding.btnLoginMahasiswa.setOnClickListener {
-            val uri = "mahasiswa://mainactivity".toUri()
-            val intent = Intent(Intent.ACTION_VIEW, uri)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finish()
+            val nim =
+                binding.etNim.text
+                    .toString()
+                    .trim()
+            val password =
+                binding.etPassword.text
+                    .toString()
+                    .trim()
+            loginMahasiswaViewModel.login(nim, password)
+        }
+    }
+
+    private fun observeLoginResult() {
+        loginMahasiswaViewModel.loginResult.observe(this) { result ->
+            when (result) {
+                is LoginResult.Success -> {
+                    Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
+                    val uri = "mahasiswa://mainactivity".toUri()
+                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finish()
+                }
+
+                is LoginResult.Error -> {
+                    Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
+                }
+            }
         }
     }
 

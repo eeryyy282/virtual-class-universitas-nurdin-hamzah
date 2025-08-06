@@ -2,10 +2,10 @@ package com.mjs.profilesettings.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.mjs.core.domain.usecase.pref.ThemeUseCase
+import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
 
 class ProfileSettingsViewModel(
-    themeUseCase: ThemeUseCase,
+    virtualClassUseCase: VirtualClassUseCase,
 ) : ViewModel() {
-    val getThemeSetting = themeUseCase.getThemeSetting().asLiveData()
+    val getThemeSetting = virtualClassUseCase.getThemeSetting().asLiveData()
 }

@@ -11,7 +11,7 @@ import com.mjs.core.data.source.local.entity.MahasiswaEntity
 import com.mjs.core.data.source.local.entity.MaterialEntity
 import com.mjs.core.data.source.local.entity.PostEntity
 import com.mjs.core.data.source.local.entity.SubmissionEntity
-import com.mjs.core.data.source.local.pref.ThemePreference
+import com.mjs.core.data.source.local.pref.AppPreference
 import com.mjs.core.data.source.local.room.dao.AttendanceDao
 import com.mjs.core.data.source.local.room.dao.AuthDao
 import com.mjs.core.data.source.local.room.dao.ClassroomDao
@@ -20,7 +20,7 @@ import com.mjs.core.data.source.local.room.dao.TaskDao
 import kotlinx.coroutines.flow.Flow
 
 class LocalDataSource(
-    private val themePreference: ThemePreference,
+    private val appPreference: AppPreference,
     private val authDao: AuthDao,
     private val classroomDao: ClassroomDao,
     private val taskDao: TaskDao,
@@ -28,10 +28,10 @@ class LocalDataSource(
     private val attendanceDao: AttendanceDao,
 ) {
     suspend fun saveThemeSetting(isDarkModeActive: Boolean) {
-        themePreference.saveThemeSetting(isDarkModeActive)
+        appPreference.saveThemeSetting(isDarkModeActive)
     }
 
-    fun getThemeSetting(): Flow<Boolean> = themePreference.getThemeSetting()
+    fun getThemeSetting(): Flow<Boolean> = appPreference.getThemeSetting()
 
     suspend fun registerMahasiswa(mahasiswa: MahasiswaEntity) = authDao.registerMahasiswa(mahasiswa)
 

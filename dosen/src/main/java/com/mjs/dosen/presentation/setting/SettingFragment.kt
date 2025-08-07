@@ -58,7 +58,7 @@ class SettingFragment : Fragment() {
                         val dosen = it.data
                         if (dosen != null) {
                             binding.tvName.text = dosen.nama
-                            binding.tvIdTitle.text = dosen.nidn
+                            binding.tvIdTitle.text = dosen.nidn.toString()
                         } else {
                             Toast
                                 .makeText(context, "Gagal memuat data dosen", Toast.LENGTH_SHORT)

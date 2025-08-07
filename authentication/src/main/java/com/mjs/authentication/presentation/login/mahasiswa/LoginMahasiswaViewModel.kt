@@ -36,9 +36,12 @@ class LoginMahasiswaViewModel(
                 _loginResult.value = LoginResult.Error("NIM and password cannot be empty")
                 return@launch
             }
-            val mahasiswa = authDao.loginMahasiswa(nim, password)
+            val mahasiswa = authDao.loginMahasiswa(nim.toInt(), password)
             if (mahasiswa != null) {
-                appPreference.saveLoginSession(mahasiswa.nim, AppPreference.USER_TYPE_MAHASISWA)
+                appPreference.saveLoginSession(
+                    mahasiswa.nim,
+                    AppPreference.USER_TYPE_MAHASISWA,
+                )
                 _loginResult.value = LoginResult.Success(AppPreference.USER_TYPE_MAHASISWA)
             } else {
                 _loginResult.value = LoginResult.Error("Invalid NIM or password")

@@ -27,8 +27,8 @@ data class AttendanceEntity(
     @ColumnInfo(name = "absensi_id")
     val absensiId: Int = 0,
     @ColumnInfo(name = "kelas_id")
-    val kelasId: Int,
-    val nim: String,
+    val kelasId: String,
+    val nim: Int,
     @ColumnInfo(name = "tanggal_hadir")
     val tanggalHadir: String,
     val status: String,

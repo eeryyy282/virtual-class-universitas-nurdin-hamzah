@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Materi(
     val materiId: Int,
-    val kelasId: Int,
+    val kelasId: String,
     val judulMateri: String,
     val deskripsi: String,
     val attachment: String? = null,

@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Mahasiswa(
-    val nim: String,
+    val nim: Int,
     val nama: String,
     val email: String,
     val fotoProfil: String?,

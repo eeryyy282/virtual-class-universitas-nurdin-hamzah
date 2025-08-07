@@ -21,7 +21,7 @@ data class AssignmentEntity(
     @ColumnInfo(name = "assignment_id")
     val assignmentId: Int = 0,
     @ColumnInfo(name = "kelas_id")
-    val kelasId: Int,
+    val kelasId: String,
     @ColumnInfo(name = "judul_tugas")
     val judulTugas: String,
     val deskripsi: String,

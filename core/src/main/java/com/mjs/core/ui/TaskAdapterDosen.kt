@@ -10,7 +10,7 @@ import com.mjs.core.domain.model.Tugas
 
 class TaskAdapterDosen : RecyclerView.Adapter<TaskAdapterDosen.ListViewHolder>() {
     private var listData = ArrayList<Tugas>()
-    var getClassName: ((Int) -> String)? = null
+    var getClassName: ((String) -> String)? = null
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(newListData: List<Tugas>?) {

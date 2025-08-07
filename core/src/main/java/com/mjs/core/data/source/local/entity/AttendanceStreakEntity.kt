@@ -28,7 +28,7 @@ data class AttendanceStreakEntity(
     val streakId: Int = 0,
     val nim: String,
     @ColumnInfo(name = "kelas_id")
-    val kelasId: Int,
+    val kelasId: String,
     @ColumnInfo(name = "current_streak")
     val currentStreak: Int,
     @ColumnInfo(name = "longest_streak")

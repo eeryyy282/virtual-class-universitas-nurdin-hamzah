@@ -2,6 +2,7 @@ package com.mjs.core.ui
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mjs.core.databinding.ItemScheduleDetailBinding
@@ -11,6 +12,7 @@ class ScheduleDetailAdapter : RecyclerView.Adapter<ScheduleDetailAdapter.ListVie
     private var listData = ArrayList<Kelas>()
     var onItemClick: ((Kelas) -> Unit)? = null
     var getDosenName: ((String) -> String)? = null
+    var isForDosenView: Boolean = false
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(newListData: List<Kelas>?) {
@@ -50,8 +52,15 @@ class ScheduleDetailAdapter : RecyclerView.Adapter<ScheduleDetailAdapter.ListVie
                         .getOrElse(1) { data.jadwal }
                         .trim()
                 textSubjectSchedule.text = data.namaKelas
-                tvDosenSubject.text = getDosenName?.invoke(data.nidn) ?: data.nidn
-                tvSubjectRoom.text = data.deskripsi
+                tvSubjectRoom.text = data.ruang
+
+                if (isForDosenView) {
+                    tvDosenSubject.visibility = View.GONE
+                } else {
+                    tvDosenSubject.visibility = View.VISIBLE
+                    tvDosenSubject.text =
+                        getDosenName?.invoke(data.nidn.toString()) ?: data.nidn.toString()
+                }
             }
         }
 

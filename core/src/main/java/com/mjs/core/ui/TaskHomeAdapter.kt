@@ -12,7 +12,7 @@ import com.mjs.core.utils.DateUtils
 
 class TaskHomeAdapter : RecyclerView.Adapter<TaskHomeAdapter.ListViewHolder>() {
     private var listData = ArrayList<Tugas>()
-    var getClassName: ((Int) -> String)? = null
+    var getClassName: ((String) -> String)? = null
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(newListData: List<Tugas>?) {

@@ -28,7 +28,7 @@ data class SubmissionEntity(
     val submissionId: Int = 0,
     @ColumnInfo(name = "assignment_id")
     val assignmentId: Int,
-    val nim: String,
+    val nim: Int,
     @ColumnInfo(name = "attachment")
     val attachment: String? = null,
     @ColumnInfo(name = "submission_date")

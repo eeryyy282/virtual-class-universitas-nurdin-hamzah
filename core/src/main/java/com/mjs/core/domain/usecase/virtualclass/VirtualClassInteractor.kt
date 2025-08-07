@@ -27,23 +27,26 @@ class VirtualClassInteractor(
         virtualClassRepository.saveThemeSetting(isDarkModeActive)
     }
 
-    override fun getMahasiswaByNim(nim: String): Flow<Resource<Mahasiswa>> = virtualClassRepository.getMahasiswaByNim(nim)
+    override fun getMahasiswaByNim(nim: Int): Flow<Resource<Mahasiswa>> = virtualClassRepository.getMahasiswaByNim(nim) // Changed to Int
 
-    override fun getDosenByNidn(nidn: String): Flow<Resource<Dosen>> = virtualClassRepository.getDosenByNidn(nidn)
+    override fun getDosenByNidn(nidn: Int): Flow<Resource<Dosen>> = virtualClassRepository.getDosenByNidn(nidn) // Changed to Int
 
     override suspend fun registerMahasiswa(mahasiswa: MahasiswaEntity): Flow<Resource<String>> =
         virtualClassRepository.registerMahasiswa(mahasiswa)
 
     override fun getAllKelas(): Flow<Resource<List<Kelas>>> = virtualClassRepository.getAllKelas()
 
-    override fun getEnrolledClasses(nim: String): Flow<Resource<List<EnrollmentEntity>>> = virtualClassRepository.getEnrolledClasses(nim)
+    override fun getEnrolledClasses(nim: Int): Flow<Resource<List<EnrollmentEntity>>> =
+        virtualClassRepository.getEnrolledClasses(nim) // Changed to Int
 
     override suspend fun enrollToClass(enrollment: EnrollmentEntity): Flow<Resource<String>> =
         virtualClassRepository.enrollToClass(enrollment)
 
-    override fun getMaterialsByClass(kelasId: Int): Flow<Resource<List<Materi>>> = virtualClassRepository.getMaterialsByClass(kelasId)
+    override fun getMaterialsByClass(kelasId: String): Flow<Resource<List<Materi>>> =
+        virtualClassRepository.getMaterialsByClass(kelasId) // Changed to String
 
-    override fun getAssignmentsByClass(kelasId: Int): Flow<Resource<List<Tugas>>> = virtualClassRepository.getAssignmentsByClass(kelasId)
+    override fun getAssignmentsByClass(kelasId: String): Flow<Resource<List<Tugas>>> =
+        virtualClassRepository.getAssignmentsByClass(kelasId) // Changed to String
 
     override suspend fun insertAssignment(assignment: AssignmentEntity): Flow<Resource<String>> =
         virtualClassRepository.insertAssignment(assignment)
@@ -51,21 +54,26 @@ class VirtualClassInteractor(
     override suspend fun insertSubmission(submission: SubmissionEntity): Flow<Resource<String>> =
         virtualClassRepository.insertSubmission(submission)
 
-    override fun getForumsByClass(kelasId: Int): Flow<Resource<List<Forum>>> = virtualClassRepository.getForumsByClass(kelasId)
+    override fun getForumsByClass(kelasId: String): Flow<Resource<List<Forum>>> =
+        virtualClassRepository.getForumsByClass(kelasId) // Changed to String
 
     override fun getPostsByForum(forumId: Int): Flow<Resource<List<Postingan>>> = virtualClassRepository.getPostsByForum(forumId)
 
     override suspend fun insertPost(post: PostEntity): Flow<Resource<String>> = virtualClassRepository.insertPost(post)
 
     override fun getAttendanceHistory(
-        nim: String,
-        kelasId: Int,
+        nim: Int,
+        kelasId: String,
     ): Flow<Resource<List<Kehadiran>>> = virtualClassRepository.getAttendanceHistory(nim, kelasId)
 
     override suspend fun insertAttendance(attendance: AttendanceEntity): Flow<Resource<String>> =
         virtualClassRepository.insertAttendance(attendance)
 
-    override fun getTodaySchedule(nim: String): Flow<Resource<List<Kelas>>> = virtualClassRepository.getTodaySchedule(nim)
+    override fun getTodaySchedule(nim: Int): Flow<Resource<List<Kelas>>> = virtualClassRepository.getTodaySchedule(nim) // Changed to Int
 
-    override fun getTodayScheduleDosen(nidn: String): Flow<Resource<List<Kelas>>> = virtualClassRepository.getTodayScheduleDosen(nidn)
+    override fun getTodayScheduleDosen(nidn: Int): Flow<Resource<List<Kelas>>> = virtualClassRepository.getTodayScheduleDosen(nidn)
+
+    override fun getAllSchedulesByNim(nim: Int): Flow<Resource<List<Kelas>>> = virtualClassRepository.getAllSchedulesByNim(nim)
+
+    override fun getAllSchedulesByNidn(nidn: Int): Flow<Resource<List<Kelas>>> = virtualClassRepository.getAllSchedulesByNidn(nidn)
 }

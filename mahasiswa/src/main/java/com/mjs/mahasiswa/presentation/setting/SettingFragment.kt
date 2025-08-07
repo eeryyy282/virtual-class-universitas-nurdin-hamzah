@@ -56,7 +56,7 @@ class SettingFragment : Fragment() {
                         val mahasiswa = it.data
                         if (mahasiswa != null) {
                             binding.tvName.text = mahasiswa.nama
-                            binding.tvIdUser.text = mahasiswa.nim
+                            binding.tvIdUser.text = mahasiswa.nim.toString()
                         } else {
                             Toast
                                 .makeText(

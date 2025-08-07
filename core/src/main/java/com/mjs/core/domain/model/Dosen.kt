@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Dosen(
-    val nidn: String,
+    val nidn: Int,
     val nama: String,
     val email: String,
     val fotoProfil: String?,

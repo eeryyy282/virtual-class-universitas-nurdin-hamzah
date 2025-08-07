@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TaskDao {
     @Query("SELECT * FROM assignments WHERE kelas_id = :kelasId")
-    fun getAssignmentsByClass(kelasId: Int): Flow<List<AssignmentEntity>>
+    fun getAssignmentsByClass(kelasId: String): Flow<List<AssignmentEntity>> // Changed kelasId to String
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAssignment(assignment: AssignmentEntity)
@@ -25,6 +25,6 @@ interface TaskDao {
     @Query("SELECT assignment_id FROM assignments WHERE judul_tugas = :judul AND kelas_id = :kelasId ORDER BY assignment_id DESC LIMIT 1")
     suspend fun getAssignmentIdByTitleAndClassId(
         judul: String,
-        kelasId: Int,
+        kelasId: String,
     ): Int?
 }

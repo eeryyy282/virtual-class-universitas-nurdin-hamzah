@@ -15,8 +15,8 @@ interface AttendanceDao {
 
     @Query("SELECT * FROM attendance WHERE nim = :nim AND kelas_id = :kelasId")
     fun getAttendanceHistory(
-        nim: String,
-        kelasId: Int,
+        nim: Int,
+        kelasId: String,
     ): Flow<List<AttendanceEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -24,7 +24,7 @@ interface AttendanceDao {
 
     @Query("SELECT * FROM attendance_streak WHERE nim = :nim AND kelas_id = :kelasId")
     fun getAttendanceStreak(
-        nim: String,
-        kelasId: Int,
+        nim: Int,
+        kelasId: String,
     ): Flow<AttendanceStreakEntity?>
 }

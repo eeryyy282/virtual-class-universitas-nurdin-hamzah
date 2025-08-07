@@ -21,7 +21,7 @@ data class MaterialEntity(
     @ColumnInfo(name = "materi_id")
     val materiId: Int = 0,
     @ColumnInfo(name = "kelas_id")
-    val kelasId: Int,
+    val kelasId: String,
     @ColumnInfo(name = "judul_materi")
     val judulMateri: String,
     val deskripsi: String,

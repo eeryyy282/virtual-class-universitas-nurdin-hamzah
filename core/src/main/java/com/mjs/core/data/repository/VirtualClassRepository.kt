@@ -34,7 +34,7 @@ class VirtualClassRepository(
 
     override suspend fun saveThemeSetting(isDarkModeActive: Boolean) = localDataSource.saveThemeSetting(isDarkModeActive)
 
-    override fun getMahasiswaByNim(nim: String): Flow<Resource<Mahasiswa>> =
+    override fun getMahasiswaByNim(nim: Int): Flow<Resource<Mahasiswa>> =
         flow {
             emit(Resource.Loading())
             localDataSource.getMahasiswaByNim(nim).collect { entity ->
@@ -46,7 +46,7 @@ class VirtualClassRepository(
             }
         }
 
-    override fun getDosenByNidn(nidn: String): Flow<Resource<Dosen>> =
+    override fun getDosenByNidn(nidn: Int): Flow<Resource<Dosen>> =
         flow {
             emit(Resource.Loading())
             localDataSource.getDosenByNidn(nidn).collect { entity ->
@@ -86,7 +86,7 @@ class VirtualClassRepository(
                 }
         }
 
-    override fun getEnrolledClasses(nim: String): Flow<Resource<List<EnrollmentEntity>>> =
+    override fun getEnrolledClasses(nim: Int): Flow<Resource<List<EnrollmentEntity>>> =
         flow {
             emit(Resource.Loading())
             localDataSource.getEnrolledClasses(nim).collect {
@@ -105,7 +105,7 @@ class VirtualClassRepository(
             }
         }
 
-    override fun getMaterialsByClass(kelasId: Int): Flow<Resource<List<Materi>>> =
+    override fun getMaterialsByClass(kelasId: String): Flow<Resource<List<Materi>>> =
         flow {
             emit(Resource.Loading())
             localDataSource
@@ -117,7 +117,7 @@ class VirtualClassRepository(
                 }
         }
 
-    override fun getAssignmentsByClass(kelasId: Int): Flow<Resource<List<Tugas>>> =
+    override fun getAssignmentsByClass(kelasId: String): Flow<Resource<List<Tugas>>> =
         flow {
             emit(Resource.Loading())
             localDataSource
@@ -151,7 +151,7 @@ class VirtualClassRepository(
             }
         }
 
-    override fun getForumsByClass(kelasId: Int): Flow<Resource<List<Forum>>> =
+    override fun getForumsByClass(kelasId: String): Flow<Resource<List<Forum>>> =
         flow {
             emit(Resource.Loading())
             localDataSource
@@ -187,8 +187,8 @@ class VirtualClassRepository(
         }
 
     override fun getAttendanceHistory(
-        nim: String,
-        kelasId: Int,
+        nim: Int,
+        kelasId: String,
     ): Flow<Resource<List<Kehadiran>>> =
         flow {
             emit(Resource.Loading())
@@ -213,8 +213,8 @@ class VirtualClassRepository(
         }
 
     override fun getAttendanceStreak(
-        nim: String,
-        kelasId: Int,
+        nim: Int,
+        kelasId: String,
     ): Flow<Resource<Int>> =
         flow {
             emit(Resource.Loading())
@@ -231,7 +231,7 @@ class VirtualClassRepository(
             }
         }
 
-    override fun getTodaySchedule(nim: String): Flow<Resource<List<Kelas>>> =
+    override fun getTodaySchedule(nim: Int): Flow<Resource<List<Kelas>>> =
         flow {
             emit(Resource.Loading())
             try {
@@ -261,7 +261,7 @@ class VirtualClassRepository(
             }
         }
 
-    override fun getTodayScheduleDosen(nidn: String): Flow<Resource<List<Kelas>>> =
+    override fun getTodayScheduleDosen(nidn: Int): Flow<Resource<List<Kelas>>> =
         flow {
             emit(Resource.Loading())
             try {
@@ -285,6 +285,47 @@ class VirtualClassRepository(
                 }
             } catch (e: Exception) {
                 emit(Resource.Error(e.message ?: "Gagal mengambil jadwal dosen hari ini"))
+            }
+        }
+
+    override fun getAllSchedulesByNim(nim: Int): Flow<Resource<List<Kelas>>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                val enrolledClasses = localDataSource.getEnrolledClasses(nim).first()
+                if (enrolledClasses.isNotEmpty()) {
+                    val allStudentSchedules =
+                        mutableListOf<com.mjs.core.data.source.local.entity.KelasEntity>()
+                    for (enrollment in enrolledClasses) {
+                        localDataSource
+                            .getKelasById(enrollment.kelasId)
+                            .first()
+                            ?.let { kelasEntity ->
+                                allStudentSchedules.add(kelasEntity)
+                            }
+                    }
+                    emit(Resource.Success(DataMapper.mapKelasEntitiesToDomains(allStudentSchedules)))
+                } else {
+                    emit(Resource.Success(emptyList()))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Gagal mengambil semua jadwal mahasiswa"))
+            }
+        }
+
+    override fun getAllSchedulesByNidn(nidn: Int): Flow<Resource<List<Kelas>>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                val allClasses = localDataSource.getAllKelas().first()
+                if (allClasses.isNotEmpty()) {
+                    val dosenSchedules = allClasses.filter { it.nidn == nidn }
+                    emit(Resource.Success(DataMapper.mapKelasEntitiesToDomains(dosenSchedules)))
+                } else {
+                    emit(Resource.Success(emptyList()))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Gagal mengambil semua jadwal dosen"))
             }
         }
 }

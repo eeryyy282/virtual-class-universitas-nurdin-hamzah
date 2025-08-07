@@ -22,45 +22,49 @@ interface IVirtualClassRepository {
 
     suspend fun saveThemeSetting(isDarkModeActive: Boolean)
 
-    fun getMahasiswaByNim(nim: String): Flow<Resource<Mahasiswa>>
+    fun getMahasiswaByNim(nim: Int): Flow<Resource<Mahasiswa>>
 
-    fun getDosenByNidn(nidn: String): Flow<Resource<Dosen>>
+    fun getDosenByNidn(nidn: Int): Flow<Resource<Dosen>>
 
     suspend fun registerMahasiswa(mahasiswa: MahasiswaEntity): Flow<Resource<String>>
 
     fun getAllKelas(): Flow<Resource<List<Kelas>>>
 
-    fun getEnrolledClasses(nim: String): Flow<Resource<List<EnrollmentEntity>>>
+    fun getEnrolledClasses(nim: Int): Flow<Resource<List<EnrollmentEntity>>>
 
     suspend fun enrollToClass(enrollment: EnrollmentEntity): Flow<Resource<String>>
 
-    fun getMaterialsByClass(kelasId: Int): Flow<Resource<List<Materi>>>
+    fun getMaterialsByClass(kelasId: String): Flow<Resource<List<Materi>>>
 
-    fun getAssignmentsByClass(kelasId: Int): Flow<Resource<List<Tugas>>>
+    fun getAssignmentsByClass(kelasId: String): Flow<Resource<List<Tugas>>>
 
     suspend fun insertAssignment(assignment: AssignmentEntity): Flow<Resource<String>>
 
     suspend fun insertSubmission(submission: SubmissionEntity): Flow<Resource<String>>
 
-    fun getForumsByClass(kelasId: Int): Flow<Resource<List<Forum>>>
+    fun getForumsByClass(kelasId: String): Flow<Resource<List<Forum>>>
 
     fun getPostsByForum(forumId: Int): Flow<Resource<List<Postingan>>>
 
     suspend fun insertPost(post: PostEntity): Flow<Resource<String>>
 
     fun getAttendanceHistory(
-        nim: String,
-        kelasId: Int,
+        nim: Int,
+        kelasId: String,
     ): Flow<Resource<List<Kehadiran>>>
 
     suspend fun insertAttendance(attendance: AttendanceEntity): Flow<Resource<String>>
 
     fun getAttendanceStreak(
-        nim: String,
-        kelasId: Int,
+        nim: Int,
+        kelasId: String,
     ): Flow<Resource<Int>>
 
-    fun getTodaySchedule(nim: String): Flow<Resource<List<Kelas>>>
+    fun getTodaySchedule(nim: Int): Flow<Resource<List<Kelas>>>
 
-    fun getTodayScheduleDosen(nidn: String): Flow<Resource<List<Kelas>>>
+    fun getTodayScheduleDosen(nidn: Int): Flow<Resource<List<Kelas>>>
+
+    fun getAllSchedulesByNim(nim: Int): Flow<Resource<List<Kelas>>>
+
+    fun getAllSchedulesByNidn(nidn: Int): Flow<Resource<List<Kelas>>>
 }

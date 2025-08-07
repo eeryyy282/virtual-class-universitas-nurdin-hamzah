@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ForumDao {
     @Query("SELECT * FROM forums WHERE kelas_id = :kelasId")
-    fun getForumsByClass(kelasId: Int): Flow<List<ForumEntity>>
+    fun getForumsByClass(kelasId: String): Flow<List<ForumEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertForum(forum: ForumEntity)
@@ -25,6 +25,6 @@ interface ForumDao {
     @Query("SELECT forum_id FROM forums WHERE judul_forum = :judul AND kelas_id = :kelasId ORDER BY forum_id DESC LIMIT 1")
     suspend fun getForumIdByTitleAndClassId(
         judul: String,
-        kelasId: Int,
+        kelasId: String,
     ): Int?
 }

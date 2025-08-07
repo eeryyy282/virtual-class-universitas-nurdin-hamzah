@@ -5,10 +5,10 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Kelas(
-    val kelasId: Int,
+    val kelasId: String,
     val namaKelas: String,
     val deskripsi: String,
-    val nidn: String,
+    val nidn: Int,
     val jadwal: String,
     val semester: String,
     val ruang: String,

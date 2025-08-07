@@ -46,7 +46,7 @@ class TaskDetailAdapter : RecyclerView.Adapter<TaskDetailAdapter.ListViewHolder>
 
         fun bind(data: Tugas) {
             with(binding) {
-                tvSubject.text = getClassName?.invoke(data.kelasId) ?: ""
+                tvSubject.text = getClassName?.invoke(data.kelasId.toInt()) ?: ""
                 tvMeetingTask.text = data.judulTugas
                 tvDescriptionTask.text = data.deskripsi
                 tvDeadlineDate.text = data.tanggalSelesai

@@ -26,9 +26,9 @@ data class EnrollmentEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "enroll_id")
     val enrollId: Int = 0,
-    val nim: String,
+    val nim: Int,
     @ColumnInfo(name = "kelas_id")
-    val kelasId: Int,
+    val kelasId: String,
     @ColumnInfo(name = "tanggal_daftar")
     val tanggalDaftar: String,
     val status: String,

@@ -12,13 +12,13 @@ import kotlinx.coroutines.flow.Flow
 interface AuthDao {
     @Query("SELECT * FROM mahasiswa WHERE nim = :nim AND password = :sandi")
     suspend fun loginMahasiswa(
-        nim: String,
+        nim: Int,
         sandi: String,
     ): MahasiswaEntity?
 
     @Query("SELECT * FROM dosen WHERE nidn = :nidn AND password = :sandi")
     suspend fun loginDosen(
-        nidn: String,
+        nidn: Int,
         sandi: String,
     ): DosenEntity?
 
@@ -29,8 +29,8 @@ interface AuthDao {
     suspend fun registerDosen(dosen: DosenEntity)
 
     @Query("SELECT * FROM mahasiswa WHERE nim = :nim")
-    fun getMahasiswaByNim(nim: String): Flow<MahasiswaEntity?>
+    fun getMahasiswaByNim(nim: Int): Flow<MahasiswaEntity?>
 
     @Query("SELECT * FROM dosen WHERE nidn = :nidn")
-    fun getDosenByNidn(nidn: String): Flow<DosenEntity?>
+    fun getDosenByNidn(nidn: Int): Flow<DosenEntity?>
 }

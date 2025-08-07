@@ -36,7 +36,7 @@ class LoginDosenViewModel(
                 _loginResult.value = LoginResult.Error("NIDN and password cannot be empty")
                 return@launch
             }
-            val dosen = authDao.loginDosen(nidn, password)
+            val dosen = authDao.loginDosen(nidn.toInt(), password)
             if (dosen != null) {
                 appPreference.saveLoginSession(dosen.nidn, AppPreference.USER_TYPE_DOSEN)
                 _loginResult.value = LoginResult.Success(AppPreference.USER_TYPE_DOSEN)

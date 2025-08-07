@@ -58,7 +58,7 @@ class HomeFragment : Fragment() {
                         val mahasiswa = resource.data
                         if (mahasiswa != null) {
                             binding.tvNameHome.text = mahasiswa.nama
-                            binding.tvIdUserHome.text = mahasiswa.nim
+                            binding.tvIdUserHome.text = mahasiswa.nim.toString()
                             binding.tvMentorUserHome.text = mahasiswa.dosenPembimbing
                         } else {
                             Toast
@@ -88,7 +88,6 @@ class HomeFragment : Fragment() {
 
     private fun setupRecyclerViewTugas() {
         taskHomeAdapter = TaskHomeAdapter()
-        // Asumsi binding.rvTaskHome adalah RecyclerView untuk tugas
         binding.rvTaskHome.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = taskHomeAdapter

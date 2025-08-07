@@ -12,6 +12,7 @@ class ScheduleAdapter : RecyclerView.Adapter<ScheduleAdapter.ListViewHolder>() {
     private var listData = ArrayList<Pair<String, List<Kelas>>>()
     var onItemClick: ((Kelas) -> Unit)? = null
     var getDosenName: ((String) -> String)? = null
+    var isForDosenView: Boolean = false
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(newListData: List<Pair<String, List<Kelas>>>?) {
@@ -35,7 +36,8 @@ class ScheduleAdapter : RecyclerView.Adapter<ScheduleAdapter.ListViewHolder>() {
         position: Int,
     ) {
         val (day, scheduleList) = listData[position]
-        holder.bind(day, scheduleList, onItemClick, getDosenName)
+        // Pass isForDosenView to the bind method
+        holder.bind(day, scheduleList, onItemClick, getDosenName, isForDosenView)
     }
 
     override fun getItemCount(): Int = listData.size
@@ -48,6 +50,7 @@ class ScheduleAdapter : RecyclerView.Adapter<ScheduleAdapter.ListViewHolder>() {
             scheduleList: List<Kelas>,
             onItemClick: ((Kelas) -> Unit)?,
             getDosenName: ((String) -> String)?,
+            isForDosenView: Boolean,
         ) {
             with(binding) {
                 tvTitleDay.text = day
@@ -56,6 +59,7 @@ class ScheduleAdapter : RecyclerView.Adapter<ScheduleAdapter.ListViewHolder>() {
                 val scheduleDetailAdapter = ScheduleDetailAdapter()
                 scheduleDetailAdapter.onItemClick = onItemClick
                 scheduleDetailAdapter.getDosenName = getDosenName
+                scheduleDetailAdapter.isForDosenView = isForDosenView
                 scheduleDetailAdapter.setData(scheduleList)
                 rvScheduleDetail.adapter = scheduleDetailAdapter
             }

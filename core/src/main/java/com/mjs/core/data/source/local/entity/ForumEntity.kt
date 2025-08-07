@@ -21,7 +21,7 @@ data class ForumEntity(
     @ColumnInfo(name = "forum_id")
     val forumId: Int = 0,
     @ColumnInfo(name = "kelas_id")
-    val kelasId: Int,
+    val kelasId: String,
     @ColumnInfo(name = "judul_forum")
     val judulForum: String,
     val deskripsi: String,

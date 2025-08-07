@@ -23,7 +23,7 @@ data class PostEntity(
     @ColumnInfo(name = "forum_id")
     val forumId: Int,
     @ColumnInfo(name = "user_id")
-    val userId: String,
+    val userId: Int,
     @ColumnInfo(name = "user_role")
     val userRole: String,
     @ColumnInfo(name = "isi_post")

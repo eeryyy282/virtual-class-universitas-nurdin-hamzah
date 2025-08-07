@@ -14,8 +14,8 @@ interface ClassroomDao {
     @Query("SELECT * FROM classes")
     fun getAllKelas(): Flow<List<KelasEntity>>
 
-    @Query("SELECT * FROM classes WHERE kelas_id = :kelasId") // Added this function
-    fun getKelasById(kelasId: Int): Flow<KelasEntity?>
+    @Query("SELECT * FROM classes WHERE kelas_id = :kelasId")
+    fun getKelasById(kelasId: String): Flow<KelasEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertKelas(kelas: KelasEntity)
@@ -24,10 +24,10 @@ interface ClassroomDao {
     suspend fun insertEnrollment(enrollment: EnrollmentEntity)
 
     @Query("SELECT * FROM enrollments WHERE nim = :nim")
-    fun getEnrolledClasses(nim: String): Flow<List<EnrollmentEntity>>
+    fun getEnrolledClasses(nim: Int): Flow<List<EnrollmentEntity>>
 
     @Query("SELECT * FROM materials WHERE kelas_id = :kelasId")
-    fun getMaterialsByClass(kelasId: Int): Flow<List<MaterialEntity>>
+    fun getMaterialsByClass(kelasId: String): Flow<List<MaterialEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMaterial(material: MaterialEntity)
@@ -35,6 +35,6 @@ interface ClassroomDao {
     @Query("SELECT kelas_id FROM classes WHERE nama_kelas = :namaKelas AND nidn = :nidn ORDER BY kelas_id DESC LIMIT 1")
     suspend fun getKelasIdByNameAndNidn(
         namaKelas: String,
-        nidn: String,
-    ): Int?
+        nidn: Int,
+    ): String?
 }

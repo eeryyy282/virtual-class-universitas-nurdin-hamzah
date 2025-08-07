@@ -48,7 +48,8 @@ class ClassroomDetailAdapter : RecyclerView.Adapter<ClassroomDetailAdapter.ListV
                 tvSubject.text = data.namaKelas
                 tvCodeSubject.text = data.deskripsi
                 tvClassroomLocation.text = data.jadwal
-                tvDosenClassroom.text = getDosenName?.invoke(data.nidn) ?: data.nidn
+                tvDosenClassroom.text =
+                    getDosenName?.invoke(data.nidn.toString()) ?: data.nidn.toString()
                 tvCreditsSubject.text = data.credit.toString()
                 tvCategorySubject.text = data.category
                 Glide

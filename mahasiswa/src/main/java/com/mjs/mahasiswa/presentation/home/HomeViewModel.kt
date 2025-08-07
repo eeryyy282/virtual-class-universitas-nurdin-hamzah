@@ -27,8 +27,8 @@ class HomeViewModel(
     private val _tugasListState = MutableStateFlow<Resource<List<Tugas>>?>(null)
     val tugasListState: StateFlow<Resource<List<Tugas>>?> = _tugasListState
 
-    private val _enrolledCoursesMapState = MutableStateFlow<Map<Int, String>>(emptyMap())
-    val enrolledCoursesMapState: StateFlow<Map<Int, String>> = _enrolledCoursesMapState
+    private val _enrolledCoursesMapState = MutableStateFlow<Map<String, String>>(emptyMap())
+    val enrolledCoursesMapState: StateFlow<Map<String, String>> = _enrolledCoursesMapState
 
     private val _attendanceStreakState = MutableStateFlow<Resource<Int>?>(null)
     val attendanceStreakState: StateFlow<Resource<Int>?> = _attendanceStreakState
@@ -73,7 +73,7 @@ class HomeViewModel(
             if (enrolledClassesResource is Resource.Success) {
                 val enrollments = enrolledClassesResource.data
                 if (!enrollments.isNullOrEmpty()) {
-                    val firstClassId = enrollments[0].kelasId // Ambil kelasId dari kelas pertama
+                    val firstClassId = enrollments[0].kelasId
                     virtualClassRepository.getAttendanceStreak(nim, firstClassId).collect {
                         _attendanceStreakState.value = it
                     }
@@ -245,5 +245,5 @@ class HomeViewModel(
         }
     }
 
-    fun getClassNameById(kelasId: Int): String = enrolledCoursesMapState.value[kelasId] ?: "Kelas Tidak Dikenal"
+    fun getClassNameById(kelasId: String): String = enrolledCoursesMapState.value[kelasId] ?: "Kelas Tidak Dikenal"
 }

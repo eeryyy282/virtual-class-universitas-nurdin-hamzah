@@ -25,8 +25,8 @@ class HomeViewModel(
     private val _tugasListDosenState = MutableStateFlow<Resource<List<Tugas>>?>(null)
     val tugasListDosenState: StateFlow<Resource<List<Tugas>>?> = _tugasListDosenState
 
-    private val _kelasDosenMapState = MutableStateFlow<Map<Int, String>>(emptyMap())
-    val kelasDosenMapState: StateFlow<Map<Int, String>> = _kelasDosenMapState
+    private val _kelasDosenMapState = MutableStateFlow<Map<String, String>>(emptyMap())
+    val kelasDosenMapState: StateFlow<Map<String, String>> = _kelasDosenMapState
 
     private val _todayScheduleState = MutableStateFlow<Resource<List<Kelas>>?>(null)
     val todayScheduleState: StateFlow<Resource<List<Kelas>>?> = _todayScheduleState
@@ -58,7 +58,8 @@ class HomeViewModel(
             val nidn = appPreference.getLoggedInUserId().firstOrNull()
 
             if (nidn == null) {
-                _tugasListDosenState.value = Resource.Error("NIDN dosen tidak ditemukan.")
+                _tugasListDosenState.value =
+                    Resource.Error("NIDN dosen tidak ditemukan atau tidak valid.")
                 return@launch
             }
 
@@ -163,10 +164,11 @@ class HomeViewModel(
                     _todayScheduleState.value = it
                 }
             } else {
-                _todayScheduleState.value = Resource.Error("NIDN pengguna tidak ditemukan.")
+                _todayScheduleState.value =
+                    Resource.Error("NIDN pengguna tidak ditemukan atau tidak valid.")
             }
         }
     }
 
-    fun getNamaKelasById(kelasId: Int): String = _kelasDosenMapState.value[kelasId] ?: "Kelas Tidak Dikenal"
+    fun getNamaKelasById(kelasId: String): String = _kelasDosenMapState.value[kelasId] ?: "Kelas Tidak Dikenal"
 }

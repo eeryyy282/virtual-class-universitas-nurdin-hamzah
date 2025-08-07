@@ -17,13 +17,13 @@ import androidx.room.PrimaryKey
     ],
 )
 data class KelasEntity(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "kelas_id")
-    val kelasId: Int = 0,
+    val kelasId: String,
     @ColumnInfo(name = "nama_kelas")
     val namaKelas: String,
     val deskripsi: String,
-    val nidn: String,
+    val nidn: Int,
     val jadwal: String,
     val semester: String,
     val credit: Int,

@@ -15,22 +15,28 @@ import org.koin.dsl.module
 val databaseModule =
     module {
         val passphrase: ByteArray = SQLiteDatabase.getBytes("virtual_class".toCharArray())
-        val factory = SupportFactory(passphrase)
+        val sqlCipherFactory = SupportFactory(passphrase)
 
         factory { get<VirtualClassDatabase>().authDao() }
         factory { get<VirtualClassDatabase>().classroomDao() }
         factory { get<VirtualClassDatabase>().taskDao() }
         factory { get<VirtualClassDatabase>().forumDao() }
         factory { get<VirtualClassDatabase>().attendanceDao() }
+
         single {
-            Room
-                .databaseBuilder(
-                    androidContext(),
-                    VirtualClassDatabase::class.java,
-                    "virtual_class.db",
-                ).fallbackToDestructiveMigration(false)
-                .openHelperFactory(factory)
-                .build()
+            lateinit var dbInstance: VirtualClassDatabase
+            val callback = VirtualClassDatabase.PrepopulateCallback { dbInstance.authDao() }
+            dbInstance =
+                Room
+                    .databaseBuilder(
+                        androidContext(),
+                        VirtualClassDatabase::class.java,
+                        "virtual_class.db",
+                    ).fallbackToDestructiveMigration(false)
+                    .openHelperFactory(sqlCipherFactory)
+                    .addCallback(callback)
+                    .build()
+            dbInstance
         }
     }
 
@@ -38,15 +44,23 @@ val repositoryModule =
     module {
         single {
             LocalDataSource(
-                get(),
-                get(),
-                get(),
-                get(),
-                get(),
-                get(),
+                appPreference = get(),
+                authDao = get(),
+                classroomDao = get(),
+                taskDao = get(),
+                forumDao = get(),
+                attendanceDao = get(),
             )
         }
-        single { AppPreference(get()) }
+        single {
+            AppPreference(
+                dataStore = get(),
+            )
+        }
         single { androidContext().dataStore }
-        single<IVirtualClassRepository> { VirtualClassRepository(get()) }
+        single<IVirtualClassRepository> {
+            VirtualClassRepository(
+                localDataSource = get(),
+            )
+        }
     }

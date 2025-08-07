@@ -24,11 +24,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            packaging {
-                jniLibs {
-                    useLegacyPackaging = false
-                }
-            }
         }
     }
     compileOptions {
@@ -80,4 +75,6 @@ dependencies {
     implementation(libs.sqliteKtx)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+
+    implementation(libs.javax.inject)
 }

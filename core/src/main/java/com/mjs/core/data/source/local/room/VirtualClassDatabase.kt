@@ -2,6 +2,7 @@ package com.mjs.core.data.source.local.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.mjs.core.data.source.local.entity.AssignmentEntity
 import com.mjs.core.data.source.local.entity.AttendanceEntity
 import com.mjs.core.data.source.local.entity.AttendanceStreakEntity
@@ -18,6 +19,10 @@ import com.mjs.core.data.source.local.room.dao.AuthDao
 import com.mjs.core.data.source.local.room.dao.ClassroomDao
 import com.mjs.core.data.source.local.room.dao.ForumDao
 import com.mjs.core.data.source.local.room.dao.TaskDao
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 @Database(
     entities = [
@@ -39,4 +44,44 @@ abstract class VirtualClassDatabase : RoomDatabase() {
     abstract fun forumDao(): ForumDao
 
     abstract fun attendanceDao(): AttendanceDao
+
+    class PrepopulateCallback(
+        private val authDaoProvider: () -> AuthDao,
+    ) : Callback() {
+        private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+            applicationScope.launch {
+                populateDatabaseInternal(authDaoProvider())
+            }
+        }
+
+        suspend fun populateDatabaseInternal(authDao: AuthDao) {
+            authDao.registerDosen(
+                DosenEntity(
+                    nidn = "1234567890",
+                    nama = "Dr. Budi Santoso",
+                    email = "budi.santoso@example.com",
+                    password = "password123",
+                ),
+            )
+            authDao.registerDosen(
+                DosenEntity(
+                    nidn = "0987654321",
+                    nama = "Prof. Siti Aminah",
+                    email = "siti.aminah@example.com",
+                    password = "password456",
+                ),
+            )
+            authDao.registerMahasiswa(
+                MahasiswaEntity(
+                    nim = "21111073",
+                    nama = "Muhammad Juzairi Safitli",
+                    email = "airiagustus82@gmail.com",
+                    password = "12345678",
+                ),
+            )
+        }
+    }
 }

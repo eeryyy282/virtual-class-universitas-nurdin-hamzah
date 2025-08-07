@@ -207,4 +207,23 @@ class VirtualClassRepository(
                 emit(Resource.Error(e.message ?: "Gagal mencatat kehadiran"))
             }
         }
+
+    override fun getAttendanceStreak(
+        nim: String,
+        kelasId: Int,
+    ): Flow<Resource<Int>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                localDataSource.getAttendanceStreak(nim, kelasId).collect { streakEntity ->
+                    if (streakEntity != null) {
+                        emit(Resource.Success(streakEntity.currentStreak))
+                    } else {
+                        emit(Resource.Success(0))
+                    }
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Gagal mengambil data streak kehadiran"))
+            }
+        }
 }

@@ -29,9 +29,13 @@ class HomeViewModel(
     private val _enrolledCoursesMapState = MutableStateFlow<Map<Int, String>>(emptyMap())
     val enrolledCoursesMapState: StateFlow<Map<Int, String>> = _enrolledCoursesMapState
 
+    private val _attendanceStreakState = MutableStateFlow<Resource<Int>?>(null)
+    val attendanceStreakState: StateFlow<Resource<Int>?> = _attendanceStreakState
+
     init {
         fetchMahasiswaData()
         fetchTugasAndKelasMahasiswa()
+        fetchAttendanceStreak()
     }
 
     private fun fetchMahasiswaData() {
@@ -41,6 +45,45 @@ class HomeViewModel(
                 virtualClassRepository.getMahasiswaByNim(nim).collect {
                     _mahasiswaData.value = it
                 }
+            }
+        }
+    }
+
+    private fun fetchAttendanceStreak() {
+        viewModelScope.launch {
+            _attendanceStreakState.value = Resource.Loading()
+            val nim = appPreference.getLoggedInUserId().firstOrNull()
+
+            if (nim == null) {
+                _attendanceStreakState.value = Resource.Error("NIM pengguna tidak ditemukan.")
+                return@launch
+            }
+
+            val enrolledClassesResource =
+                virtualClassRepository
+                    .getEnrolledClasses(nim)
+                    .filter { it !is Resource.Loading }
+                    .firstOrNull()
+
+            if (enrolledClassesResource is Resource.Success) {
+                val enrollments = enrolledClassesResource.data
+                if (!enrollments.isNullOrEmpty()) {
+                    val firstClassId = enrollments[0].kelasId // Ambil kelasId dari kelas pertama
+                    virtualClassRepository.getAttendanceStreak(nim, firstClassId).collect {
+                        _attendanceStreakState.value = it
+                    }
+                } else {
+                    _attendanceStreakState.value = Resource.Success(0)
+                }
+            } else if (enrolledClassesResource is Resource.Error) {
+                _attendanceStreakState.value =
+                    Resource.Error(
+                        enrolledClassesResource.message
+                            ?: "Gagal memuat kelas yang diikuti untuk streak.",
+                    )
+            } else {
+                _attendanceStreakState.value =
+                    Resource.Success(0)
             }
         }
     }

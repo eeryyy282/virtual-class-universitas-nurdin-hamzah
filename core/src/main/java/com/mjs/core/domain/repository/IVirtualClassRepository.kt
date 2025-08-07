@@ -54,4 +54,9 @@ interface IVirtualClassRepository {
     ): Flow<Resource<List<Kehadiran>>>
 
     suspend fun insertAttendance(attendance: AttendanceEntity): Flow<Resource<String>>
+
+    fun getAttendanceStreak(
+        nim: String,
+        kelasId: Int,
+    ): Flow<Resource<Int>>
 }

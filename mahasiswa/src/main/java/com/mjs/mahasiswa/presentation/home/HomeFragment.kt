@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mjs.core.data.Resource
 import com.mjs.core.ui.TaskHomeAdapter
+import com.mjs.mahasiswa.R
 import com.mjs.mahasiswa.databinding.FragmentHomeBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -41,6 +43,7 @@ class HomeFragment : Fragment() {
         setupProfileUser()
         setupRecyclerViewTugas()
         observeTugasList()
+        observeAttendanceStreak()
     }
 
     private fun setupProfileUser() {
@@ -141,6 +144,53 @@ class HomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             homeViewModel.enrolledCoursesMapState.collectLatest { map ->
                 taskHomeAdapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    private fun observeAttendanceStreak() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            homeViewModel.attendanceStreakState.collectLatest { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+                        binding.ivDoesntHaveAnTask.visibility = View.GONE
+                        binding.tvDoesntHaveAnTask.visibility = View.GONE
+                        binding.progressBarStatistic.visibility = View.VISIBLE
+                    }
+
+                    is Resource.Success -> {
+                        val streakCount = resource.data
+                        binding.ivDoesntHaveAnTask.visibility = View.GONE
+                        binding.tvDoesntHaveAnTask.visibility = View.GONE
+                        binding.progressBarStatistic.visibility = View.GONE
+                        binding.ivFireIconStatistic.visibility = View.VISIBLE
+                        binding.tvStreakStatistic.visibility = View.VISIBLE
+                        binding.tvStreakStatisticCount.visibility = View.VISIBLE
+                        binding.tvStreakStatisticCount.text = streakCount?.toString() ?: "0"
+                        if ((streakCount ?: 0) > 10) {
+                            binding.ivFireIconStatistic.setColorFilter(
+                                ContextCompat.getColor(requireContext(), R.color.air_force_blue),
+                            )
+                        } else {
+                            binding.ivFireIconStatistic.clearColorFilter()
+                        }
+                    }
+
+                    is Resource.Error -> {
+                        binding.ivDoesntHaveAnTask.visibility = View.VISIBLE
+                        binding.tvDoesntHaveAnTask.visibility = View.VISIBLE
+                        binding.progressBarStatistic.visibility = View.GONE
+                        Toast
+                            .makeText(
+                                context,
+                                resource.message ?: "Gagal memuat data streak",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                    }
+
+                    null -> {
+                    }
+                }
             }
         }
     }

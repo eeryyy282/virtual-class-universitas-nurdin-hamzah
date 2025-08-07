@@ -66,4 +66,6 @@ class VirtualClassInteractor(
         virtualClassRepository.insertAttendance(attendance)
 
     override fun getTodaySchedule(nim: String): Flow<Resource<List<Kelas>>> = virtualClassRepository.getTodaySchedule(nim)
+
+    override fun getTodayScheduleDosen(nidn: String): Flow<Resource<List<Kelas>>> = virtualClassRepository.getTodayScheduleDosen(nidn)
 }

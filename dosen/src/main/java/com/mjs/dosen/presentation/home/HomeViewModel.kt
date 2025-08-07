@@ -5,8 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.mjs.core.data.Resource
 import com.mjs.core.data.source.local.pref.AppPreference
 import com.mjs.core.domain.model.Dosen
+import com.mjs.core.domain.model.Kelas
 import com.mjs.core.domain.model.Tugas
-import com.mjs.core.domain.repository.IVirtualClassRepository
+import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val virtualClassRepository: IVirtualClassRepository,
+    private val virtualClassUseCase: VirtualClassUseCase,
     private val appPreference: AppPreference,
 ) : ViewModel() {
     private val _dosenData = MutableStateFlow<Resource<Dosen>?>(null)
@@ -27,9 +28,13 @@ class HomeViewModel(
     private val _kelasDosenMapState = MutableStateFlow<Map<Int, String>>(emptyMap())
     val kelasDosenMapState: StateFlow<Map<Int, String>> = _kelasDosenMapState
 
+    private val _todayScheduleState = MutableStateFlow<Resource<List<Kelas>>?>(null)
+    val todayScheduleState: StateFlow<Resource<List<Kelas>>?> = _todayScheduleState
+
     init {
         fetchDosenData()
         fetchTugasUntukDosen()
+        fetchTodaySchedule()
     }
 
     private fun fetchDosenData() {
@@ -40,7 +45,7 @@ class HomeViewModel(
                     .getLoggedInUserType()
                     .firstOrNull() == AppPreference.USER_TYPE_DOSEN
             ) {
-                virtualClassRepository.getDosenByNidn(nidn).collect {
+                virtualClassUseCase.getDosenByNidn(nidn).collect {
                     _dosenData.value = it
                 }
             }
@@ -58,7 +63,7 @@ class HomeViewModel(
             }
 
             val allKelasResource =
-                virtualClassRepository
+                virtualClassUseCase
                     .getAllKelas()
                     .firstOrNull { it !is Resource.Loading }
 
@@ -84,7 +89,7 @@ class HomeViewModel(
                         val deferredTugasResources =
                             kelasYangDiajar.map { kelas ->
                                 async {
-                                    virtualClassRepository
+                                    virtualClassUseCase
                                         .getAssignmentsByClass(kelas.kelasId)
                                         .firstOrNull { it !is Resource.Loading }
                                 }
@@ -145,6 +150,20 @@ class HomeViewModel(
                     _tugasListDosenState.value =
                         Resource.Error("Tidak dapat memuat informasi kelas untuk mengambil tugas.")
                 }
+            }
+        }
+    }
+
+    private fun fetchTodaySchedule() {
+        viewModelScope.launch {
+            _todayScheduleState.value = Resource.Loading()
+            val nidn = appPreference.getLoggedInUserId().firstOrNull()
+            if (nidn != null) {
+                virtualClassUseCase.getTodayScheduleDosen(nidn).collect {
+                    _todayScheduleState.value = it
+                }
+            } else {
+                _todayScheduleState.value = Resource.Error("NIDN pengguna tidak ditemukan.")
             }
         }
     }

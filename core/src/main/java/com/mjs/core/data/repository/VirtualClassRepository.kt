@@ -260,4 +260,31 @@ class VirtualClassRepository(
                 emit(Resource.Error(e.message ?: "Gagal mengambil jadwal hari ini"))
             }
         }
+
+    override fun getTodayScheduleDosen(nidn: String): Flow<Resource<List<Kelas>>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                val calendar = Calendar.getInstance()
+                val currentDayName =
+                    SimpleDateFormat("EEEE", Locale("id", "ID")).format(calendar.time)
+
+                val allClasses = localDataSource.getAllKelas().first()
+                if (allClasses.isNotEmpty()) {
+                    val todayClasses =
+                        allClasses.filter { kelasEntity ->
+                            kelasEntity.nidn == nidn &&
+                                kelasEntity.jadwal.contains(
+                                    currentDayName,
+                                    ignoreCase = true,
+                                )
+                        }
+                    emit(Resource.Success(DataMapper.mapKelasEntitiesToDomains(todayClasses)))
+                } else {
+                    emit(Resource.Success(emptyList()))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Gagal mengambil jadwal dosen hari ini"))
+            }
+        }
 }

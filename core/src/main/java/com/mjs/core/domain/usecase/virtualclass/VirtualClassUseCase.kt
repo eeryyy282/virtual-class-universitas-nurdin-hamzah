@@ -56,4 +56,6 @@ interface VirtualClassUseCase {
     suspend fun insertAttendance(attendance: AttendanceEntity): Flow<Resource<String>>
 
     fun getTodaySchedule(nim: String): Flow<Resource<List<Kelas>>>
+
+    fun getTodayScheduleDosen(nidn: String): Flow<Resource<List<Kelas>>>
 }

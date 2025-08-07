@@ -24,7 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.Calendar // Added import
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
@@ -153,7 +153,6 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                 )
             mahasiswaData.forEach { authDao.registerMahasiswa(it) }
 
-            // Kelas
             classroomDao.insertKelas(
                 KelasEntity(
                     namaKelas = "Pemrograman Mobile Lanjut",
@@ -197,12 +196,12 @@ abstract class VirtualClassDatabase : RoomDatabase() {
             val calendar = Calendar.getInstance()
             val currentDayName = SimpleDateFormat("EEEE", Locale("id", "ID")).format(calendar.time)
             val todayClassNidn = dosen2Nidn
-            val todayClassName = "Workshop Pemrograman Python"
+            val todayClassName = "Pemrograman Python"
 
             classroomDao.insertKelas(
                 KelasEntity(
                     namaKelas = todayClassName,
-                    deskripsi = "Workshop intensif mengenai dasar-dasar pemrograman Python dan aplikasinya.",
+                    deskripsi = "Belajar mengenai dasar-dasar pemrograman Python dan aplikasinya.",
                     nidn = todayClassNidn,
                     jadwal = "$currentDayName, 14:00 - 16:00 WIB",
                     semester = "Ganjil 2023/2024",
@@ -215,6 +214,21 @@ abstract class VirtualClassDatabase : RoomDatabase() {
             val todayClassId =
                 classroomDao.getKelasIdByNameAndNidn(todayClassName, todayClassNidn) ?: 0
 
+            val todayDosen1ClassName = "Etika Profesi TI"
+            classroomDao.insertKelas(
+                KelasEntity(
+                    namaKelas = todayDosen1ClassName,
+                    deskripsi = "Membahas etika dan profesionalisme dalam bidang Teknologi Informasi.",
+                    nidn = dosen1Nidn,
+                    jadwal = "$currentDayName, 09:00 - 10:40 WIB",
+                    semester = "Ganjil 2023/2024",
+                    credit = 2,
+                    category = "Teknik Informatika",
+                    classImage = null,
+                    ruang = "Ruang Teori 1",
+                ),
+            )
+
             val kelas1Id =
                 classroomDao.getKelasIdByNameAndNidn("Pemrograman Mobile Lanjut", dosen1Nidn) ?: 0
             val kelas2Id =
@@ -222,7 +236,6 @@ abstract class VirtualClassDatabase : RoomDatabase() {
             val kelas3Id =
                 classroomDao.getKelasIdByNameAndNidn("Kecerdasan Buatan", dosen1Nidn) ?: 0
 
-            // Enrollments
             if (kelas1Id != 0) {
                 classroomDao.insertEnrollment(
                     EnrollmentEntity(
@@ -293,11 +306,11 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                     ),
                 )
             }
-            // Enroll Muhammad Juzairi Safitli to today's class
+
             if (todayClassId != 0) {
                 classroomDao.insertEnrollment(
                     EnrollmentEntity(
-                        nim = mahasiswa1Nim, // Muhammad Juzairi Safitli's NIM
+                        nim = mahasiswa1Nim,
                         kelasId = todayClassId,
                         tanggalDaftar = currentDate,
                         status = "Aktif",
@@ -305,7 +318,6 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                 )
             }
 
-            // Materials
             if (kelas1Id != 0) {
                 classroomDao.insertMaterial(
                     MaterialEntity(
@@ -341,7 +353,6 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                 )
             }
 
-            // Assignments
             var assignment1K1Id = 0
             var assignment1K2Id = 0
             if (kelas1Id != 0) {
@@ -383,7 +394,6 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                         ?: 0
             }
 
-            // Submissions
             if (assignment1K1Id != 0) {
                 taskDao.insertSubmission(
                     SubmissionEntity(
@@ -419,7 +429,6 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                 )
             }
 
-            // Forums
             var forum1K1Id = 0
             if (kelas1Id != 0) {
                 forumDao.insertForum(
@@ -452,7 +461,6 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                     ) ?: 0
             }
 
-            // Posts
             if (forum1K1Id != 0) {
                 forumDao.insertPost(
                     PostEntity(

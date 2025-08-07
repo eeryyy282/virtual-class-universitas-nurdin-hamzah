@@ -41,6 +41,7 @@ class HomeFragment : Fragment() {
         setupProfileDosen()
         setupRecyclerViewTugasDosen()
         observeTugasDosen()
+        observeTodaySchedule()
     }
 
     private fun setupProfileDosen() {
@@ -141,6 +142,72 @@ class HomeFragment : Fragment() {
             homeViewModel.kelasDosenMapState.collectLatest {
                 if (::taskHomeAdapter.isInitialized) {
                     taskHomeAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
+    private fun observeTodaySchedule() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            homeViewModel.todayScheduleState.collectLatest { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+                        binding.progressBarSchedule.visibility = View.VISIBLE
+                        binding.ivDoesntHaveAnSchedule.visibility = View.GONE
+                        binding.tvDoesntHaveAnSchedule.visibility = View.GONE
+                        binding.tvScheduleClassroom.visibility = View.GONE
+                        binding.tvTimeScheduleHome.visibility = View.GONE
+                        binding.tvSubjectScheduleHome.visibility = View.GONE
+                        binding.btnScheduleDetailHome.visibility = View.GONE
+                    }
+
+                    is Resource.Success -> {
+                        binding.progressBarSchedule.visibility = View.GONE
+                        val scheduleList = resource.data
+                        if (scheduleList.isNullOrEmpty()) {
+                            binding.ivDoesntHaveAnSchedule.visibility = View.VISIBLE
+                            binding.tvDoesntHaveAnSchedule.visibility = View.VISIBLE
+                            binding.tvScheduleClassroom.visibility = View.GONE
+                            binding.tvTimeScheduleHome.visibility = View.GONE
+                            binding.tvSubjectScheduleHome.visibility = View.GONE
+                            binding.btnScheduleDetailHome.visibility = View.GONE
+                        } else {
+                            binding.ivDoesntHaveAnSchedule.visibility = View.GONE
+                            binding.tvDoesntHaveAnSchedule.visibility = View.GONE
+                            binding.tvScheduleClassroom.visibility = View.VISIBLE
+                            binding.tvTimeScheduleHome.visibility = View.VISIBLE
+                            binding.tvSubjectScheduleHome.visibility = View.VISIBLE
+                            binding.btnScheduleDetailHome.visibility = View.VISIBLE
+                            binding.tvScheduleClassroom.text = scheduleList[0].ruang
+                            binding.tvTimeScheduleHome.text =
+                                scheduleList[0]
+                                    .jadwal
+                                    .split(",")
+                                    .getOrNull(1)
+                                    ?.trim()
+                            binding.tvSubjectScheduleHome.text = scheduleList[0].namaKelas
+                        }
+                    }
+
+                    is Resource.Error -> {
+                        binding.progressBarSchedule.visibility = View.GONE
+                        binding.ivDoesntHaveAnSchedule.visibility = View.VISIBLE
+                        binding.tvDoesntHaveAnSchedule.visibility = View.VISIBLE
+                        binding.tvScheduleClassroom.visibility = View.GONE
+                        binding.tvTimeScheduleHome.visibility = View.GONE
+                        binding.tvSubjectScheduleHome.visibility = View.GONE
+                        binding.btnScheduleDetailHome.visibility = View.GONE
+                    }
+
+                    null -> {
+                        binding.progressBarSchedule.visibility = View.GONE
+                        binding.ivDoesntHaveAnSchedule.visibility = View.VISIBLE
+                        binding.tvDoesntHaveAnSchedule.visibility = View.VISIBLE
+                        binding.tvScheduleClassroom.visibility = View.GONE
+                        binding.tvTimeScheduleHome.visibility = View.GONE
+                        binding.tvSubjectScheduleHome.visibility = View.GONE
+                        binding.btnScheduleDetailHome.visibility = View.GONE
+                    }
                 }
             }
         }

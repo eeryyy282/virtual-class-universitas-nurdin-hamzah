@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.mjs.core.R
 import com.mjs.core.databinding.ItemTaskHomeBinding
 import com.mjs.core.domain.model.Tugas
+import com.mjs.core.utils.DateUtils
 
 class TaskHomeAdapter : RecyclerView.Adapter<TaskHomeAdapter.ListViewHolder>() {
     private var listData = ArrayList<Tugas>()
@@ -14,7 +16,11 @@ class TaskHomeAdapter : RecyclerView.Adapter<TaskHomeAdapter.ListViewHolder>() {
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(newListData: List<Tugas>?) {
-        if (newListData == null) return
+        if (newListData == null) {
+            listData.clear()
+            notifyDataSetChanged()
+            return
+        }
         listData.clear()
         newListData.sortedByDescending { it.tanggalSelesai }.take(2).let {
             listData.addAll(it)
@@ -39,7 +45,10 @@ class TaskHomeAdapter : RecyclerView.Adapter<TaskHomeAdapter.ListViewHolder>() {
         holder.bind(data)
     }
 
-    override fun getItemCount(): Int = listData.size
+    override fun getItemCount(): Int {
+        val count = listData.size
+        return count
+    }
 
     inner class ListViewHolder(
         itemView: View,
@@ -49,9 +58,12 @@ class TaskHomeAdapter : RecyclerView.Adapter<TaskHomeAdapter.ListViewHolder>() {
         fun bind(data: Tugas) {
             with(binding) {
                 tvTaskSubject.text = data.judulTugas
-                tvTaskDeadline.text = data.tanggalSelesai
+                tvTaskDeadline.text = DateUtils.formatDeadline(data.tanggalSelesai)
                 getClassName?.let { getClassNameFunc ->
-                    tvSubject.text = getClassNameFunc(data.kelasId)
+                    val className = getClassNameFunc(data.kelasId)
+                    tvSubject.text = className
+                } ?: run {
+                    tvSubject.text = itemView.context.getString(R.string.unknown_class)
                 }
             }
         }

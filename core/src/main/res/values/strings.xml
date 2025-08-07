@@ -93,4 +93,5 @@
     <string name="doesnt_have_an_classroom_text">Sepertinya anda belum mendaftarkan ke kelas manampun.</string>
     <string name="title_dosen">Dosen</string>
     <string name="classroom_semester">Semester</string>
+    <string name="unknown_class">Kelas Tidak Diketahui</string>
 </resources>

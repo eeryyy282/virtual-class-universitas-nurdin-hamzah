@@ -25,6 +25,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_margin="16dp"
+                android:src="@drawable/classroom_photo"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

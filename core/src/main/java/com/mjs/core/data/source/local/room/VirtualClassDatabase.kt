@@ -87,7 +87,7 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                     nama = "Dr. Amelia Rahman",
                     email = "amelia.rahman@example.com",
                     password = "password123",
-                    fotoProfil = "https://example.com/profil/amelia.jpg",
+                    fotoProfil = null,
                 ),
             )
             authDao.registerDosen(
@@ -96,7 +96,7 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                     nama = "Prof. Dr. Dian Kusuma",
                     email = "dian.kusuma@example.com",
                     password = "password456",
-                    fotoProfil = "https://example.com/profil/dian.jpg",
+                    fotoProfil = null,
                 ),
             )
 
@@ -113,7 +113,7 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                         "Muhammad Juzairi Safitli",
                         "airiagustus82@gmail.com",
                         "12345678",
-                        "https://example.com/profil/juzairi.jpg",
+                        null,
                         "Junaidi Surya, M.Kom.",
                     ),
                     MahasiswaEntity(
@@ -129,7 +129,7 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                         "Putri Lestari",
                         "putri.l@example.com",
                         "password222",
-                        "https://example.com/profil/putri.jpg",
+                        null,
                         "Budiyanto Siregar",
                     ),
                     MahasiswaEntity(
@@ -145,7 +145,7 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                         "Siti Nurhaliza",
                         "siti.n@example.com",
                         "password444",
-                        "https://example.com/profil/siti.jpg",
+                        null,
                         "Burton Suhagar",
                     ),
                 )
@@ -161,7 +161,7 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                     semester = "Ganjil 2023/2024",
                     credit = 4,
                     category = "Teknik Informatika",
-                    classImage = "https://example.com/class_image/mobile_lanjut.jpg",
+                    classImage = null,
                 ),
             )
             classroomDao.insertKelas(
@@ -173,7 +173,7 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                     semester = "Ganjil 2023/2024",
                     credit = 4,
                     category = "Sistem Informasi",
-                    classImage = "https://example.com/class_image/basis_data.jpg",
+                    classImage = null,
                 ),
             )
             classroomDao.insertKelas(
@@ -185,7 +185,7 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                     semester = "Ganjil 2023/2024",
                     credit = 3,
                     category = "Teknik Informatika",
-                    classImage = "https://example.com/class_image/ai.jpg",
+                    classImage = null,
                 ),
             )
 

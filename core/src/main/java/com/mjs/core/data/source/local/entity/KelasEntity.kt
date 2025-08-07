@@ -28,5 +28,5 @@ data class KelasEntity(
     val semester: String,
     val credit: Int,
     val category: String,
-    val classImage: String,
+    val classImage: String? = null,
 )

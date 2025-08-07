@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mjs.core.data.Resource
 import com.mjs.core.data.source.local.pref.AppPreference
+import com.mjs.core.domain.model.Kelas
 import com.mjs.core.domain.model.Mahasiswa
 import com.mjs.core.domain.model.Tugas
 import com.mjs.core.domain.repository.IVirtualClassRepository
@@ -32,10 +33,14 @@ class HomeViewModel(
     private val _attendanceStreakState = MutableStateFlow<Resource<Int>?>(null)
     val attendanceStreakState: StateFlow<Resource<Int>?> = _attendanceStreakState
 
+    private val _todayScheduleState = MutableStateFlow<Resource<List<Kelas>>?>(null)
+    val todayScheduleState: StateFlow<Resource<List<Kelas>>?> = _todayScheduleState
+
     init {
         fetchMahasiswaData()
         fetchTugasAndKelasMahasiswa()
         fetchAttendanceStreak()
+        fetchTodaySchedule()
     }
 
     private fun fetchMahasiswaData() {
@@ -222,6 +227,20 @@ class HomeViewModel(
                         "Gagal mendapatkan informasi mata kuliah yang diikuti atau semua mata kuliah karena alasan yang tidak diketahui."
                     }
                 _tugasListState.value = Resource.Error(finalErrorMessage)
+            }
+        }
+    }
+
+    private fun fetchTodaySchedule() {
+        viewModelScope.launch {
+            _todayScheduleState.value = Resource.Loading()
+            val nim = appPreference.getLoggedInUserId().firstOrNull()
+            if (nim != null) {
+                virtualClassRepository.getTodaySchedule(nim).collect {
+                    _todayScheduleState.value = it
+                }
+            } else {
+                _todayScheduleState.value = Resource.Error("NIM pengguna tidak ditemukan.")
             }
         }
     }

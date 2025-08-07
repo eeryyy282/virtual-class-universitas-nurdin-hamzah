@@ -24,6 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.util.Calendar // Added import
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
@@ -49,6 +50,7 @@ abstract class VirtualClassDatabase : RoomDatabase() {
 
     abstract fun attendanceDao(): AttendanceDao
 
+    @Suppress("DEPRECATION")
     class PrepopulateCallback(
         private val databaseProvider: () -> VirtualClassDatabase,
     ) : Callback() {
@@ -162,6 +164,7 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                     credit = 4,
                     category = "Teknik Informatika",
                     classImage = null,
+                    ruang = "Ruang 4.4",
                 ),
             )
             classroomDao.insertKelas(
@@ -174,6 +177,7 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                     credit = 4,
                     category = "Sistem Informasi",
                     classImage = null,
+                    ruang = "Laboratorium Grafis",
                 ),
             )
             classroomDao.insertKelas(
@@ -186,8 +190,30 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                     credit = 3,
                     category = "Teknik Informatika",
                     classImage = null,
+                    ruang = "Ruang 3.2",
                 ),
             )
+
+            val calendar = Calendar.getInstance()
+            val currentDayName = SimpleDateFormat("EEEE", Locale("id", "ID")).format(calendar.time)
+            val todayClassNidn = dosen2Nidn
+            val todayClassName = "Workshop Pemrograman Python"
+
+            classroomDao.insertKelas(
+                KelasEntity(
+                    namaKelas = todayClassName,
+                    deskripsi = "Workshop intensif mengenai dasar-dasar pemrograman Python dan aplikasinya.",
+                    nidn = todayClassNidn,
+                    jadwal = "$currentDayName, 14:00 - 16:00 WIB",
+                    semester = "Ganjil 2023/2024",
+                    credit = 2,
+                    category = "Teknik Informatika",
+                    classImage = null,
+                    ruang = "Aula Kampus",
+                ),
+            )
+            val todayClassId =
+                classroomDao.getKelasIdByNameAndNidn(todayClassName, todayClassNidn) ?: 0
 
             val kelas1Id =
                 classroomDao.getKelasIdByNameAndNidn("Pemrograman Mobile Lanjut", dosen1Nidn) ?: 0
@@ -262,6 +288,17 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                     EnrollmentEntity(
                         nim = mahasiswa4Nim,
                         kelasId = kelas3Id,
+                        tanggalDaftar = currentDate,
+                        status = "Aktif",
+                    ),
+                )
+            }
+            // Enroll Muhammad Juzairi Safitli to today's class
+            if (todayClassId != 0) {
+                classroomDao.insertEnrollment(
+                    EnrollmentEntity(
+                        nim = mahasiswa1Nim, // Muhammad Juzairi Safitli's NIM
+                        kelasId = todayClassId,
                         tanggalDaftar = currentDate,
                         status = "Aktif",
                     ),

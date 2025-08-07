@@ -14,6 +14,9 @@ interface ClassroomDao {
     @Query("SELECT * FROM classes")
     fun getAllKelas(): Flow<List<KelasEntity>>
 
+    @Query("SELECT * FROM classes WHERE kelas_id = :kelasId") // Added this function
+    fun getKelasById(kelasId: Int): Flow<KelasEntity?>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertKelas(kelas: KelasEntity)
 

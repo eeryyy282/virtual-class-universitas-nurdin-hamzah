@@ -22,7 +22,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
+@Suppress("DEPRECATION")
 class VirtualClassRepository(
     private val localDataSource: LocalDataSource,
 ) : IVirtualClassRepository {
@@ -224,6 +228,36 @@ class VirtualClassRepository(
                 }
             } catch (e: Exception) {
                 emit(Resource.Error(e.message ?: "Gagal mengambil data streak kehadiran"))
+            }
+        }
+
+    override fun getTodaySchedule(nim: String): Flow<Resource<List<Kelas>>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                val calendar = Calendar.getInstance()
+                val currentDayName =
+                    SimpleDateFormat("EEEE", Locale("id", "ID")).format(calendar.time)
+
+                val enrolledClasses = localDataSource.getEnrolledClasses(nim).first()
+                if (enrolledClasses.isNotEmpty()) {
+                    val todayClasses =
+                        enrolledClasses.mapNotNull { enrollment ->
+                            val kelasEntity =
+                                localDataSource.getKelasById(enrollment.kelasId).first()
+                            kelasEntity?.takeIf {
+                                it.jadwal.contains(
+                                    currentDayName,
+                                    ignoreCase = true,
+                                )
+                            }
+                        }
+                    emit(Resource.Success(DataMapper.mapKelasEntitiesToDomains(todayClasses)))
+                } else {
+                    emit(Resource.Success(emptyList()))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Gagal mengambil jadwal hari ini"))
             }
         }
 }

@@ -11,6 +11,7 @@ data class Kelas(
     val nidn: String,
     val jadwal: String,
     val semester: String,
+    val ruang: String,
     val credit: Int,
     val category: String,
     val classImage: String? = null,

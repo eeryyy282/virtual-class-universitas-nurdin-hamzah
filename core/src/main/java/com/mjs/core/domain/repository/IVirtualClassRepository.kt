@@ -59,4 +59,6 @@ interface IVirtualClassRepository {
         nim: String,
         kelasId: Int,
     ): Flow<Resource<Int>>
+
+    fun getTodaySchedule(nim: String): Flow<Resource<List<Kelas>>>
 }

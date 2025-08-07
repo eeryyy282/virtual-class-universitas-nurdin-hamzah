@@ -29,4 +29,5 @@ data class KelasEntity(
     val credit: Int,
     val category: String,
     val classImage: String? = null,
+    val ruang: String,
 )

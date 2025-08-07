@@ -114,6 +114,7 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                         "airiagustus82@gmail.com",
                         "12345678",
                         "https://example.com/profil/juzairi.jpg",
+                        "Junaidi Surya, M.Kom.",
                     ),
                     MahasiswaEntity(
                         mahasiswa2Nim,
@@ -121,6 +122,7 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                         "ahmad.k@example.com",
                         "password111",
                         null,
+                        "Ahmad Nawir Ihsam",
                     ),
                     MahasiswaEntity(
                         mahasiswa3Nim,
@@ -128,6 +130,7 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                         "putri.l@example.com",
                         "password222",
                         "https://example.com/profil/putri.jpg",
+                        "Budiyanto Siregar",
                     ),
                     MahasiswaEntity(
                         mahasiswa4Nim,
@@ -135,6 +138,7 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                         "budi.p@example.com",
                         "password333",
                         null,
+                        "Ahmad Dahlan",
                     ),
                     MahasiswaEntity(
                         mahasiswa5Nim,
@@ -142,6 +146,7 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                         "siti.n@example.com",
                         "password444",
                         "https://example.com/profil/siti.jpg",
+                        "Burton Suhagar",
                     ),
                 )
             mahasiswaData.forEach { authDao.registerMahasiswa(it) }

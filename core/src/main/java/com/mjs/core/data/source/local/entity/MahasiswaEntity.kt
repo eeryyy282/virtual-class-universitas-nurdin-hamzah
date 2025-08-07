@@ -13,4 +13,6 @@ data class MahasiswaEntity(
     val password: String,
     @ColumnInfo(name = "foto_profil")
     val fotoProfil: String? = null,
+    @ColumnInfo(name = "dosen_pembimbing")
+    val dosenPembimbing: String,
 )

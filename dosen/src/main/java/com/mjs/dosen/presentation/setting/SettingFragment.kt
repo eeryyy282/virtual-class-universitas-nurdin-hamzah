@@ -10,13 +10,18 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.mjs.core.data.Resource
 import com.mjs.dosen.R
 import com.mjs.dosen.databinding.FragmentSettingBinding
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingFragment : Fragment() {
+    @Suppress("ktlint:standard:backing-property-naming")
     private var _binding: FragmentSettingBinding? = null
-    val binding get() = _binding!!
+    private val binding get() = _binding!!
 
     private val settingViewModel: SettingViewModel by viewModel()
 
@@ -28,8 +33,44 @@ class SettingFragment : Fragment() {
         _binding = FragmentSettingBinding.inflate(inflater, container, false)
         updateThemeDescription()
         setupAction()
+        setupProfileDosen()
 
         return binding.root
+    }
+
+    private fun setupProfileDosen() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            settingViewModel.dosenData.collectLatest {
+                when (it) {
+                    is Resource.Error -> {
+                        Toast
+                            .makeText(
+                                context,
+                                it.message ?: "Terjadi kesalahan",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                    }
+
+                    is Resource.Loading -> {
+                    }
+
+                    is Resource.Success -> {
+                        val dosen = it.data
+                        if (dosen != null) {
+                            binding.tvName.text = dosen.nama
+                            binding.tvIdTitle.text = dosen.nidn
+                        } else {
+                            Toast
+                                .makeText(context, "Gagal memuat data dosen", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
+
+                    null -> {
+                    }
+                }
+            }
+        }
     }
 
     private fun updateThemeDescription() {
@@ -81,6 +122,23 @@ class SettingFragment : Fragment() {
             val uri = "profile_settings://profile_settings_activity".toUri()
             val intent = Intent(Intent.ACTION_VIEW, uri)
             startActivity(intent)
+        }
+
+        binding.btnLogout.setOnClickListener {
+            AlertDialog
+                .Builder(requireContext())
+                .setTitle(getString(R.string.confirm_logout_title))
+                .setMessage(getString(R.string.confirm_logout_message))
+                .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                    settingViewModel.logoutUser()
+                    val uri = "virtualclassuniversitasnurdinhamzah://onboarding".toUri()
+                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    startActivity(intent)
+                    requireActivity().finish()
+                }.setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                    dialog.dismiss()
+                }.show()
         }
     }
 

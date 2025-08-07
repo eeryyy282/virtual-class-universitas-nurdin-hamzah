@@ -91,4 +91,8 @@
     <string name="category_subject">Kategori</string>
     <string name="teacher_classroom">Dosen Pengampu:</string>
     <string name="doesnt_have_an_classroom_text">Sepertinya anda belum mendaftarkan ke kelas manampun.</string>
+    <string name="confirm_logout_title">Konfirmasi Logout</string>
+    <string name="confirm_logout_message">Apakah Anda yakin ingin keluar?</string>
+    <string name="yes">Ya</string>
+    <string name="no">Tidak</string>
 </resources>

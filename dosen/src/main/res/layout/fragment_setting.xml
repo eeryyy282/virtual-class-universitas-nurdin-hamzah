@@ -56,7 +56,7 @@
             android:textColor="@color/outline_color_theme"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/iv_icon_setting"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_icon_setting"
             app:layout_constraintStart_toEndOf="@+id/iv_icon_setting"
             app:layout_constraintTop_toTopOf="@+id/iv_icon_setting" />
 
@@ -111,7 +111,7 @@
             app:layout_constraintTop_toTopOf="@+id/cv_profile_user" />
 
         <TextView
-            android:id="@+id/tv_title"
+            android:id="@+id/tv_id_user"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/lato"
@@ -130,10 +130,10 @@
             android:text="@string/name_text_title"
             android:textColor="@color/outline_color_theme"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/tv_title"
+            app:layout_constraintEnd_toEndOf="@+id/tv_id_user"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/tv_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_id_user"
+            app:layout_constraintTop_toBottomOf="@+id/tv_id_user"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
@@ -351,6 +351,7 @@
         </androidx.cardview.widget.CardView>
 
         <Button
+            android:id="@+id/btnLogout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"

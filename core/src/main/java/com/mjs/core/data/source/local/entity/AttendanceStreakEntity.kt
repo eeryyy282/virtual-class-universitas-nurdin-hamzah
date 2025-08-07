@@ -31,6 +31,8 @@ data class AttendanceStreakEntity(
     val kelasId: Int,
     @ColumnInfo(name = "current_streak")
     val currentStreak: Int,
-    @ColumnInfo(name = "last_attendance_date")
-    val lastAttendanceDate: String,
+    @ColumnInfo(name = "longest_streak")
+    val longestStreak: Int,
+    @ColumnInfo(name = "last_attended_date")
+    val lastAttendedDate: String,
 )

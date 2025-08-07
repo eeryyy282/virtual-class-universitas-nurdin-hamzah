@@ -25,7 +25,7 @@ val databaseModule =
 
         single {
             lateinit var dbInstance: VirtualClassDatabase
-            val callback = VirtualClassDatabase.PrepopulateCallback { dbInstance.authDao() }
+            val callback = VirtualClassDatabase.PrepopulateCallback { dbInstance }
             dbInstance =
                 Room
                     .databaseBuilder(

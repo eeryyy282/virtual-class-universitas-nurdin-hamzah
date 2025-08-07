@@ -29,10 +29,10 @@ data class SubmissionEntity(
     @ColumnInfo(name = "assignment_id")
     val assignmentId: Int,
     val nim: String,
-    @ColumnInfo(name = "file_url")
-    val fileUrl: String,
+    @ColumnInfo(name = "attachment")
+    val attachment: String? = null,
     @ColumnInfo(name = "submission_date")
     val submissionDate: String,
-    val grade: String? = null,
+    val grade: Int? = null,
     val feedback: String? = null,
 )

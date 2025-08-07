@@ -28,4 +28,10 @@ interface ClassroomDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMaterial(material: MaterialEntity)
+
+    @Query("SELECT kelas_id FROM classes WHERE nama_kelas = :namaKelas AND nidn = :nidn ORDER BY kelas_id DESC LIMIT 1")
+    suspend fun getKelasIdByNameAndNidn(
+        namaKelas: String,
+        nidn: String,
+    ): Int?
 }

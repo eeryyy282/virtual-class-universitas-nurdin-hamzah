@@ -9,5 +9,7 @@ data class Tugas(
     val kelasId: Int,
     val judulTugas: String,
     val deskripsi: String,
-    val deadline: String,
+    val tanggalMulai: String,
+    val tanggalSelesai: String,
+    val attachment: String? = null,
 ) : Parcelable

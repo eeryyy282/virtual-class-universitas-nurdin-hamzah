@@ -25,8 +25,10 @@ data class MaterialEntity(
     @ColumnInfo(name = "judul_materi")
     val judulMateri: String,
     val deskripsi: String,
-    @ColumnInfo(name = "file_url")
-    val fileUrl: String,
+    @ColumnInfo(name = "attachment")
+    val attachment: String? = null,
     @ColumnInfo(name = "tanggal_upload")
     val tanggalUpload: String,
+    @ColumnInfo(name = "type")
+    val tipe: String? = null,
 )

@@ -21,4 +21,10 @@ interface TaskDao {
 
     @Query("SELECT * FROM submissions WHERE assignment_id = :assignmentId")
     fun getSubmissionsByAssignment(assignmentId: Int): Flow<List<SubmissionEntity>>
+
+    @Query("SELECT assignment_id FROM assignments WHERE judul_tugas = :judul AND kelas_id = :kelasId ORDER BY assignment_id DESC LIMIT 1")
+    suspend fun getAssignmentIdByTitleAndClassId(
+        judul: String,
+        kelasId: Int,
+    ): Int?
 }

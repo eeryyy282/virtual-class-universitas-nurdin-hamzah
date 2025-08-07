@@ -55,7 +55,9 @@ object DataMapper {
             kelasId = input.kelasId,
             judulTugas = input.judulTugas,
             deskripsi = input.deskripsi,
-            deadline = input.deadline,
+            tanggalMulai = input.tanggalMulai,
+            tanggalSelesai = input.tanggalSelesai,
+            attachment = input.attachment,
         )
 
     fun mapTugasEntitiesToDomains(input: List<AssignmentEntity>): List<Tugas> = input.map { mapTugasEntityToDomain(it) }
@@ -66,8 +68,9 @@ object DataMapper {
             kelasId = input.kelasId,
             judulMateri = input.judulMateri,
             deskripsi = input.deskripsi,
-            fileUrl = input.fileUrl,
+            attachment = input.attachment,
             tanggalUpload = input.tanggalUpload,
+            tipe = input.tipe,
         )
 
     fun mapMateriEntitiesToDomains(input: List<MaterialEntity>): List<Materi> = input.map { mapMateriEntityToDomain(it) }
@@ -99,8 +102,9 @@ object DataMapper {
             absensiId = input.absensiId,
             kelasId = input.kelasId,
             nim = input.nim,
-            tanggalSesi = input.tanggalSesi,
+            tanggalHadir = input.tanggalHadir,
             status = input.status,
+            keterangan = input.keterangan,
         )
 
     fun mapKehadiranEntitiesToDomains(input: List<AttendanceEntity>): List<Kehadiran> = input.map { mapKehadiranEntityToDomain(it) }

@@ -25,5 +25,8 @@ data class AssignmentEntity(
     @ColumnInfo(name = "judul_tugas")
     val judulTugas: String,
     val deskripsi: String,
-    val deadline: String,
+    val tanggalMulai: String,
+    val tanggalSelesai: String,
+    @ColumnInfo(name = "attachment")
+    val attachment: String? = null,
 )

@@ -25,4 +25,5 @@ data class ForumEntity(
     @ColumnInfo(name = "judul_forum")
     val judulForum: String,
     val deskripsi: String,
+    val tanggalDibuat: String,
 )

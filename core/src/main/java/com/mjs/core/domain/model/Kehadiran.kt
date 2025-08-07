@@ -8,6 +8,7 @@ data class Kehadiran(
     val absensiId: Int,
     val kelasId: Int,
     val nim: String,
-    val tanggalSesi: String,
+    val tanggalHadir: String,
     val status: String,
+    val keterangan: String? = null,
 ) : Parcelable

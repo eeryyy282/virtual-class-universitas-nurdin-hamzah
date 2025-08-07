@@ -9,6 +9,7 @@ data class Materi(
     val kelasId: Int,
     val judulMateri: String,
     val deskripsi: String,
-    val fileUrl: String,
+    val attachment: String? = null,
     val tanggalUpload: String,
+    val tipe: String? = null,
 ) : Parcelable

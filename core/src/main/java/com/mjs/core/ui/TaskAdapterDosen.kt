@@ -48,7 +48,7 @@ class TaskAdapterDosen : RecyclerView.Adapter<TaskAdapterDosen.ListViewHolder>()
             with(binding) {
                 tvMeetingTask.text = data.judulTugas
                 tvDescriptionTask.text = data.deskripsi
-                tvDeadlineDate.text = data.deadline
+                tvDeadlineDate.text = data.tanggalSelesai
                 getClassName?.let { getClassNameFunc ->
                     tvSubject.text = getClassNameFunc(data.kelasId)
                 }

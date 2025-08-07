@@ -21,4 +21,10 @@ interface ForumDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPost(post: PostEntity)
+
+    @Query("SELECT forum_id FROM forums WHERE judul_forum = :judul AND kelas_id = :kelasId ORDER BY forum_id DESC LIMIT 1")
+    suspend fun getForumIdByTitleAndClassId(
+        judul: String,
+        kelasId: Int,
+    ): Int?
 }

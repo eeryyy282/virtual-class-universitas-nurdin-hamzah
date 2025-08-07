@@ -16,7 +16,7 @@ class TaskHomeAdapter : RecyclerView.Adapter<TaskHomeAdapter.ListViewHolder>() {
     fun setData(newListData: List<Tugas>?) {
         if (newListData == null) return
         listData.clear()
-        newListData.sortedByDescending { it.deadline }.take(2).let {
+        newListData.sortedByDescending { it.tanggalSelesai }.take(2).let {
             listData.addAll(it)
         }
         notifyDataSetChanged()
@@ -49,7 +49,7 @@ class TaskHomeAdapter : RecyclerView.Adapter<TaskHomeAdapter.ListViewHolder>() {
         fun bind(data: Tugas) {
             with(binding) {
                 tvTaskSubject.text = data.judulTugas
-                tvTaskDeadline.text = data.deadline
+                tvTaskDeadline.text = data.tanggalSelesai
                 getClassName?.let { getClassNameFunc ->
                     tvSubject.text = getClassNameFunc(data.kelasId)
                 }

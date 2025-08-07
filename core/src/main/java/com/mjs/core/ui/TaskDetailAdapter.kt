@@ -49,7 +49,7 @@ class TaskDetailAdapter : RecyclerView.Adapter<TaskDetailAdapter.ListViewHolder>
                 tvSubject.text = getClassName?.invoke(data.kelasId) ?: ""
                 tvMeetingTask.text = data.judulTugas
                 tvDescriptionTask.text = data.deskripsi
-                tvDeadlineDate.text = data.deadline
+                tvDeadlineDate.text = data.tanggalSelesai
             }
         }
     }

@@ -38,7 +38,6 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        // Log.d(TAG, "onViewCreated CALLED")
         setupProfileUser()
         setupRecyclerViewTugas()
         observeTugasList()

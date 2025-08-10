@@ -94,4 +94,6 @@
     <string name="title_dosen">Dosen</string>
     <string name="classroom_semester">Semester</string>
     <string name="unknown_class">Kelas Tidak Diketahui</string>
+    <string name="no_not_finished_tasks_text">Tidak ada tugas yang belum selesai</string>
+    <string name="no_late_tasks_text">Tidak ada tugas yang terlewat</string>
 </resources>

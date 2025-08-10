@@ -32,6 +32,32 @@
             app:layout_constraintTop_toBottomOf="@+id/not_finished_task"
             tools:listitem="@layout/item_task_detail" />
 
+        <ImageView
+            android:id="@+id/iv_no_not_finished_tasks"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/no_not_finished_tasks_text"
+            android:src="@drawable/doesnt_have_an_content_icon"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rv_not_finished_task" />
+
+        <TextView
+            android:id="@+id/tv_no_not_finished_tasks"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/no_not_finished_tasks_text"
+            android:textAlignment="center"
+            android:textColor="@color/text_color_themed"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_no_not_finished_tasks" />
+
         <TextView
             android:id="@+id/late_task"
             android:layout_width="0dp"
@@ -44,20 +70,44 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rv_not_finished_task" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_no_not_finished_tasks" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_late_task"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/late_task"
-            app:layout_constraintVertical_bias="0.0"
             tools:listitem="@layout/item_task_detail" />
+
+        <ImageView
+            android:id="@+id/iv_no_late_tasks"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/no_late_tasks_text"
+            android:src="@drawable/doesnt_have_an_content_icon"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rv_late_task" />
+
+        <TextView
+            android:id="@+id/tv_no_late_tasks"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/no_late_tasks_text"
+            android:textAlignment="center"
+            android:textColor="@color/text_color_themed"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_no_late_tasks" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

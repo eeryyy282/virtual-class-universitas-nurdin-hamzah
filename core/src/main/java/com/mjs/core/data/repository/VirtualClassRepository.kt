@@ -328,4 +328,36 @@ class VirtualClassRepository(
                 emit(Resource.Error(e.message ?: "Gagal mengambil semua jadwal dosen"))
             }
         }
+
+    override fun getNotFinishedTasks(
+        nim: Int,
+        kelasId: String,
+    ): Flow<Resource<List<Tugas>>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                localDataSource
+                    .getNotFinishedTasks(nim, kelasId)
+                    .map { DataMapper.mapTugasEntitiesToDomains(it) }
+                    .collect { emit(Resource.Success(it)) }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Gagal mengambil tugas yang belum selesai"))
+            }
+        }
+
+    override fun getLateTasks(
+        nim: Int,
+        kelasId: String,
+    ): Flow<Resource<List<Tugas>>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                localDataSource
+                    .getLateTasks(nim, kelasId)
+                    .map { DataMapper.mapTugasEntitiesToDomains(it) }
+                    .collect { emit(Resource.Success(it)) }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Gagal mengambil tugas yang terlambat"))
+            }
+        }
 }

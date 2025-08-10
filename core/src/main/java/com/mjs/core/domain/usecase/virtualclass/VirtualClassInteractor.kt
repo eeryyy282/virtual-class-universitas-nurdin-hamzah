@@ -36,17 +36,14 @@ class VirtualClassInteractor(
 
     override fun getAllKelas(): Flow<Resource<List<Kelas>>> = virtualClassRepository.getAllKelas()
 
-    override fun getEnrolledClasses(nim: Int): Flow<Resource<List<EnrollmentEntity>>> =
-        virtualClassRepository.getEnrolledClasses(nim) // Changed to Int
+    override fun getEnrolledClasses(nim: Int): Flow<Resource<List<EnrollmentEntity>>> = virtualClassRepository.getEnrolledClasses(nim)
 
     override suspend fun enrollToClass(enrollment: EnrollmentEntity): Flow<Resource<String>> =
         virtualClassRepository.enrollToClass(enrollment)
 
-    override fun getMaterialsByClass(kelasId: String): Flow<Resource<List<Materi>>> =
-        virtualClassRepository.getMaterialsByClass(kelasId) // Changed to String
+    override fun getMaterialsByClass(kelasId: String): Flow<Resource<List<Materi>>> = virtualClassRepository.getMaterialsByClass(kelasId)
 
-    override fun getAssignmentsByClass(kelasId: String): Flow<Resource<List<Tugas>>> =
-        virtualClassRepository.getAssignmentsByClass(kelasId) // Changed to String
+    override fun getAssignmentsByClass(kelasId: String): Flow<Resource<List<Tugas>>> = virtualClassRepository.getAssignmentsByClass(kelasId)
 
     override suspend fun insertAssignment(assignment: AssignmentEntity): Flow<Resource<String>> =
         virtualClassRepository.insertAssignment(assignment)
@@ -54,8 +51,7 @@ class VirtualClassInteractor(
     override suspend fun insertSubmission(submission: SubmissionEntity): Flow<Resource<String>> =
         virtualClassRepository.insertSubmission(submission)
 
-    override fun getForumsByClass(kelasId: String): Flow<Resource<List<Forum>>> =
-        virtualClassRepository.getForumsByClass(kelasId) // Changed to String
+    override fun getForumsByClass(kelasId: String): Flow<Resource<List<Forum>>> = virtualClassRepository.getForumsByClass(kelasId)
 
     override fun getPostsByForum(forumId: Int): Flow<Resource<List<Postingan>>> = virtualClassRepository.getPostsByForum(forumId)
 
@@ -76,4 +72,14 @@ class VirtualClassInteractor(
     override fun getAllSchedulesByNim(nim: Int): Flow<Resource<List<Kelas>>> = virtualClassRepository.getAllSchedulesByNim(nim)
 
     override fun getAllSchedulesByNidn(nidn: Int): Flow<Resource<List<Kelas>>> = virtualClassRepository.getAllSchedulesByNidn(nidn)
+
+    override fun getNotFinishedTasks(
+        nim: Int,
+        kelasId: String,
+    ): Flow<Resource<List<Tugas>>> = virtualClassRepository.getNotFinishedTasks(nim, kelasId)
+
+    override fun getLateTasks(
+        nim: Int,
+        kelasId: String,
+    ): Flow<Resource<List<Tugas>>> = virtualClassRepository.getLateTasks(nim, kelasId)
 }

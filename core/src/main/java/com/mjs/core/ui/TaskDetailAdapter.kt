@@ -7,10 +7,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mjs.core.databinding.ItemTaskDetailBinding
 import com.mjs.core.domain.model.Tugas
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 class TaskDetailAdapter : RecyclerView.Adapter<TaskDetailAdapter.ListViewHolder>() {
     private var listData = ArrayList<Tugas>()
-    var getClassName: ((Int) -> String)? = null
+    var getClassName: ((String) -> String)? = null
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(newListData: List<Tugas>?) {
@@ -39,18 +42,35 @@ class TaskDetailAdapter : RecyclerView.Adapter<TaskDetailAdapter.ListViewHolder>
 
     override fun getItemCount(): Int = listData.size
 
+    @Suppress("DEPRECATION")
     inner class ListViewHolder(
         itemView: View,
     ) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemTaskDetailBinding.bind(itemView)
 
+        @SuppressLint("SimpleDateFormat")
         fun bind(data: Tugas) {
             with(binding) {
-                tvSubject.text = getClassName?.invoke(data.kelasId.toInt()) ?: ""
+                tvSubject.text = getClassName?.invoke(data.kelasId) ?: ""
                 tvMeetingTask.text = data.judulTugas
                 tvDescriptionTask.text = data.deskripsi
-                tvDeadlineDate.text = data.tanggalSelesai
+                tvDeadlineDate.text = formatDeadline(data.tanggalSelesai)
             }
         }
+
+        private fun formatDeadline(dateString: String): String =
+            try {
+                val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                val date = inputFormat.parse(dateString)
+                date?.let {
+                    val outputFormat =
+                        SimpleDateFormat("HH.mm 'WIB' | dd MMMM yyyy", Locale("id", "ID"))
+                    outputFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+                    outputFormat.format(it)
+                } ?: dateString
+            } catch (e: Exception) {
+                e.printStackTrace()
+                dateString
+            }
     }
 }

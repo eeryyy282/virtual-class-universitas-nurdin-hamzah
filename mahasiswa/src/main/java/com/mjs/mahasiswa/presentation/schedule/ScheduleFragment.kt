@@ -46,7 +46,7 @@ class ScheduleFragment : Fragment() {
 
     private fun setupRecyclerView() {
         scheduleAdapter = ScheduleAdapter()
-        scheduleAdapter.isForDosenView = false // Set for mahasiswa view
+        scheduleAdapter.isForDosenView = false
         binding.rvSchedule.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = scheduleAdapter

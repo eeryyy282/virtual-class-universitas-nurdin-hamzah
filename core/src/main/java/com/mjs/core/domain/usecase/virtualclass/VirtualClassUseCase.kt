@@ -62,4 +62,14 @@ interface VirtualClassUseCase {
     fun getAllSchedulesByNim(nim: Int): Flow<Resource<List<Kelas>>>
 
     fun getAllSchedulesByNidn(nidn: Int): Flow<Resource<List<Kelas>>>
+
+    fun getNotFinishedTasks(
+        nim: Int,
+        kelasId: String,
+    ): Flow<Resource<List<Tugas>>>
+
+    fun getLateTasks(
+        nim: Int,
+        kelasId: String,
+    ): Flow<Resource<List<Tugas>>>
 }

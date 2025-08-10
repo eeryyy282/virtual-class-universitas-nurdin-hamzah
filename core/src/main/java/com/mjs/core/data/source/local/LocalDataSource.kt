@@ -82,4 +82,14 @@ class LocalDataSource(
         nim: Int,
         kelasId: String,
     ): Flow<AttendanceStreakEntity?> = attendanceDao.getAttendanceStreak(nim, kelasId)
+
+    fun getNotFinishedTasks(
+        nim: Int,
+        kelasId: String,
+    ): Flow<List<AssignmentEntity>> = taskDao.getNotFinishedTasks(nim, kelasId)
+
+    fun getLateTasks(
+        nim: Int,
+        kelasId: String,
+    ): Flow<List<AssignmentEntity>> = taskDao.getLateTasks(nim, kelasId)
 }

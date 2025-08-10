@@ -27,4 +27,28 @@ interface TaskDao {
         judul: String,
         kelasId: String,
     ): Int?
+
+    @Query(
+        """
+        SELECT a.* FROM assignments a
+        LEFT JOIN submissions s ON a.assignment_id = s.assignment_id AND s.nim = :nim
+        WHERE a.kelas_id = :kelasId AND s.submission_id IS NULL AND datetime(a.tanggalSelesai) >= datetime('now')
+    """,
+    )
+    fun getNotFinishedTasks(
+        nim: Int,
+        kelasId: String,
+    ): Flow<List<AssignmentEntity>>
+
+    @Query(
+        """
+        SELECT a.* FROM assignments a
+        LEFT JOIN submissions s ON a.assignment_id = s.assignment_id AND s.nim = :nim
+        WHERE a.kelas_id = :kelasId AND s.submission_id IS NULL AND datetime(a.tanggalSelesai) < datetime('now')
+    """,
+    )
+    fun getLateTasks(
+        nim: Int,
+        kelasId: String,
+    ): Flow<List<AssignmentEntity>>
 }

@@ -39,6 +39,10 @@ class LocalDataSource(
 
     fun getDosenByNidn(nidn: Int): Flow<DosenEntity?> = authDao.getDosenByNidn(nidn)
 
+    suspend fun updateMahasiswa(mahasiswa: MahasiswaEntity) = authDao.updateMahasiswa(mahasiswa)
+
+    suspend fun updateDosen(dosen: DosenEntity) = authDao.updateDosen(dosen)
+
     fun getAllKelas(): Flow<List<KelasEntity>> = classroomDao.getAllKelas()
 
     fun getKelasById(kelasId: String): Flow<KelasEntity?> = classroomDao.getKelasById(kelasId)

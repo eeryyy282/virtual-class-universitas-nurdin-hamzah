@@ -88,4 +88,9 @@ class VirtualClassInteractor(
 
     override fun getPastDeadlineAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>> =
         virtualClassRepository.getPastDeadlineAssignmentsForDosen(nidn)
+
+    override suspend fun updateMahasiswaProfile(mahasiswa: Mahasiswa): Flow<Resource<String>> =
+        virtualClassRepository.updateMahasiswaProfile(mahasiswa)
+
+    override suspend fun updateDosenProfile(dosen: Dosen): Flow<Resource<String>> = virtualClassRepository.updateDosenProfile(dosen)
 }

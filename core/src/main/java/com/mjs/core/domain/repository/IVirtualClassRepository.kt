@@ -81,4 +81,8 @@ interface IVirtualClassRepository {
     fun getActiveAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>>
 
     fun getPastDeadlineAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>>
+
+    suspend fun updateMahasiswaProfile(mahasiswa: Mahasiswa): Flow<Resource<String>>
+
+    suspend fun updateDosenProfile(dosen: Dosen): Flow<Resource<String>>
 }

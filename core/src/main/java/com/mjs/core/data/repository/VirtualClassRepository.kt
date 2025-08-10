@@ -413,4 +413,50 @@ class VirtualClassRepository(
                 emit(Resource.Error(e.message ?: "Gagal mengambil tugas lewat tenggat untuk dosen"))
             }
         }
+
+    override suspend fun updateMahasiswaProfile(mahasiswa: Mahasiswa): Flow<Resource<String>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                val currentMahasiswaEntity =
+                    localDataSource.getMahasiswaByNim(mahasiswa.nim).first()
+                if (currentMahasiswaEntity != null) {
+                    val updatedMahasiswaEntity =
+                        currentMahasiswaEntity.copy(
+                            nama = mahasiswa.nama,
+                            email = mahasiswa.email,
+                            fotoProfil = mahasiswa.fotoProfil,
+                            dosenPembimbing = mahasiswa.dosenPembimbing,
+                        )
+                    localDataSource.updateMahasiswa(updatedMahasiswaEntity)
+                    emit(Resource.Success("Profil Mahasiswa berhasil diperbarui"))
+                } else {
+                    emit(Resource.Error("Mahasiswa dengan NIM ${mahasiswa.nim} tidak ditemukan"))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Gagal memperbarui profil Mahasiswa"))
+            }
+        }
+
+    override suspend fun updateDosenProfile(dosen: Dosen): Flow<Resource<String>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                val currentDosenEntity = localDataSource.getDosenByNidn(dosen.nidn).first()
+                if (currentDosenEntity != null) {
+                    val updatedDosenEntity =
+                        currentDosenEntity.copy(
+                            nama = dosen.nama,
+                            email = dosen.email,
+                            fotoProfil = dosen.fotoProfil,
+                        )
+                    localDataSource.updateDosen(updatedDosenEntity)
+                    emit(Resource.Success("Profil Dosen berhasil diperbarui"))
+                } else {
+                    emit(Resource.Error("Dosen dengan NIDN ${dosen.nidn} tidak ditemukan"))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Gagal memperbarui profil Dosen"))
+            }
+        }
 }

@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.mjs.core.data.source.local.entity.DosenEntity
 import com.mjs.core.data.source.local.entity.MahasiswaEntity
 import kotlinx.coroutines.flow.Flow
@@ -33,4 +34,10 @@ interface AuthDao {
 
     @Query("SELECT * FROM dosen WHERE nidn = :nidn")
     fun getDosenByNidn(nidn: Int): Flow<DosenEntity?>
+
+    @Update
+    suspend fun updateMahasiswa(mahasiswa: MahasiswaEntity)
+
+    @Update
+    suspend fun updateDosen(dosen: DosenEntity)
 }

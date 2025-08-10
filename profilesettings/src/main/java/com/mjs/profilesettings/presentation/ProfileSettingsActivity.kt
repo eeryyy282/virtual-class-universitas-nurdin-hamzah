@@ -8,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.mjs.core.data.Resource
 import com.mjs.profilesettings.R
 import com.mjs.profilesettings.databinding.ActivityProfileSettingsBinding
 import com.mjs.profilesettings.di.profileSettingsModule
@@ -32,9 +34,99 @@ class ProfileSettingsActivity : AppCompatActivity() {
             insets
         }
 
+        profileSettingsViewModel.loadProfile()
+        observeViewModel()
         checkDarkMode()
         setupAction()
         setEditMode(false)
+    }
+
+    private fun observeViewModel() {
+        profileSettingsViewModel.mahasiswaProfile.observe(this) {
+            when (it) {
+                is Resource.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+
+                is Resource.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    val mahasiswa = it.data
+                    binding.etProfileName.setText(mahasiswa?.nama)
+                    binding.etProfileEmail.setText(mahasiswa?.email)
+                    Glide
+                        .with(this)
+                        .load(mahasiswa?.fotoProfil)
+                        .placeholder(R.drawable.profile_photo)
+                        .error(R.drawable.profile_photo)
+                        .into(binding.photoProfileSetting)
+                }
+
+                is Resource.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+
+        profileSettingsViewModel.dosenProfile.observe(this) {
+            when (it) {
+                is Resource.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+
+                is Resource.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    val dosen = it.data
+                    binding.etProfileName.setText(dosen?.nama)
+                    binding.etProfileEmail.setText(dosen?.email)
+                    Glide
+                        .with(this)
+                        .load(dosen?.fotoProfil)
+                        .placeholder(R.drawable.profile_photo)
+                        .error(R.drawable.profile_photo)
+                        .into(binding.photoProfileSetting)
+                }
+
+                is Resource.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+
+        profileSettingsViewModel.updateProfileResult.observe(this) {
+            when (it) {
+                is Resource.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.btnSaveProfile.isEnabled = false
+                }
+
+                is Resource.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.btnSaveProfile.isEnabled = true
+                    Toast
+                        .makeText(
+                            this,
+                            getString(R.string.text_changes_saved_successfully),
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    setEditMode(false)
+                    profileSettingsViewModel.loadProfile()
+                }
+
+                is Resource.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.btnSaveProfile.isEnabled = true
+                    Toast
+                        .makeText(
+                            this,
+                            "Gagal memperbarui profil: ${it.message}",
+                            Toast.LENGTH_LONG,
+                        ).show()
+                    setEditMode(true)
+                }
+            }
+        }
     }
 
     private fun checkDarkMode() {
@@ -52,6 +144,9 @@ class ProfileSettingsActivity : AppCompatActivity() {
         binding.etProfileEmail.isEnabled = isEditing
         binding.btnEditProfile.visibility = if (isEditing) View.GONE else View.VISIBLE
         binding.btnSaveProfile.visibility = if (isEditing) View.VISIBLE else View.GONE
+        if (!isEditing) {
+            binding.progressBar.visibility = View.GONE
+        }
     }
 
     private fun setupAction() {
@@ -60,19 +155,25 @@ class ProfileSettingsActivity : AppCompatActivity() {
         }
 
         binding.btnSaveProfile.setOnClickListener {
+            val name =
+                binding.etProfileName.text
+                    .toString()
+                    .trim()
+            val email =
+                binding.etProfileEmail.text
+                    .toString()
+                    .trim()
+
+            if (name.isEmpty() || email.isEmpty()) {
+                Toast.makeText(this, "Nama dan Email tidak boleh kosong", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             MaterialAlertDialogBuilder(this)
                 .setTitle(getString(R.string.text_confirm_changes_title))
                 .setMessage(getString(R.string.text_confirm_changes_message))
                 .setPositiveButton(getString(R.string.text_yes)) { _, _ ->
-                    binding.etProfileName.text.toString()
-                    binding.etProfileEmail.text.toString()
-                    Toast
-                        .makeText(
-                            this,
-                            getString(R.string.text_changes_saved_successfully),
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                    setEditMode(false)
+                    profileSettingsViewModel.updateProfile(name, email)
                 }.setNegativeButton(getString(R.string.text_no)) { dialog, _ ->
                     dialog.dismiss()
                 }.show()

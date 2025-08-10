@@ -49,4 +49,9 @@
     <string name="confirm_logout_message">Apakah Anda yakin ingin keluar?</string>
     <string name="yes">Ya</string>
     <string name="no">Tidak</string>
+    <string name="active_tasks">Tugas Aktif</string>
+    <string name="tasks_ready_for_grading">Tugas Siap Dinilai</string>
+    <string name="no_active_tasks_text">Tidak ada tugas aktif</string>
+    <string name="no_tasks_ready_for_grading_text">Tidak ada tugas yang siap dinilai</string>
+    <string name="doesnt_have_an_task_text">Belum ada tugas yang tersedia.</string>
 </resources>

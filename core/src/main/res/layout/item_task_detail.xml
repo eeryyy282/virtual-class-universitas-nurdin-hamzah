@@ -112,12 +112,14 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:backgroundTint="@color/backround_item_task"
                 app:cardCornerRadius="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/tv_deadline"
                 app:layout_constraintStart_toStartOf="@+id/tv_deadline"
-                app:layout_constraintTop_toBottomOf="@+id/tv_deadline">
+                app:layout_constraintTop_toBottomOf="@+id/tv_deadline"
+                app:layout_constraintVertical_bias="0.0">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

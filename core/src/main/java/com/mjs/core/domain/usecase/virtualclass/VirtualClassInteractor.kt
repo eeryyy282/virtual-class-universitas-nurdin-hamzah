@@ -27,9 +27,9 @@ class VirtualClassInteractor(
         virtualClassRepository.saveThemeSetting(isDarkModeActive)
     }
 
-    override fun getMahasiswaByNim(nim: Int): Flow<Resource<Mahasiswa>> = virtualClassRepository.getMahasiswaByNim(nim) // Changed to Int
+    override fun getMahasiswaByNim(nim: Int): Flow<Resource<Mahasiswa>> = virtualClassRepository.getMahasiswaByNim(nim)
 
-    override fun getDosenByNidn(nidn: Int): Flow<Resource<Dosen>> = virtualClassRepository.getDosenByNidn(nidn) // Changed to Int
+    override fun getDosenByNidn(nidn: Int): Flow<Resource<Dosen>> = virtualClassRepository.getDosenByNidn(nidn)
 
     override suspend fun registerMahasiswa(mahasiswa: MahasiswaEntity): Flow<Resource<String>> =
         virtualClassRepository.registerMahasiswa(mahasiswa)
@@ -65,7 +65,7 @@ class VirtualClassInteractor(
     override suspend fun insertAttendance(attendance: AttendanceEntity): Flow<Resource<String>> =
         virtualClassRepository.insertAttendance(attendance)
 
-    override fun getTodaySchedule(nim: Int): Flow<Resource<List<Kelas>>> = virtualClassRepository.getTodaySchedule(nim) // Changed to Int
+    override fun getTodaySchedule(nim: Int): Flow<Resource<List<Kelas>>> = virtualClassRepository.getTodaySchedule(nim)
 
     override fun getTodayScheduleDosen(nidn: Int): Flow<Resource<List<Kelas>>> = virtualClassRepository.getTodayScheduleDosen(nidn)
 
@@ -82,4 +82,10 @@ class VirtualClassInteractor(
         nim: Int,
         kelasId: String,
     ): Flow<Resource<List<Tugas>>> = virtualClassRepository.getLateTasks(nim, kelasId)
+
+    override fun getActiveAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>> =
+        virtualClassRepository.getActiveAssignmentsForDosen(nidn)
+
+    override fun getPastDeadlineAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>> =
+        virtualClassRepository.getPastDeadlineAssignmentsForDosen(nidn)
 }

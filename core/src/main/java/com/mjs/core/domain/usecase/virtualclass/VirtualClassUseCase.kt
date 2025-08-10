@@ -72,4 +72,8 @@ interface VirtualClassUseCase {
         nim: Int,
         kelasId: String,
     ): Flow<Resource<List<Tugas>>>
+
+    fun getActiveAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>>
+
+    fun getPastDeadlineAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>>
 }

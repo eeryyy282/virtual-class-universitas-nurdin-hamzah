@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mjs.core.databinding.ItemTaskDetailBinding
 import com.mjs.core.domain.model.Tugas
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 class TaskAdapterDosen : RecyclerView.Adapter<TaskAdapterDosen.ListViewHolder>() {
     private var listData = ArrayList<Tugas>()
@@ -39,20 +42,37 @@ class TaskAdapterDosen : RecyclerView.Adapter<TaskAdapterDosen.ListViewHolder>()
 
     override fun getItemCount(): Int = listData.size
 
+    @Suppress("DEPRECATION")
     inner class ListViewHolder(
         itemView: View,
     ) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemTaskDetailBinding.bind(itemView)
 
+        @SuppressLint("SimpleDateFormat")
         fun bind(data: Tugas) {
             with(binding) {
                 tvMeetingTask.text = data.judulTugas
                 tvDescriptionTask.text = data.deskripsi
-                tvDeadlineDate.text = data.tanggalSelesai
+                tvDeadlineDate.text = formatDeadline(data.tanggalSelesai)
                 getClassName?.let { getClassNameFunc ->
                     tvSubject.text = getClassNameFunc(data.kelasId)
                 }
             }
         }
+
+        private fun formatDeadline(dateString: String): String =
+            try {
+                val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                val date = inputFormat.parse(dateString)
+                date?.let {
+                    val outputFormat =
+                        SimpleDateFormat("HH.mm 'WIB' | dd MMMM yyyy", Locale("id", "ID"))
+                    outputFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+                    outputFormat.format(it)
+                } ?: dateString
+            } catch (e: Exception) {
+                e.printStackTrace()
+                dateString
+            }
     }
 }

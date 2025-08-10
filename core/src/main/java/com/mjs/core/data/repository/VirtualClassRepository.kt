@@ -5,6 +5,7 @@ import com.mjs.core.data.source.local.LocalDataSource
 import com.mjs.core.data.source.local.entity.AssignmentEntity
 import com.mjs.core.data.source.local.entity.AttendanceEntity
 import com.mjs.core.data.source.local.entity.EnrollmentEntity
+import com.mjs.core.data.source.local.entity.KelasEntity
 import com.mjs.core.data.source.local.entity.MahasiswaEntity
 import com.mjs.core.data.source.local.entity.PostEntity
 import com.mjs.core.data.source.local.entity.SubmissionEntity
@@ -24,12 +25,18 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 @Suppress("DEPRECATION")
 class VirtualClassRepository(
     private val localDataSource: LocalDataSource,
 ) : IVirtualClassRepository {
+    private fun getCurrentFormattedDate(): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        return dateFormat.format(Date())
+    }
+
     override fun getThemeSetting(): Flow<Boolean> = localDataSource.getThemeSetting()
 
     override suspend fun saveThemeSetting(isDarkModeActive: Boolean) = localDataSource.saveThemeSetting(isDarkModeActive)
@@ -295,7 +302,7 @@ class VirtualClassRepository(
                 val enrolledClasses = localDataSource.getEnrolledClasses(nim).first()
                 if (enrolledClasses.isNotEmpty()) {
                     val allStudentSchedules =
-                        mutableListOf<com.mjs.core.data.source.local.entity.KelasEntity>()
+                        mutableListOf<KelasEntity>()
                     for (enrollment in enrolledClasses) {
                         localDataSource
                             .getKelasById(enrollment.kelasId)
@@ -336,8 +343,9 @@ class VirtualClassRepository(
         flow {
             emit(Resource.Loading())
             try {
+                val currentDate = getCurrentFormattedDate()
                 localDataSource
-                    .getNotFinishedTasks(nim, kelasId)
+                    .getNotFinishedTasks(nim, kelasId, currentDate)
                     .map { DataMapper.mapTugasEntitiesToDomains(it) }
                     .collect { emit(Resource.Success(it)) }
             } catch (e: Exception) {
@@ -352,12 +360,57 @@ class VirtualClassRepository(
         flow {
             emit(Resource.Loading())
             try {
+                val currentDate = getCurrentFormattedDate()
                 localDataSource
-                    .getLateTasks(nim, kelasId)
+                    .getLateTasks(nim, kelasId, currentDate)
                     .map { DataMapper.mapTugasEntitiesToDomains(it) }
                     .collect { emit(Resource.Success(it)) }
             } catch (e: Exception) {
                 emit(Resource.Error(e.message ?: "Gagal mengambil tugas yang terlambat"))
+            }
+        }
+
+    override fun getActiveAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                val allClasses = localDataSource.getAllKelas().first()
+                val dosenKelasIds = allClasses.filter { it.nidn == nidn }.map { it.kelasId }
+                if (dosenKelasIds.isNotEmpty()) {
+                    val currentDate = getCurrentFormattedDate()
+                    localDataSource
+                        .getAssignmentsByKelasIdsAndFutureDeadline(
+                            dosenKelasIds,
+                            currentDate,
+                        ).map { DataMapper.mapTugasEntitiesToDomains(it) }
+                        .collect { emit(Resource.Success(it)) }
+                } else {
+                    emit(Resource.Success(emptyList()))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Gagal mengambil tugas aktif untuk dosen"))
+            }
+        }
+
+    override fun getPastDeadlineAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                val allClasses = localDataSource.getAllKelas().first()
+                val dosenKelasIds = allClasses.filter { it.nidn == nidn }.map { it.kelasId }
+                if (dosenKelasIds.isNotEmpty()) {
+                    val currentDate = getCurrentFormattedDate()
+                    localDataSource
+                        .getAssignmentsByKelasIdsAndPastDeadline(
+                            dosenKelasIds,
+                            currentDate,
+                        ).map { DataMapper.mapTugasEntitiesToDomains(it) }
+                        .collect { emit(Resource.Success(it)) }
+                } else {
+                    emit(Resource.Success(emptyList()))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Gagal mengambil tugas lewat tenggat untuk dosen"))
             }
         }
 }

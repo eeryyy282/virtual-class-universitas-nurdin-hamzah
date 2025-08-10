@@ -86,10 +86,22 @@ class LocalDataSource(
     fun getNotFinishedTasks(
         nim: Int,
         kelasId: String,
-    ): Flow<List<AssignmentEntity>> = taskDao.getNotFinishedTasks(nim, kelasId)
+        currentDate: String,
+    ): Flow<List<AssignmentEntity>> = taskDao.getNotFinishedTasks(nim, kelasId, currentDate)
 
     fun getLateTasks(
         nim: Int,
         kelasId: String,
-    ): Flow<List<AssignmentEntity>> = taskDao.getLateTasks(nim, kelasId)
+        currentDate: String,
+    ): Flow<List<AssignmentEntity>> = taskDao.getLateTasks(nim, kelasId, currentDate)
+
+    fun getAssignmentsByKelasIdsAndFutureDeadline(
+        kelasIds: List<String>,
+        currentDate: String,
+    ): Flow<List<AssignmentEntity>> = taskDao.getAssignmentsByKelasIdsAndFutureDeadline(kelasIds, currentDate)
+
+    fun getAssignmentsByKelasIdsAndPastDeadline(
+        kelasIds: List<String>,
+        currentDate: String,
+    ): Flow<List<AssignmentEntity>> = taskDao.getAssignmentsByKelasIdsAndPastDeadline(kelasIds, currentDate)
 }

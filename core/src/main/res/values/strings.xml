@@ -96,4 +96,9 @@
     <string name="unknown_class">Kelas Tidak Diketahui</string>
     <string name="no_not_finished_tasks_text">Tidak ada tugas yang belum selesai</string>
     <string name="no_late_tasks_text">Tidak ada tugas yang terlewat</string>
+    <string name="active_tasks">Tugas Aktif</string>
+    <string name="tasks_ready_for_grading">Tugas Siap Dinilai</string>
+    <string name="no_active_tasks_text">Tidak ada tugas aktif</string>
+    <string name="no_tasks_ready_for_grading_text">Tidak ada tugas yang siap dinilai</string>
+    <string name="error_loading_tasks">Terjadi error saat memuat tugas anda.</string>
 </resources>

@@ -9,8 +9,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.mjs.core.data.Resource
-import com.mjs.core.ui.TaskHomeAdapter
+import com.mjs.core.ui.task.TaskHomeAdapter
+import com.mjs.dosen.R
 import com.mjs.dosen.databinding.FragmentHomeBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -56,6 +58,12 @@ class HomeFragment : Fragment() {
                         if (dosen != null) {
                             binding.tvNameHome.text = dosen.nama
                             binding.tvIdUserHome.text = dosen.nidn.toString()
+                            Glide
+                                .with(requireContext())
+                                .load(dosen.fotoProfil)
+                                .placeholder(R.drawable.profile_photo)
+                                .error(R.drawable.profile_photo)
+                                .into(binding.ivProfileUser)
                         } else {
                             Toast
                                 .makeText(context, "Gagal memuat data dosen", Toast.LENGTH_SHORT)

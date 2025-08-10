@@ -1,4 +1,4 @@
-package com.mjs.core.ui
+package com.mjs.core.ui.task
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
 
-class TaskAdapterDosen : RecyclerView.Adapter<TaskAdapterDosen.ListViewHolder>() {
+class TaskDetailAdapter : RecyclerView.Adapter<TaskDetailAdapter.ListViewHolder>() {
     private var listData = ArrayList<Tugas>()
     var getClassName: ((String) -> String)? = null
 
@@ -51,12 +51,10 @@ class TaskAdapterDosen : RecyclerView.Adapter<TaskAdapterDosen.ListViewHolder>()
         @SuppressLint("SimpleDateFormat")
         fun bind(data: Tugas) {
             with(binding) {
+                tvSubject.text = getClassName?.invoke(data.kelasId) ?: ""
                 tvMeetingTask.text = data.judulTugas
                 tvDescriptionTask.text = data.deskripsi
                 tvDeadlineDate.text = formatDeadline(data.tanggalSelesai)
-                getClassName?.let { getClassNameFunc ->
-                    tvSubject.text = getClassNameFunc(data.kelasId)
-                }
             }
         }
 

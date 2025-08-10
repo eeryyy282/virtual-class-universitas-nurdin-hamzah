@@ -26,7 +26,7 @@ data class AttendanceStreakEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "streak_id")
     val streakId: Int = 0,
-    val nim: String,
+    val nim: Int,
     @ColumnInfo(name = "kelas_id")
     val kelasId: String,
     @ColumnInfo(name = "current_streak")

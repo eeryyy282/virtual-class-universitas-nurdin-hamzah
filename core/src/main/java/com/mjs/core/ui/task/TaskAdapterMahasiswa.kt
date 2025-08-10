@@ -1,4 +1,4 @@
-package com.mjs.core.ui
+package com.mjs.core.ui.task
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -72,7 +72,6 @@ class TaskAdapterMahasiswa : RecyclerView.Adapter<TaskAdapterMahasiswa.ListViewH
                     tvNoNotFinishedTasks.visibility = View.GONE
                 }
 
-                // Setup for Late Tasks
                 rvLateTask.layoutManager = LinearLayoutManager(itemView.context)
                 val lateAdapter = TaskDetailAdapter()
                 lateAdapter.getClassName = getClassNameFunc

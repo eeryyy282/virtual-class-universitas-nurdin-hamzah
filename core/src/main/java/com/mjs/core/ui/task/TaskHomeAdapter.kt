@@ -1,4 +1,4 @@
-package com.mjs.core.ui
+package com.mjs.core.ui.task
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

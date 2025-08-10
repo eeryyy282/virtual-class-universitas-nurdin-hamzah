@@ -10,8 +10,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.mjs.core.data.Resource
-import com.mjs.core.ui.TaskHomeAdapter
+import com.mjs.core.ui.task.TaskHomeAdapter
 import com.mjs.mahasiswa.R
 import com.mjs.mahasiswa.databinding.FragmentHomeBinding
 import kotlinx.coroutines.flow.collectLatest
@@ -60,6 +61,12 @@ class HomeFragment : Fragment() {
                             binding.tvNameHome.text = mahasiswa.nama
                             binding.tvIdUserHome.text = mahasiswa.nim.toString()
                             binding.tvMentorUserHome.text = mahasiswa.dosenPembimbing
+                            Glide
+                                .with(requireContext())
+                                .load(mahasiswa.fotoProfil)
+                                .placeholder(R.drawable.profile_photo)
+                                .error(R.drawable.profile_photo)
+                                .into(binding.ivProfileUser)
                         } else {
                             Toast
                                 .makeText(
@@ -144,7 +151,7 @@ class HomeFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             homeViewModel.enrolledCoursesMapState.collectLatest { map ->
-                taskHomeAdapter.notifyDataSetChanged() // Ini mungkin perlu disesuaikan jika map memengaruhi tampilan tugas
+                taskHomeAdapter.notifyDataSetChanged()
             }
         }
     }
@@ -155,18 +162,18 @@ class HomeFragment : Fragment() {
                 when (resource) {
                     is Resource.Loading -> {
                         binding.ivDoesntHaveAnTask.visibility =
-                            View.GONE // Sesuaikan dengan UI Anda
+                            View.GONE
                         binding.tvDoesntHaveAnTask.visibility =
-                            View.GONE // Sesuaikan dengan UI Anda
+                            View.GONE
                         binding.progressBarStatistic.visibility = View.VISIBLE
                     }
 
                     is Resource.Success -> {
                         val streakCount = resource.data
                         binding.ivDoesntHaveAnTask.visibility =
-                            View.GONE // Sesuaikan dengan UI Anda
+                            View.GONE
                         binding.tvDoesntHaveAnTask.visibility =
-                            View.GONE // Sesuaikan dengan UI Anda
+                            View.GONE
                         binding.progressBarStatistic.visibility = View.GONE
                         binding.ivFireIconStatistic.visibility = View.VISIBLE
                         binding.tvStreakStatistic.visibility = View.VISIBLE
@@ -183,9 +190,9 @@ class HomeFragment : Fragment() {
 
                     is Resource.Error -> {
                         binding.ivDoesntHaveAnTask.visibility =
-                            View.VISIBLE // Sesuaikan dengan UI Anda
+                            View.VISIBLE
                         binding.tvDoesntHaveAnTask.visibility =
-                            View.VISIBLE // Sesuaikan dengan UI Anda
+                            View.VISIBLE
                         binding.progressBarStatistic.visibility = View.GONE
                         Toast
                             .makeText(
@@ -232,7 +239,6 @@ class HomeFragment : Fragment() {
                             binding.tvScheduleClassroom.visibility = View.VISIBLE
                             binding.tvTimeScheduleHome.visibility = View.VISIBLE
                             binding.tvSubjectScheduleHome.visibility = View.VISIBLE
-                            binding.btnScheduleDetailHome.visibility = View.VISIBLE
                             binding.tvScheduleClassroom.text = scheduleList[0].ruang
                             binding.tvTimeScheduleHome.text =
                                 scheduleList[0]
@@ -241,6 +247,8 @@ class HomeFragment : Fragment() {
                                     .getOrNull(1)
                                     ?.trim()
                             binding.tvSubjectScheduleHome.text = scheduleList[0].namaKelas
+                            binding.btnScheduleDetailHome.visibility =
+                                View.VISIBLE // Ensure this is visible if there is a schedule
                         }
                     }
 

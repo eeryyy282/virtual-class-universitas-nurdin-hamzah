@@ -10,7 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mjs.core.data.Resource
-import com.mjs.core.ui.TaskAdapterMahasiswa
+import com.mjs.core.ui.task.TaskAdapterMahasiswa
 import com.mjs.mahasiswa.databinding.FragmentTaskBinding
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel

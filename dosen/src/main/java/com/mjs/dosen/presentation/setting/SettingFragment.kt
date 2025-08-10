@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.mjs.core.data.Resource
 import com.mjs.dosen.R
 import com.mjs.dosen.databinding.FragmentSettingBinding
@@ -59,6 +60,12 @@ class SettingFragment : Fragment() {
                         if (dosen != null) {
                             binding.tvName.text = dosen.nama
                             binding.tvIdTitle.text = dosen.nidn.toString()
+                            Glide
+                                .with(requireContext())
+                                .load(dosen.fotoProfil)
+                                .placeholder(R.drawable.profile_photo)
+                                .error(R.drawable.profile_photo)
+                                .into(binding.photoProfileSetting)
                         } else {
                             Toast
                                 .makeText(context, "Gagal memuat data dosen", Toast.LENGTH_SHORT)

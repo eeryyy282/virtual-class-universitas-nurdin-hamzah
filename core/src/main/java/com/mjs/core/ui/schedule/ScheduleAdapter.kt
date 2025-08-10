@@ -1,4 +1,4 @@
-package com.mjs.core.ui
+package com.mjs.core.ui.schedule
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -36,7 +36,6 @@ class ScheduleAdapter : RecyclerView.Adapter<ScheduleAdapter.ListViewHolder>() {
         position: Int,
     ) {
         val (day, scheduleList) = listData[position]
-        // Pass isForDosenView to the bind method
         holder.bind(day, scheduleList, onItemClick, getDosenName, isForDosenView)
     }
 

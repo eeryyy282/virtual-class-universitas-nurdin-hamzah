@@ -1,18 +1,16 @@
-package com.mjs.core.ui
+package com.mjs.core.ui.classroom
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.mjs.core.databinding.ItemScheduleDetailBinding
+import com.mjs.core.databinding.ItemClassroomDetailBinding
 import com.mjs.core.domain.model.Kelas
 
-class ScheduleDetailAdapter : RecyclerView.Adapter<ScheduleDetailAdapter.ListViewHolder>() {
+class ClassroomAdapterMahasiswa : RecyclerView.Adapter<ClassroomAdapterMahasiswa.ListViewHolder>() {
     private var listData = ArrayList<Kelas>()
     var onItemClick: ((Kelas) -> Unit)? = null
     var getDosenName: ((String) -> String)? = null
-    var isForDosenView: Boolean = false
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(newListData: List<Kelas>?) {
@@ -27,7 +25,7 @@ class ScheduleDetailAdapter : RecyclerView.Adapter<ScheduleDetailAdapter.ListVie
         viewType: Int,
     ): ListViewHolder {
         val binding =
-            ItemScheduleDetailBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemClassroomDetailBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ListViewHolder(binding)
     }
 
@@ -42,25 +40,15 @@ class ScheduleDetailAdapter : RecyclerView.Adapter<ScheduleDetailAdapter.ListVie
     override fun getItemCount(): Int = listData.size
 
     inner class ListViewHolder(
-        private val binding: ItemScheduleDetailBinding,
+        private val binding: ItemClassroomDetailBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Kelas) {
             with(binding) {
-                tvScheduleClassroom.text =
-                    data.jadwal
-                        .split(",")
-                        .getOrElse(1) { data.jadwal }
-                        .trim()
-                textSubjectSchedule.text = data.namaKelas
-                tvSubjectRoom.text = data.ruang
-
-                if (isForDosenView) {
-                    tvDosenSubject.visibility = View.GONE
-                } else {
-                    tvDosenSubject.visibility = View.VISIBLE
-                    tvDosenSubject.text =
-                        getDosenName?.invoke(data.nidn.toString()) ?: data.nidn.toString()
-                }
+                tvSubject.text = data.namaKelas
+                tvCodeSubject.text = data.deskripsi
+                tvClassroomLocation.text = data.jadwal
+                tvDosenClassroom.text =
+                    getDosenName?.invoke(data.nidn.toString()) ?: data.nidn.toString()
             }
         }
 

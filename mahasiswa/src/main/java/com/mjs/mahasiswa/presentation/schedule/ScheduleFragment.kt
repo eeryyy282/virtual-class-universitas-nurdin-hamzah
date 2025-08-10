@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mjs.core.data.Resource
-import com.mjs.core.ui.ScheduleAdapter
+import com.mjs.core.ui.schedule.ScheduleAdapter
 import com.mjs.mahasiswa.databinding.FragmentScheduleBinding
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch

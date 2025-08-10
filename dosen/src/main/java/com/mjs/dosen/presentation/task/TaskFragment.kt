@@ -10,7 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mjs.core.data.Resource
-import com.mjs.core.ui.TaskAdapterDosenCategorized
+import com.mjs.core.ui.task.TaskAdapterDosenCategorized
 import com.mjs.dosen.databinding.FragmentTaskBinding
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel

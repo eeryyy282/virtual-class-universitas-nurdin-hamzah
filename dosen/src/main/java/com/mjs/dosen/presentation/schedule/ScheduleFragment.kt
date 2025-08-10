@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mjs.core.data.Resource
-import com.mjs.core.ui.ScheduleAdapter
+import com.mjs.core.ui.schedule.ScheduleAdapter
 import com.mjs.dosen.databinding.FragmentScheduleBinding
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel

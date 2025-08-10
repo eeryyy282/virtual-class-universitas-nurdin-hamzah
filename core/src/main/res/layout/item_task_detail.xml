@@ -56,7 +56,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
         android:backgroundTint="@color/background_color_card_view"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -113,6 +113,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
                 android:backgroundTint="@color/backround_item_task"
                 app:cardCornerRadius="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -16,6 +16,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HomeViewModel(
     private val virtualClassRepository: IVirtualClassRepository,
@@ -194,7 +197,19 @@ class HomeViewModel(
 
                     if (allTugas.isNotEmpty()) {
                         val distinctTugas = allTugas.distinctBy { it.assignmentId }
-                        _tugasListState.value = Resource.Success(distinctTugas)
+                        val dateFormat =
+                            SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                        val currentDate = Date()
+                        val activeTasks =
+                            distinctTugas.filter {
+                                try {
+                                    val deadlineDate = dateFormat.parse(it.tanggalSelesai)
+                                    deadlineDate != null && deadlineDate.after(currentDate)
+                                } catch (_: Exception) {
+                                    false
+                                }
+                            }
+                        _tugasListState.value = Resource.Success(activeTasks)
                     } else if (hasError) {
                         _tugasListState.value =
                             Resource.Error(errorMessage ?: "Gagal memuat beberapa tugas.")

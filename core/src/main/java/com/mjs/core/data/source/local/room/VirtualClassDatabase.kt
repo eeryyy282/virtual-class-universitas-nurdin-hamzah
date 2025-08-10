@@ -27,7 +27,6 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import java.util.concurrent.TimeUnit
 
 @Database(
     entities = [
@@ -71,617 +70,716 @@ abstract class VirtualClassDatabase : RoomDatabase() {
             val attendanceDao = database.attendanceDao()
 
             val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            val currentDate = dateFormat.format(Date())
-            val oneDayAgo =
-                dateFormat.format(Date(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1)))
-            val twoDaysAgo =
-                dateFormat.format(Date(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(2)))
-            val oneWeekAgo =
-                dateFormat.format(Date(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(7)))
-            val inOneWeek =
-                dateFormat.format(Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7)))
-
-            val dosen1Nidn = 1122334455
-            val dosen2Nidn = 2000000002
-            authDao.registerDosen(
-                DosenEntity(
-                    nidn = dosen1Nidn,
-                    nama = "Dr. Amelia Rahman",
-                    email = "amelia.rahman@example.com",
-                    password = "password123",
-                    fotoProfil = null,
-                ),
-            )
-            authDao.registerDosen(
-                DosenEntity(
-                    nidn = dosen2Nidn,
-                    nama = "Prof. Dr. Dian Kusuma",
-                    email = "dian.kusuma@example.com",
-                    password = "password456",
-                    fotoProfil = null,
-                ),
-            )
-
-            val mahasiswa1Nim = 21111073
-            val mahasiswa2Nim = 21111074
-            val mahasiswa3Nim = 21111075
-            val mahasiswa4Nim = 21111076
-            val mahasiswa5Nim = 21111077
-
-            val mahasiswaData =
-                listOf(
-                    MahasiswaEntity(
-                        mahasiswa1Nim,
-                        "Muhammad Juzairi Safitli",
-                        "airiagustus82@gmail.com",
-                        "12345678",
-                        null,
-                        "Junaidi Surya, M.Kom.",
-                    ),
-                    MahasiswaEntity(
-                        mahasiswa2Nim,
-                        "Ahmad Kurniawan",
-                        "ahmad.k@example.com",
-                        "password111",
-                        null,
-                        "Ahmad Nawir Ihsam",
-                    ),
-                    MahasiswaEntity(
-                        mahasiswa3Nim,
-                        "Putri Lestari",
-                        "putri.l@example.com",
-                        "password222",
-                        null,
-                        "Budiyanto Siregar",
-                    ),
-                    MahasiswaEntity(
-                        mahasiswa4Nim,
-                        "Budi Prasetyo",
-                        "budi.p@example.com",
-                        "password333",
-                        null,
-                        "Ahmad Dahlan",
-                    ),
-                    MahasiswaEntity(
-                        mahasiswa5Nim,
-                        "Siti Nurhaliza",
-                        "siti.n@example.com",
-                        "password444",
-                        null,
-                        "Burton Suhagar",
-                    ),
-                )
-            mahasiswaData.forEach { authDao.registerMahasiswa(it) }
-
-            val kelas1Id = "PML23001"
-            val kelas2Id = "BDT23002"
-            val kelas3Id = "KCB23003"
-
-            classroomDao.insertKelas(
-                KelasEntity(
-                    kelasId = kelas1Id,
-                    namaKelas = "Pemrograman Mobile Lanjut",
-                    deskripsi = "Mempelajari pengembangan aplikasi mobile Android dengan Kotlin dan Jetpack Compose.",
-                    nidn = dosen1Nidn,
-                    jadwal = "Senin, 10:00 - 12:30 WIB",
-                    semester = "Ganjil 2023/2024",
-                    credit = 4,
-                    category = "Teknik Informatika",
-                    classImage = null,
-                    ruang = "Ruang 4.4",
-                ),
-            )
-            classroomDao.insertKelas(
-                KelasEntity(
-                    kelasId = kelas2Id,
-                    namaKelas = "Basis Data Terdistribusi",
-                    deskripsi = "Konsep dan implementasi basis data terdistribusi, NoSQL, dan Big Data.",
-                    nidn = dosen2Nidn,
-                    jadwal = "Selasa, 13:00 - 15:30 WIB",
-                    semester = "Ganjil 2023/2024",
-                    credit = 4,
-                    category = "Sistem Informasi",
-                    classImage = null,
-                    ruang = "Laboratorium Grafis",
-                ),
-            )
-            classroomDao.insertKelas(
-                KelasEntity(
-                    kelasId = kelas3Id,
-                    namaKelas = "Kecerdasan Buatan",
-                    deskripsi = "Pengantar Kecerdasan Buatan, meliputi search, knowledge representation, dan machine learning.",
-                    nidn = dosen1Nidn,
-                    jadwal = "Rabu, 08:00 - 10:30 WIB",
-                    semester = "Ganjil 2023/2024",
-                    credit = 3,
-                    category = "Teknik Informatika",
-                    classImage = null,
-                    ruang = "Ruang 3.2",
-                ),
-            )
-
             val calendar = Calendar.getInstance()
+
+            fun getDate(
+                timeUnit: Int,
+                amount: Int,
+                referenceDate: Date = Date(),
+            ): String {
+                val cal = Calendar.getInstance()
+                cal.time = referenceDate
+                cal.add(timeUnit, amount)
+                return dateFormat.format(cal.time)
+            }
+
+            val today = Date()
+            val currentDate = getDate(Calendar.DAY_OF_YEAR, 0, today)
+            val yesterday = getDate(Calendar.DAY_OF_YEAR, -1, today)
+            val threeDaysAgo = getDate(Calendar.DAY_OF_YEAR, -3, today)
+            val oneWeekAgo = getDate(Calendar.DAY_OF_YEAR, -7, today)
+            val twoWeeksAgo = getDate(Calendar.DAY_OF_YEAR, -14, today)
+            val oneMonthAgo = getDate(Calendar.MONTH, -1, today)
+            getDate(Calendar.MONTH, -2, today)
+
+            val tomorrow = getDate(Calendar.DAY_OF_YEAR, 1, today)
+            val inThreeDays = getDate(Calendar.DAY_OF_YEAR, 3, today)
+            val inOneWeek = getDate(Calendar.DAY_OF_YEAR, 7, today)
+            val inTwoWeeks = getDate(Calendar.DAY_OF_YEAR, 14, today)
+            val inOneMonth = getDate(Calendar.MONTH, 1, today)
+            getDate(Calendar.MONTH, 2, today)
+
+            val roleDosen = "dosen"
+            val roleMahasiswa = "mahasiswa"
+
+            val dosen1Nidn = 1122334455 // Dr. Arini Larasati
+            val dosen2Nidn = 2233445566.toInt() // Prof. Bambang Wijaya
+            val dosen3Nidn = 3344556677.toInt() // Chandra Kusuma, M.Sc.
+            authDao.registerDosen(
+                DosenEntity(
+                    dosen1Nidn,
+                    "Dr. Arini Larasati, S.Kom., M.Cs.",
+                    "arini.larasati@example.ac.id",
+                    "pass1122",
+                    "https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?w=400",
+                ),
+            )
+            authDao.registerDosen(
+                DosenEntity(
+                    dosen2Nidn,
+                    "Prof. Bambang Wijaya, Ph.D.",
+                    "bambang.wijaya@example.ac.id",
+                    "pass2233",
+                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
+                ),
+            )
+            authDao.registerDosen(
+                DosenEntity(
+                    dosen3Nidn,
+                    "Chandra Kusuma, M.Sc.",
+                    "chandra.kusuma@example.ac.id",
+                    "pass3344",
+                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
+                ),
+            )
+
+            val mhs1Nim = 21111073 // Muhammad Juzairi Safitli (Sangat Aktif)
+            val mhs2Nim = 22021002 // Yuni Azira (Aktif)
+            val mhs3Nim = 22032003 // Budi Hartono (Cukup Aktif)
+            val mhs4Nim = 23041004 // Rina Amelia (Kurang Aktif)
+            val mhs5Nim = 23052005 // Eko Prasetyo (Baru Mendaftar)
+            authDao.registerMahasiswa(
+                MahasiswaEntity(
+                    mhs1Nim,
+                    "Muhammad Juzairi Safitli",
+                    "juzairi.safitli@student.example.ac.id",
+                    "pass2111",
+                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
+                    "Dr. Arini Larasati, S.Kom., M.Cs.",
+                ),
+            )
+            authDao.registerMahasiswa(
+                MahasiswaEntity(
+                    mhs2Nim,
+                    "Yuni Azira",
+                    "yuni.azira@student.example.ac.id",
+                    "pass2202",
+                    "https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?w=400",
+                    "Prof. Bambang Wijaya, Ph.D.",
+                ),
+            )
+            authDao.registerMahasiswa(
+                MahasiswaEntity(
+                    mhs3Nim,
+                    "Budi Hartono",
+                    "budi.hartono@student.example.ac.id",
+                    "pass2203",
+                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
+                    "Chandra Kusuma, M.Sc.",
+                ),
+            )
+            authDao.registerMahasiswa(
+                MahasiswaEntity(
+                    mhs4Nim,
+                    "Rina Amelia",
+                    "rina.amelia@student.example.ac.id",
+                    "pass2304",
+                    "https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?w=400",
+                    "Dr. Arini Larasati, S.Kom., M.Cs.",
+                ),
+            )
+            authDao.registerMahasiswa(
+                MahasiswaEntity(
+                    mhs5Nim,
+                    "Eko Prasetyo",
+                    "eko.prasetyo@student.example.ac.id",
+                    "pass2305",
+                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
+                    "Prof. Bambang Wijaya, Ph.D.",
+                ),
+            )
+
             val currentDayName = SimpleDateFormat("EEEE", Locale("id", "ID")).format(calendar.time)
+            val kelasPML = "IF-401"
+            val kelasBDT = "SI-302"
+            val kelasAI = "IF-503"
+            val kelasWEB = "IF-305"
+            val kelasSTAT = "DS-201"
+            val kelasPYTHON = "UM-101"
+            val kelasETIKA = "UM-102"
 
-            val todayClassNidn = dosen2Nidn
-            val todayClassName = "Pemrograman Python"
-            val todayClassId = "PYT23101"
             classroomDao.insertKelas(
                 KelasEntity(
-                    kelasId = todayClassId,
-                    namaKelas = todayClassName,
-                    deskripsi = "Belajar mengenai dasar-dasar pemrograman Python dan aplikasinya.",
-                    nidn = todayClassNidn,
-                    jadwal = "$currentDayName, 14:00 - 16:00 WIB",
-                    semester = "Ganjil 2023/2024",
-                    credit = 2,
-                    category = "Teknik Informatika",
-                    classImage = null,
-                    ruang = "Aula Kampus",
+                    kelasPML,
+                    "Pemrograman Mobile Lanjut",
+                    "Fokus pada pengembangan aplikasi Android native dengan Kotlin, Jetpack Compose, MVVM, dan integrasi API.",
+                    dosen1Nidn,
+                    "Senin, 10:00 - 12:30 WIB",
+                    "Semester Ganjil 2024/2025",
+                    4,
+                    "Teknik Informatika",
+                    "https://images.unsplash.com/photo-1607252650355-f7fd0460ccdb?w=400",
+                    "Gedung A Ruang 301",
                 ),
             )
-
-            val todayDosen1ClassName = "Etika Profesi TI"
-            val todayDosen1ClassNidn = dosen1Nidn
-            val todayDosen1ClassId = "EPT23102"
             classroomDao.insertKelas(
                 KelasEntity(
-                    kelasId = todayDosen1ClassId,
-                    namaKelas = todayDosen1ClassName,
-                    deskripsi = "Membahas etika dan profesionalisme dalam bidang Teknologi Informasi.",
-                    nidn = todayDosen1ClassNidn,
-                    jadwal = "$currentDayName, 09:00 - 10:40 WIB",
-                    semester = "Ganjil 2023/2024",
-                    credit = 2,
-                    category = "Teknik Informatika",
-                    classImage = null,
-                    ruang = "Ruang Teori 1",
+                    kelasBDT,
+                    "Basis Data Terdistribusi",
+                    "Mempelajari konsep, arsitektur, dan implementasi sistem basis data terdistribusi, termasuk replikasi, partisi, dan konsistensi data.",
+                    dosen2Nidn,
+                    "Selasa, 13:00 - 15:30 WIB",
+                    "Semester Ganjil 2024/2025",
+                    3,
+                    "Sistem Informasi",
+                    "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400",
+                    "Laboratorium Basis Data Terpadu",
+                ),
+            )
+            classroomDao.insertKelas(
+                KelasEntity(
+                    kelasAI,
+                    "Kecerdasan Buatan Lanjutan",
+                    "Pembahasan mendalam tentang algoritma machine learning, deep learning, natural language processing, dan computer vision.",
+                    dosen1Nidn,
+                    "Rabu, 08:00 - 10:30 WIB",
+                    "Semester Ganjil 2024/2025",
+                    4,
+                    "Teknik Informatika",
+                    "https://images.unsplash.com/photo-1526378722484-bd91ca387e72?w=400",
+                    "Gedung C Ruang Cerdas",
+                ),
+            )
+            classroomDao.insertKelas(
+                KelasEntity(
+                    kelasWEB,
+                    "Pengembangan Web Framework",
+                    "Praktik penggunaan framework web modern seperti React/Vue untuk frontend dan Node.js/Django untuk backend.",
+                    dosen3Nidn,
+                    "Kamis, 14:00 - 16:30 WIB",
+                    "Semester Ganjil 2024/2025",
+                    3,
+                    "Teknik Informatika",
+                    null,
+                    "Laboratorium Web Programming",
+                ),
+            )
+            classroomDao.insertKelas(
+                KelasEntity(
+                    kelasSTAT,
+                    "Statistika Dasar untuk Sains Data",
+                    "Pengantar konsep statistika deskriptif dan inferensial yang esensial untuk analisis data.",
+                    dosen2Nidn,
+                    "Jumat, 09:00 - 11:30 WIB",
+                    "Semester Ganjil 2024/2025",
+                    3,
+                    "Sains Data",
+                    "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400",
+                    "Ruang Tutorial B205",
+                ),
+            )
+            classroomDao.insertKelas(
+                KelasEntity(
+                    kelasPYTHON,
+                    "Workshop Pemrograman Python",
+                    "Sesi intensif satu hari untuk mempelajari dasar-dasar Python dan aplikasinya dalam skrip sederhana.",
+                    dosen3Nidn,
+                    "$currentDayName, 09:00 - 16:00 WIB",
+                    "Workshop Mingguan",
+                    1,
+                    "Umum",
+                    null,
+                    "Aula Utama",
+                ),
+            )
+            classroomDao.insertKelas(
+                KelasEntity(
+                    kelasETIKA,
+                    "Seminar Etika Digital",
+                    "Diskusi mengenai tantangan etis dalam penggunaan teknologi digital, privasi data, dan tanggung jawab siber.",
+                    dosen1Nidn,
+                    "$currentDayName, 13:00 - 15:00 WIB",
+                    "Seminar Bulanan",
+                    0,
+                    "Umum",
+                    null,
+                    "Ruang Seminar Lt. 5",
                 ),
             )
 
             classroomDao.insertEnrollment(
                 EnrollmentEntity(
-                    nim = mahasiswa1Nim,
-                    kelasId = kelas1Id,
-                    tanggalDaftar = oneWeekAgo,
-                    status = "Aktif",
+                    0,
+                    mhs1Nim,
+                    kelasPML,
+                    oneMonthAgo,
+                    "Aktif",
                 ),
             )
             classroomDao.insertEnrollment(
                 EnrollmentEntity(
-                    nim = mahasiswa2Nim,
-                    kelasId = kelas1Id,
-                    tanggalDaftar = oneWeekAgo,
-                    status = "Aktif",
+                    0,
+                    mhs1Nim,
+                    kelasAI,
+                    oneMonthAgo,
+                    "Aktif",
                 ),
             )
             classroomDao.insertEnrollment(
                 EnrollmentEntity(
-                    nim = mahasiswa5Nim,
-                    kelasId = kelas1Id,
-                    tanggalDaftar = currentDate,
-                    status = "Aktif",
+                    0,
+                    mhs1Nim,
+                    kelasPYTHON,
+                    oneWeekAgo,
+                    "Aktif",
                 ),
             )
             classroomDao.insertEnrollment(
                 EnrollmentEntity(
-                    nim = mahasiswa1Nim,
-                    kelasId = kelas2Id,
-                    tanggalDaftar = oneWeekAgo,
-                    status = "Aktif",
+                    0,
+                    mhs1Nim,
+                    kelasETIKA,
+                    oneWeekAgo,
+                    "Aktif",
                 ),
             )
             classroomDao.insertEnrollment(
                 EnrollmentEntity(
-                    nim = mahasiswa3Nim,
-                    kelasId = kelas2Id,
-                    tanggalDaftar = currentDate,
-                    status = "Nonaktif",
+                    0,
+                    mhs2Nim,
+                    kelasPML,
+                    oneMonthAgo,
+                    "Aktif",
                 ),
             )
             classroomDao.insertEnrollment(
                 EnrollmentEntity(
-                    nim = mahasiswa4Nim,
-                    kelasId = kelas2Id,
-                    tanggalDaftar = currentDate,
-                    status = "Aktif",
+                    0,
+                    mhs2Nim,
+                    kelasBDT,
+                    oneMonthAgo,
+                    "Aktif",
                 ),
             )
             classroomDao.insertEnrollment(
                 EnrollmentEntity(
-                    nim = mahasiswa2Nim,
-                    kelasId = kelas3Id,
-                    tanggalDaftar = oneDayAgo,
-                    status = "Aktif",
+                    0,
+                    mhs2Nim,
+                    kelasSTAT,
+                    twoWeeksAgo,
+                    "Aktif",
                 ),
             )
             classroomDao.insertEnrollment(
                 EnrollmentEntity(
-                    nim = mahasiswa4Nim,
-                    kelasId = kelas3Id,
-                    tanggalDaftar = currentDate,
-                    status = "Aktif",
+                    0,
+                    mhs3Nim,
+                    kelasBDT,
+                    oneMonthAgo,
+                    "Aktif",
                 ),
             )
             classroomDao.insertEnrollment(
                 EnrollmentEntity(
-                    nim = mahasiswa1Nim,
-                    kelasId = todayClassId,
-                    tanggalDaftar = currentDate,
-                    status = "Aktif",
+                    0,
+                    mhs3Nim,
+                    kelasWEB,
+                    twoWeeksAgo,
+                    "Aktif",
                 ),
             )
             classroomDao.insertEnrollment(
                 EnrollmentEntity(
-                    nim = mahasiswa1Nim,
-                    kelasId = todayDosen1ClassId,
-                    tanggalDaftar = currentDate,
-                    status = "Aktif",
+                    0,
+                    mhs3Nim,
+                    kelasPYTHON,
+                    threeDaysAgo,
+                    "Aktif",
                 ),
             )
             classroomDao.insertEnrollment(
                 EnrollmentEntity(
-                    nim = mahasiswa1Nim,
-                    kelasId = kelas3Id,
-                    tanggalDaftar = oneDayAgo,
-                    status = "Aktif",
+                    0,
+                    mhs4Nim,
+                    kelasPML,
+                    oneMonthAgo,
+                    "Aktif",
+                ),
+            )
+            classroomDao.insertEnrollment(
+                EnrollmentEntity(
+                    0,
+                    mhs4Nim,
+                    kelasWEB,
+                    oneMonthAgo,
+                    "Nonaktif",
+                ),
+            )
+            classroomDao.insertEnrollment(
+                EnrollmentEntity(
+                    0,
+                    mhs4Nim,
+                    kelasETIKA,
+                    oneWeekAgo,
+                    "Aktif",
+                ),
+            )
+            classroomDao.insertEnrollment(
+                EnrollmentEntity(
+                    0,
+                    mhs5Nim,
+                    kelasPML,
+                    threeDaysAgo,
+                    "Aktif",
                 ),
             )
 
             classroomDao.insertMaterial(
                 MaterialEntity(
-                    kelasId = kelas1Id,
-                    judulMateri = "Pengenalan Kotlin untuk Android",
-                    deskripsi = "Materi dasar...",
-                    attachment = "https://example.com/materi/kotlin_dasar.pdf",
-                    tanggalUpload = oneWeekAgo,
-                    tipe = "pdf",
+                    0,
+                    kelasPML,
+                    "Slide 1: Pengantar Kotlin & Android Studio",
+                    "Materi presentasi untuk pertemuan pertama, mencakup setup environment dan dasar Kotlin.",
+                    oneMonthAgo,
+                    "application/pdf",
+                    "PML_S01_Intro_Kotlin_Android_Studio.pdf",
                 ),
             )
             classroomDao.insertMaterial(
                 MaterialEntity(
-                    kelasId = kelas1Id,
-                    judulMateri = "Jetpack Compose Layouting",
-                    deskripsi = "Video tutorial...",
-                    attachment = "https://youtube.com/watch?v=compose_layout_tutorial",
-                    tanggalUpload = twoDaysAgo,
-                    tipe = "video",
+                    0,
+                    kelasPML,
+                    "Video Tutorial: Layouting dengan Jetpack Compose",
+                    "Link ke playlist video tutorial mengenai berbagai teknik layouting di Jetpack Compose.",
+                    twoWeeksAgo,
+                    "text/html",
+                    "https://youtube.com/playlist?list=PML_Compose_Layouts",
                 ),
             )
             classroomDao.insertMaterial(
                 MaterialEntity(
-                    kelasId = kelas2Id,
-                    judulMateri = "Konsep CAP Theorem dalam Basis Data",
-                    deskripsi = "Penjelasan mendalam...",
-                    attachment = "https://example.com/materi/cap_theorem.pdf",
-                    tanggalUpload = oneWeekAgo,
-                    tipe = "pdf",
+                    0,
+                    kelasPML,
+                    "Contoh Kode: Navigasi & State Management",
+                    "Repository GitHub berisi contoh implementasi navigasi dan state management sederhana.",
+                    oneWeekAgo,
+                    "application/zip",
+                    "PML_Example_NavState.zip",
+                ),
+            )
+            classroomDao.insertMaterial(
+                MaterialEntity(
+                    0,
+                    kelasBDT,
+                    "Jurnal: CAP Theorem Revisited",
+                    "Artikel ilmiah terbaru yang membahas relevansi CAP Theorem dalam arsitektur modern.",
+                    threeDaysAgo,
+                    "application/pdf",
+                    "BDT_Jurnal_CAP_Revisited.pdf",
+                ),
+            )
+            classroomDao.insertMaterial(
+                MaterialEntity(
+                    0,
+                    kelasPYTHON,
+                    "Modul Workshop Python",
+                    "Modul praktikum lengkap untuk workshop pemrograman Python.",
+                    yesterday,
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    "Workshop_Python_Modul.docx",
                 ),
             )
 
-            val assignmentK1T1 =
+            val assignmentPML1 = 1
+            taskDao.insertAssignment(
                 AssignmentEntity(
-                    kelasId = kelas1Id,
-                    judulTugas = "Tugas 1: Aplikasi Kalkulator Sederhana",
-                    deskripsi = "Buatlah aplikasi kalkulator...",
-                    tanggalMulai = oneWeekAgo,
-                    tanggalSelesai = currentDate,
-                    attachment = "https://example.com/tugas/kalkulator_compose.pdf",
-                )
-            // Mendapatkan ID setelah insert jika diperlukan untuk foreign key, atau handle dengan cara lain jika ID tidak auto-generate.
-            // Untuk data dummy, kita akan mengasumsikan assignmentId yang berurutan jika kita memerlukannya nanti.
-            // Namun, karena SubmissionEntity.assignmentId adalah Int dan AssignmentEntity.assignmentId adalah Int (autoGenerate),
-            // kita akan menggunakan ID dummy yang telah ditetapkan sebelumnya.
-            taskDao.insertAssignment(assignmentK1T1) // asumsikan insert mengembalikan Long (id)
-
-            val assignmentK2T1 =
+                    assignmentPML1,
+                    kelasPML,
+                    "Tugas 1: Aplikasi Kalkulator Kustom",
+                    "Rancang dan implementasikan aplikasi kalkulator dengan tema visual kustom menggunakan Jetpack Compose. Fitur minimal: +, -, *, /.",
+                    oneWeekAgo,
+                    inOneWeek,
+                    "Spek_Tugas1_Kalkulator_PML.pdf",
+                ),
+            )
+            val assignmentBDT1 = 2
+            taskDao.insertAssignment(
                 AssignmentEntity(
-                    kelasId = kelas2Id,
-                    judulTugas = "Tugas 1: Desain Skema Basis Data E-commerce",
-                    deskripsi = "Rancang skema basis data...",
-                    tanggalMulai = oneWeekAgo,
-                    tanggalSelesai = inOneWeek,
-                    attachment = null,
-                )
-            taskDao.insertAssignment(assignmentK2T1)
-
-            val assignmentTodayPython =
+                    assignmentBDT1,
+                    kelasBDT,
+                    "Studi Kasus: Desain Partisi Database E-commerce",
+                    "Analisis kebutuhan dan rancang strategi partisi database untuk platform e-commerce skala besar.",
+                    oneWeekAgo,
+                    inThreeDays,
+                    null,
+                ),
+            )
+            val assignmentAI1 = 3
+            taskDao.insertAssignment(
                 AssignmentEntity(
-                    kelasId = todayClassId,
-                    judulTugas = "Tugas Python: Variabel dan Tipe Data",
-                    deskripsi = "Jelaskan konsep variabel, tipe data, dan operator dalam Python dengan contoh.",
-                    tanggalMulai = currentDate,
-                    tanggalSelesai = inOneWeek,
-                    attachment = null,
-                )
-            taskDao.insertAssignment(assignmentTodayPython)
-
-            val assignmentTodayEtika =
+                    assignmentAI1,
+                    kelasAI,
+                    "Implementasi Algoritma KNN",
+                    "Implementasikan algoritma K-Nearest Neighbors untuk klasifikasi dataset Iris dari awal (tanpa library ML).",
+                    twoWeeksAgo,
+                    threeDaysAgo,
+                    "Dataset_Iris_KNN.csv",
+                ),
+            )
+            val assignmentPYTHON1 = 4
+            taskDao.insertAssignment(
                 AssignmentEntity(
-                    kelasId = todayDosen1ClassId,
-                    judulTugas = "Studi Kasus Etika TI",
-                    deskripsi = "Analisis sebuah studi kasus terkait pelanggaran etika dalam penggunaan Teknologi Informasi.",
-                    tanggalMulai = currentDate,
-                    tanggalSelesai = inOneWeek,
-                    attachment = "https://example.com/kasus/etika_ti_studi.pdf",
-                )
-            taskDao.insertAssignment(assignmentTodayEtika)
-
-            // Untuk Submission, kita membutuhkan assignmentId yang valid.
-            // Idealnya, insertAssignment akan mengembalikan ID yang baru dibuat.
-            // Untuk data dummy dan asumsi bahwa DAO mengembalikan ID:
-            // Jika DAO tidak mengembalikan ID, maka kita harus menggunakan ID tetap (misalnya, dengan tidak menggunakan autoGenerate)
-            // atau melakukan query untuk ID terakhir. Demi kesederhanaan, kita akan menggunakan ID dummy yang sudah ada.
-            // Namun, lebih baik jika DAO mengembalikan ID.
-            // Kita akan menggunakan ID dummy tetap untuk konsistensi dengan kode sebelumnya,
-            // meskipun ini berarti assignmentId tidak di-link secara dinamis dari hasil insert di atas.
-            val dummyAssignmentIdK1T1 = 1
-            val dummyAssignmentIdK2T1 = 2
-            val dummyAssignmentIdTodayPython = 3
-            // val dummyAssignmentIdTodayEtika = 4 // (jika diperlukan)
+                    assignmentPYTHON1,
+                    kelasPYTHON,
+                    "Proyek Mini: Web Scraper Sederhana",
+                    "Buat skrip Python untuk melakukan scraping data judul berita dari satu halaman web berita.",
+                    currentDate,
+                    inTwoWeeks,
+                    "Panduan_Proyek_WebScraper.txt",
+                ),
+            )
+            val assignmentPML2 = 5
+            taskDao.insertAssignment(
+                AssignmentEntity(
+                    assignmentPML2,
+                    kelasPML,
+                    "Kuis Pemahaman State Hoisting",
+                    "Jawab pertanyaan kuis singkat mengenai konsep state hoisting di Jetpack Compose.",
+                    threeDaysAgo,
+                    tomorrow,
+                    null,
+                ),
+            )
+            val assignmentWEB1 = 6
+            taskDao.insertAssignment(
+                AssignmentEntity(
+                    assignmentWEB1,
+                    kelasWEB,
+                    "Pengembangan API CRUD Sederhana",
+                    "Buat API RESTful menggunakan Node.js dan Express untuk operasi CRUD pada entitas 'Produk'.",
+                    oneWeekAgo,
+                    inOneMonth,
+                    "Spesifikasi_API_Produk_WEB.json",
+                ),
+            )
 
             taskDao.insertSubmission(
                 SubmissionEntity(
-                    assignmentId = dummyAssignmentIdK1T1, // Seharusnya ID dari insertedAssignmentK1T1
-                    nim = mahasiswa1Nim,
-                    submissionDate = twoDaysAgo,
-                    attachment = "https://example.com/submission/juzairi_kalkulator.zip",
-                    grade = 90,
-                    feedback = "Kerja bagus! UI sudah responsif dan fungsionalitas lengkap.",
-                ),
-            )
-            taskDao.insertSubmission(
-                SubmissionEntity(
-                    assignmentId = dummyAssignmentIdK1T1, // Seharusnya ID dari insertedAssignmentK1T1
-                    nim = mahasiswa2Nim,
-                    submissionDate = oneDayAgo,
-                    attachment = "https://example.com/submission/ahmad_kalkulator.zip",
-                    grade = 85,
-                    feedback = "Cukup baik, namun perhatikan penanganan error untuk pembagian dengan nol.",
-                ),
-            )
-            taskDao.insertSubmission(
-                SubmissionEntity(
-                    assignmentId = dummyAssignmentIdK2T1, // Seharusnya ID dari insertedAssignmentK2T1
-                    nim = mahasiswa1Nim,
-                    submissionDate = currentDate,
-                    attachment = "https://example.com/submission/juzairi_desain_db.txt",
-                    grade = null,
-                    feedback = null,
-                ),
-            )
-            taskDao.insertSubmission(
-                SubmissionEntity(
-                    assignmentId = dummyAssignmentIdTodayPython, // Seharusnya ID dari insertedAssignmentTodayPython
-                    nim = mahasiswa1Nim,
-                    submissionDate = currentDate,
-                    attachment = "https://example.com/submission/juzairi_python_dasar.zip",
-                    grade = null,
-                    feedback = null,
+                    0,
+                    assignmentPML1,
+                    mhs2Nim,
+                    "YuniAzira_KalkulatorPML.zip",
+                    currentDate,
+                    0,
+                    null,
                 ),
             )
 
-            val forumK1F1 =
+            taskDao.insertSubmission(
+                SubmissionEntity(
+                    0,
+                    assignmentAI1,
+                    mhs1Nim,
+                    "Juzairi_KNN_AI_Late.py",
+                    yesterday,
+                    75,
+                    "Implementasi cukup baik, namun terlambat 2 hari.",
+                ),
+            )
+            taskDao.insertSubmission(
+                SubmissionEntity(
+                    0,
+                    assignmentPML2,
+                    mhs5Nim,
+                    "Eko_KuisPML.txt",
+                    currentDate,
+                    90,
+                    "Pemahaman yang baik sekali!",
+                ),
+            )
+
+            val forumPMLTugas1 = 1
+            forumDao.insertForum(
                 ForumEntity(
-                    kelasId = kelas1Id,
-                    judulForum = "Diskusi Umum Pemrograman Mobile Lanjut",
-                    deskripsi = "Tempat bertanya...",
-                    tanggalDibuat = oneWeekAgo,
-                )
-            forumDao.insertForum(forumK1F1) // asumsikan insert mengembalikan Long (id)
-
-            val forumK3F1 =
+                    forumPMLTugas1,
+                    kelasPML,
+                    "Diskusi & Tanya Jawab: Tugas 1 Aplikasi Kalkulator Kustom",
+                    "Forum khusus untuk membahas kendala, pertanyaan, atau berbagi tips terkait Tugas 1 Pemrograman Mobile Lanjut.",
+                    oneWeekAgo,
+                ),
+            )
+            val forumPythonUmum = 2
+            forumDao.insertForum(
                 ForumEntity(
-                    kelasId = kelas3Id,
-                    judulForum = "Tanya Jawab Seputar Kecerdasan Buatan",
-                    deskripsi = "Forum diskusi...",
-                    tanggalDibuat = twoDaysAgo,
-                )
-            forumDao.insertForum(forumK3F1)
-
-            // Sama seperti Assignment, lebih baik menggunakan ID yang dikembalikan oleh DAO.
-            // Untuk konsistensi dengan kode sebelumnya, kita pakai ID dummy.
-            val dummyForumIdK1F1 = 1
-            val dummyForumIdK3F1 = 2
-
-            forumDao.insertPost(
-                PostEntity(
-                    forumId = dummyForumIdK1F1, // Seharusnya ID dari insertedForumK1F1
-                    userId = dosen1Nidn,
-                    userRole = "dosen",
-                    isiPost = "Selamat datang di forum diskusi...",
-                    tanggalPost = oneWeekAgo,
-                ),
-            )
-            forumDao.insertPost(
-                PostEntity(
-                    forumId = dummyForumIdK1F1, // Seharusnya ID dari insertedForumK1F1
-                    userId = mahasiswa1Nim,
-                    userRole = "mahasiswa",
-                    isiPost = "Terima kasih, Bu Amelia. Saya ingin bertanya...",
-                    tanggalPost = twoDaysAgo,
-                ),
-            )
-            forumDao.insertPost(
-                PostEntity(
-                    forumId = dummyForumIdK1F1,
-                    userId = dosen1Nidn,
-                    userRole = "dosen",
-                    isiPost = "Pertanyaan bagus, @${mahasiswaData.find { it.nim == mahasiswa1Nim }?.nama}. `remember` akan...",
-                    tanggalPost = oneDayAgo,
-                ),
-            )
-            forumDao.insertPost(
-                PostEntity(
-                    forumId = dummyForumIdK1F1, // Seharusnya ID dari insertedForumK1F1
-                    userId = mahasiswa2Nim,
-                    userRole = "mahasiswa",
-                    isiPost = "Saya masih bingung dengan implementasi Navigation Component...",
-                    tanggalPost = currentDate,
-                ),
-            )
-            forumDao.insertPost(
-                PostEntity(
-                    forumId = dummyForumIdK3F1, // Seharusnya ID dari insertedForumK3F1
-                    userId = dosen1Nidn,
-                    userRole = "dosen",
-                    isiPost = "Mari kita diskusikan implementasi algoritma A*...",
-                    tanggalPost = twoDaysAgo,
-                ),
-            )
-            forumDao.insertPost(
-                PostEntity(
-                    forumId = dummyForumIdK3F1, // Seharusnya ID dari insertedForumK3F1
-                    userId = mahasiswa2Nim,
-                    userRole = "mahasiswa",
-                    isiPost = "Algoritma A* menggunakan fungsi heuristik...",
-                    tanggalPost = oneDayAgo,
+                    forumPythonUmum,
+                    kelasPYTHON,
+                    "Diskusi Umum Workshop Python",
+                    "Area diskusi bebas untuk pertanyaan, sharing, atau feedback terkait materi Workshop Python.",
+                    currentDate,
                 ),
             )
 
+            forumDao.insertPost(
+                PostEntity(
+                    0,
+                    forumPMLTugas1,
+                    dosen1Nidn,
+                    roleDosen,
+                    "Selamat mengerjakan Tugas 1. Jika ada yang kurang jelas mengenai spesifikasi atau penggunaan Jetpack Compose, jangan ragu untuk bertanya di sini. Perhatikan batas waktu pengumpulan.",
+                    oneWeekAgo,
+                ),
+            )
+            val postMhs1PML1Id = 2
+            forumDao.insertPost(
+                PostEntity(
+                    postMhs1PML1Id,
+                    forumPMLTugas1,
+                    mhs1Nim,
+                    roleMahasiswa,
+                    "Ibu Arini, untuk bagian tema visual kustom, apakah kita diizinkan menggunakan library eksternal untuk color picker, atau harus implementasi manual?",
+                    threeDaysAgo,
+                ),
+            )
+            forumDao.insertPost(
+                PostEntity(
+                    0,
+                    forumPMLTugas1,
+                    dosen1Nidn,
+                    roleDosen,
+                    "Untuk Tugas 1 ini, diharapkan implementasi manual untuk komponen UI standar. Penggunaan library eksternal untuk utility seperti color picker diperbolehkan, namun sebutkan dalam laporan Anda.",
+                    yesterday,
+                ),
+            )
+            forumDao.insertPost(
+                PostEntity(
+                    0,
+                    forumPMLTugas1,
+                    mhs2Nim,
+                    roleMahasiswa,
+                    "Saya sudah submit, Bu. Apakah ada requirement khusus untuk format file ZIP? Saya hanya mengkompres seluruh project Android Studio.",
+                    currentDate,
+                ),
+            )
+            forumDao.insertPost(
+                PostEntity(
+                    0,
+                    forumPMLTugas1,
+                    dosen1Nidn,
+                    roleDosen,
+                    "Betul Yuni, kompresi seluruh project sudah cukup. Terima kasih atas konfirmasinya.",
+                    currentDate,
+                ),
+            )
+            forumDao.insertPost(
+                PostEntity(
+                    0,
+                    forumPythonUmum,
+                    dosen3Nidn,
+                    roleDosen,
+                    "Selamat datang di Workshop Python! Silakan perkenalkan diri dan jika ada pertanyaan awal, bisa disampaikan di sini.",
+                    currentDate,
+                ),
+            )
+            forumDao.insertPost(
+                PostEntity(
+                    0,
+                    forumPythonUmum,
+                    mhs3Nim,
+                    roleMahasiswa,
+                    "Terima kasih, Pak Chandra. Saya Budi, ingin bertanya mengenai perbedaan performa antara list comprehension dan loop for standar untuk kasus sederhana.",
+                    currentDate,
+                ),
+            )
+
             attendanceDao.insertAttendance(
                 AttendanceEntity(
-                    kelasId = kelas1Id,
-                    nim = mahasiswa1Nim,
-                    tanggalHadir = oneWeekAgo,
-                    status = "Hadir",
-                    keterangan = null,
+                    0,
+                    kelasPML,
+                    mhs1Nim,
+                    oneMonthAgo,
+                    "Hadir",
+                    "Mengikuti sesi penuh.",
                 ),
             )
             attendanceDao.insertAttendance(
                 AttendanceEntity(
-                    kelasId = kelas1Id,
-                    nim = mahasiswa1Nim,
-                    tanggalHadir = twoDaysAgo,
-                    status = "Hadir",
-                    keterangan = null,
+                    0,
+                    kelasPML,
+                    mhs1Nim,
+                    twoWeeksAgo,
+                    "Hadir",
+                    "Sedikit terlambat karena ada urusan mendadak.",
                 ),
             )
             attendanceDao.insertAttendance(
                 AttendanceEntity(
-                    kelasId = kelas1Id,
-                    nim = mahasiswa2Nim,
-                    tanggalHadir = oneWeekAgo,
-                    status = "Hadir",
-                    keterangan = null,
+                    0,
+                    kelasPML,
+                    mhs1Nim,
+                    oneWeekAgo,
+                    "Izin",
+                    "Sakit, surat dokter terlampir via email.",
                 ),
             )
             attendanceDao.insertAttendance(
                 AttendanceEntity(
-                    kelasId = kelas1Id,
-                    nim = mahasiswa2Nim,
-                    tanggalHadir = twoDaysAgo,
-                    status = "Izin",
-                    keterangan = "Acara keluarga mendadak.",
+                    0,
+                    kelasBDT,
+                    mhs2Nim,
+                    oneMonthAgo,
+                    "Hadir",
+                    null,
                 ),
             )
             attendanceDao.insertAttendance(
                 AttendanceEntity(
-                    kelasId = kelas1Id,
-                    nim = mahasiswa5Nim,
-                    tanggalHadir = currentDate,
-                    status = "Hadir",
-                    keterangan = null,
+                    0,
+                    kelasBDT,
+                    mhs2Nim,
+                    twoWeeksAgo,
+                    "Hadir",
+                    "Aktif bertanya.",
                 ),
             )
             attendanceDao.insertAttendance(
                 AttendanceEntity(
-                    kelasId = kelas2Id,
-                    nim = mahasiswa1Nim,
-                    tanggalHadir = oneWeekAgo,
-                    status = "Hadir",
-                    keterangan = null,
+                    0,
+                    kelasBDT,
+                    mhs2Nim,
+                    oneWeekAgo,
+                    "Absen",
+                    "Tidak ada keterangan.",
                 ),
             )
             attendanceDao.insertAttendance(
                 AttendanceEntity(
-                    kelasId = kelas2Id,
-                    nim = mahasiswa4Nim,
-                    tanggalHadir = currentDate,
-                    status = "Hadir",
-                    keterangan = null,
-                ),
-            )
-            attendanceDao.insertAttendance(
-                AttendanceEntity(
-                    kelasId = todayClassId,
-                    nim = mahasiswa1Nim,
-                    tanggalHadir = currentDate,
-                    status = "Hadir",
-                    keterangan = "Mengikuti kelas Python hari ini.",
-                ),
-            )
-            attendanceDao.insertAttendance(
-                AttendanceEntity(
-                    kelasId = todayDosen1ClassId,
-                    nim = mahasiswa1Nim,
-                    tanggalHadir = currentDate,
-                    status = "Hadir",
-                    keterangan = "Mengikuti kelas Etika TI hari ini.",
+                    0,
+                    kelasPML,
+                    mhs4Nim,
+                    oneMonthAgo,
+                    "Hadir",
+                    null,
                 ),
             )
 
             attendanceDao.updateAttendanceStreak(
                 AttendanceStreakEntity(
-                    nim = mahasiswa1Nim.toString(), // Diubah ke String
-                    kelasId = kelas1Id,
-                    currentStreak = 2,
-                    longestStreak = 5,
-                    lastAttendedDate = twoDaysAgo,
+                    0,
+                    mhs1Nim,
+                    kelasPML,
+                    2,
+                    3,
+                    twoWeeksAgo,
                 ),
             )
             attendanceDao.updateAttendanceStreak(
                 AttendanceStreakEntity(
-                    nim = mahasiswa2Nim.toString(), // Diubah ke String
-                    kelasId = kelas1Id,
-                    currentStreak = 0,
-                    longestStreak = 3,
-                    lastAttendedDate = oneWeekAgo,
+                    0,
+                    mhs2Nim,
+                    kelasBDT,
+                    3,
+                    5,
+                    oneWeekAgo,
                 ),
             )
             attendanceDao.updateAttendanceStreak(
                 AttendanceStreakEntity(
-                    nim = mahasiswa5Nim.toString(), // Diubah ke String
-                    kelasId = kelas1Id,
-                    currentStreak = 1,
-                    longestStreak = 1,
-                    lastAttendedDate = currentDate,
-                ),
-            )
-            attendanceDao.updateAttendanceStreak(
-                AttendanceStreakEntity(
-                    nim = mahasiswa1Nim.toString(), // Diubah ke String
-                    kelasId = kelas2Id,
-                    currentStreak = 1,
-                    longestStreak = 1,
-                    lastAttendedDate = oneWeekAgo,
-                ),
-            )
-            attendanceDao.updateAttendanceStreak(
-                AttendanceStreakEntity(
-                    nim = mahasiswa4Nim.toString(), // Diubah ke String
-                    kelasId = kelas2Id,
-                    currentStreak = 1,
-                    longestStreak = 1,
-                    lastAttendedDate = currentDate,
-                ),
-            )
-            attendanceDao.updateAttendanceStreak(
-                AttendanceStreakEntity(
-                    nim = mahasiswa1Nim.toString(), // Diubah ke String
-                    kelasId = todayClassId,
-                    currentStreak = 1,
-                    longestStreak = 1,
-                    lastAttendedDate = currentDate,
-                ),
-            )
-            attendanceDao.updateAttendanceStreak(
-                AttendanceStreakEntity(
-                    nim = mahasiswa1Nim.toString(), // Diubah ke String
-                    kelasId = todayDosen1ClassId,
-                    currentStreak = 1,
-                    longestStreak = 1,
-                    lastAttendedDate = currentDate,
+                    0,
+                    mhs4Nim,
+                    kelasPML,
+                    1,
+                    1,
+                    oneMonthAgo,
                 ),
             )
         }

@@ -97,6 +97,9 @@ class HomeFragment : Fragment() {
         taskHomeAdapter.getClassName = { kelasId ->
             homeViewModel.getNamaKelasById(kelasId)
         }
+        taskHomeAdapter.getClassPhotoProfile = { kelasId ->
+            homeViewModel.getKelasImageById(kelasId)
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")

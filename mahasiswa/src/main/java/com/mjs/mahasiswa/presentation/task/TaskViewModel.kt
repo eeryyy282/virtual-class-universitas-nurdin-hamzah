@@ -20,8 +20,10 @@ class TaskViewModel(
     private val virtualClassUseCase: VirtualClassUseCase,
     appPreference: AppPreference,
 ) : ViewModel() {
-    private val _enrolledCoursesMapState = MutableStateFlow<Map<String, String>>(emptyMap())
-    val enrolledCoursesMapState: StateFlow<Map<String, String>> = _enrolledCoursesMapState
+    private val _enrolledCoursesMapState =
+        MutableStateFlow<Map<String, Pair<String, String?>>>(emptyMap())
+    val enrolledCoursesMapState: StateFlow<Map<String, Pair<String, String?>>> =
+        _enrolledCoursesMapState
 
     val tasks: StateFlow<Resource<Pair<List<Tugas>, List<Tugas>>>> =
         appPreference
@@ -85,7 +87,7 @@ class TaskViewModel(
                 initialValue = Resource.Loading(),
             )
 
-    private fun loadEnrolledClassesAndAllKelasDetails(nim: Int): Flow<Resource<Pair<List<String>, Map<String, String>>>> =
+    private fun loadEnrolledClassesAndAllKelasDetails(nim: Int): Flow<Resource<Pair<List<String>, Map<String, Pair<String, String?>>>>> =
         virtualClassUseCase
             .getEnrolledClasses(nim)
             .combine(virtualClassUseCase.getAllKelas()) { enrolledClassesResource, allKelasResource ->
@@ -93,7 +95,13 @@ class TaskViewModel(
                     val enrolledKelasIds =
                         enrolledClassesResource.data?.map { it.kelasId } ?: emptyList()
                     val allKelasMap =
-                        allKelasResource.data?.associate { it.kelasId to it.namaKelas }
+                        allKelasResource.data?.associate {
+                            it.kelasId to
+                                Pair(
+                                    it.namaKelas,
+                                    it.classImage,
+                                )
+                        }
                             ?: emptyMap()
                     Resource.Success(Pair(enrolledKelasIds, allKelasMap))
                 } else if (enrolledClassesResource is Resource.Error) {
@@ -145,5 +153,7 @@ class TaskViewModel(
         }
     }
 
-    fun getClassNameById(kelasId: String): String = enrolledCoursesMapState.value[kelasId] ?: "Kelas Tidak Dikenal"
+    fun getClassNameById(kelasId: String): String = enrolledCoursesMapState.value[kelasId]?.first ?: "Kelas Tidak Dikenal"
+
+    fun getClassPhotoProfileById(kelasId: String): String? = enrolledCoursesMapState.value[kelasId]?.second
 }

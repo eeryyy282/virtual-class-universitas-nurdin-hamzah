@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.mjs.core.R
 import com.mjs.core.databinding.ItemTaskHomeBinding
 import com.mjs.core.domain.model.Tugas
@@ -13,6 +14,7 @@ import com.mjs.core.utils.DateUtils
 class TaskHomeAdapter : RecyclerView.Adapter<TaskHomeAdapter.ListViewHolder>() {
     private var listData = ArrayList<Tugas>()
     var getClassName: ((String) -> String)? = null
+    var getClassPhotoProfile: ((String) -> String?)? = null
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(newListData: List<Tugas>?) {
@@ -64,6 +66,21 @@ class TaskHomeAdapter : RecyclerView.Adapter<TaskHomeAdapter.ListViewHolder>() {
                     tvSubject.text = className
                 } ?: run {
                     tvSubject.text = itemView.context.getString(R.string.unknown_class)
+                }
+
+                getClassPhotoProfile?.let { getClassPhotoProfileFunc ->
+                    val classPhotoUrl = getClassPhotoProfileFunc(data.kelasId)
+                    Glide
+                        .with(itemView.context)
+                        .load(classPhotoUrl)
+                        .placeholder(R.drawable.classroom_photo)
+                        .error(R.drawable.classroom_photo)
+                        .into(ivSubjectPhotoProfile)
+                } ?: run {
+                    Glide
+                        .with(itemView.context)
+                        .load(R.drawable.classroom_photo)
+                        .into(ivSubjectPhotoProfile)
                 }
             }
         }

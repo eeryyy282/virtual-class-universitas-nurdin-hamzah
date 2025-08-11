@@ -30,8 +30,10 @@ class HomeViewModel(
     private val _tugasListState = MutableStateFlow<Resource<List<Tugas>>?>(null)
     val tugasListState: StateFlow<Resource<List<Tugas>>?> = _tugasListState
 
-    private val _enrolledCoursesMapState = MutableStateFlow<Map<String, String>>(emptyMap())
-    val enrolledCoursesMapState: StateFlow<Map<String, String>> = _enrolledCoursesMapState
+    private val _enrolledCoursesMapState =
+        MutableStateFlow<Map<String, Pair<String, String?>>>(emptyMap())
+    val enrolledCoursesMapState: StateFlow<Map<String, Pair<String, String?>>> =
+        _enrolledCoursesMapState
 
     private val _attendanceStreakState = MutableStateFlow<Resource<Int>?>(null)
     val attendanceStreakState: StateFlow<Resource<Int>?> = _attendanceStreakState
@@ -147,7 +149,7 @@ class HomeViewModel(
                     enrollments
                         .mapNotNull { enrollment ->
                             allKelasMap[enrollment.kelasId]?.let { kelas ->
-                                enrollment.kelasId to kelas.namaKelas
+                                enrollment.kelasId to Pair(kelas.namaKelas, kelas.classImage)
                             }
                         }.toMap()
 
@@ -260,5 +262,7 @@ class HomeViewModel(
         }
     }
 
-    fun getClassNameById(kelasId: String): String = enrolledCoursesMapState.value[kelasId] ?: "Kelas Tidak Dikenal"
+    fun getClassNameById(kelasId: String): String = enrolledCoursesMapState.value[kelasId]?.first ?: "Kelas Tidak Dikenal"
+
+    fun getClassPhotoProfileById(kelasId: String): String? = enrolledCoursesMapState.value[kelasId]?.second
 }

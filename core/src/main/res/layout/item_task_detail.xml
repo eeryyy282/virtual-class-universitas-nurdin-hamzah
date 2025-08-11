@@ -21,10 +21,11 @@
             android:layout_height="match_parent">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/shapeableImageView"
+                android:id="@+id/iv_photo_profile_subject"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_margin="16dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/classroom_photo"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +39,7 @@
                 android:id="@+id/tv_subject"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="12dp"
                 android:layout_marginEnd="20dp"
                 android:fontFamily="@font/lato"
                 android:text="@string/text_tv_subject"
@@ -47,7 +48,7 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/shapeableImageView"
+                app:layout_constraintStart_toEndOf="@+id/iv_photo_profile_subject"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

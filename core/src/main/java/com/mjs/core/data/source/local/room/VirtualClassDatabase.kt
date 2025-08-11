@@ -197,6 +197,8 @@ abstract class VirtualClassDatabase : RoomDatabase() {
             val kelasSTAT = "DS-201"
             val kelasPYTHON = "UM-101"
             val kelasETIKA = "UM-102"
+            val placeholderImageUrl =
+                "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400"
 
             classroomDao.insertKelas(
                 KelasEntity(
@@ -250,7 +252,7 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                     "Semester Ganjil 2024/2025",
                     3,
                     "Teknik Informatika",
-                    null,
+                    placeholderImageUrl,
                     "Laboratorium Web Programming",
                 ),
             )
@@ -278,7 +280,7 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                     "Workshop Mingguan",
                     1,
                     "Umum",
-                    null,
+                    placeholderImageUrl,
                     "Aula Utama",
                 ),
             )
@@ -292,7 +294,7 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                     "Seminar Bulanan",
                     0,
                     "Umum",
-                    null,
+                    placeholderImageUrl,
                     "Ruang Seminar Lt. 5",
                 ),
             )

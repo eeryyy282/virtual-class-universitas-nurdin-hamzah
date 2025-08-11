@@ -28,8 +28,9 @@ class HomeViewModel(
     private val _tugasListDosenState = MutableStateFlow<Resource<List<Tugas>>?>(null)
     val tugasListDosenState: StateFlow<Resource<List<Tugas>>?> = _tugasListDosenState
 
-    private val _kelasDosenMapState = MutableStateFlow<Map<String, String>>(emptyMap())
-    val kelasDosenMapState: StateFlow<Map<String, String>> = _kelasDosenMapState
+    private val _kelasDosenMapState =
+        MutableStateFlow<Map<String, Pair<String, String?>>>(emptyMap())
+    val kelasDosenMapState: StateFlow<Map<String, Pair<String, String?>>> = _kelasDosenMapState
 
     private val _todayScheduleState = MutableStateFlow<Resource<List<Kelas>>?>(null)
     val todayScheduleState: StateFlow<Resource<List<Kelas>>?> = _todayScheduleState
@@ -83,7 +84,13 @@ class HomeViewModel(
                     }
 
                     _kelasDosenMapState.value =
-                        kelasYangDiajar.associateBy({ it.kelasId }, { it.namaKelas })
+                        kelasYangDiajar.associate {
+                            it.kelasId to
+                                Pair(
+                                    it.namaKelas,
+                                    it.classImage,
+                                )
+                        }
 
                     val semuaTugasDariKelasDosen = mutableListOf<Tugas>()
                     var hasError = false
@@ -186,5 +193,7 @@ class HomeViewModel(
         }
     }
 
-    fun getNamaKelasById(kelasId: String): String = _kelasDosenMapState.value[kelasId] ?: "Kelas Tidak Dikenal"
+    fun getNamaKelasById(kelasId: String): String = _kelasDosenMapState.value[kelasId]?.first ?: "Kelas Tidak Dikenal"
+
+    fun getKelasImageById(kelasId: String): String? = _kelasDosenMapState.value[kelasId]?.second
 }

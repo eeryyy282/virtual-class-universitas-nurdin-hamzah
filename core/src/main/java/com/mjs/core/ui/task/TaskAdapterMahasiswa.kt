@@ -13,6 +13,7 @@ class TaskAdapterMahasiswa : RecyclerView.Adapter<TaskAdapterMahasiswa.ListViewH
     private var notFinishedTasks = ArrayList<Tugas>()
     private var lateTasks = ArrayList<Tugas>()
     var getClassName: ((String) -> String)? = null
+    var getClassPhotoProfile: ((String) -> String?)? = null
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(
@@ -40,7 +41,7 @@ class TaskAdapterMahasiswa : RecyclerView.Adapter<TaskAdapterMahasiswa.ListViewH
         holder: ListViewHolder,
         position: Int,
     ) {
-        holder.bind(notFinishedTasks, lateTasks, getClassName)
+        holder.bind(notFinishedTasks, lateTasks, getClassName, getClassPhotoProfile)
     }
 
     override fun getItemCount(): Int = 1
@@ -54,11 +55,13 @@ class TaskAdapterMahasiswa : RecyclerView.Adapter<TaskAdapterMahasiswa.ListViewH
             notFinished: List<Tugas>,
             late: List<Tugas>,
             getClassNameFunc: ((String) -> String)?,
+            getClassPhotoProfileFunc: ((String) -> String?)?,
         ) {
             with(binding) {
                 rvNotFinishedTask.layoutManager = LinearLayoutManager(itemView.context)
                 val notFinishedAdapter = TaskDetailAdapter()
                 notFinishedAdapter.getClassName = getClassNameFunc
+                notFinishedAdapter.getClassPhotoProfile = getClassPhotoProfileFunc
                 notFinishedAdapter.setData(notFinished)
                 rvNotFinishedTask.adapter = notFinishedAdapter
 
@@ -75,6 +78,7 @@ class TaskAdapterMahasiswa : RecyclerView.Adapter<TaskAdapterMahasiswa.ListViewH
                 rvLateTask.layoutManager = LinearLayoutManager(itemView.context)
                 val lateAdapter = TaskDetailAdapter()
                 lateAdapter.getClassName = getClassNameFunc
+                lateAdapter.getClassPhotoProfile = getClassPhotoProfileFunc
                 lateAdapter.setData(late)
                 rvLateTask.adapter = lateAdapter
 

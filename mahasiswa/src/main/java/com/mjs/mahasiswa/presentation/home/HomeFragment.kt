@@ -103,6 +103,9 @@ class HomeFragment : Fragment() {
         taskHomeAdapter.getClassName = { kelasId ->
             homeViewModel.getClassNameById(kelasId)
         }
+        taskHomeAdapter.getClassPhotoProfile = { kelasId ->
+            homeViewModel.getClassPhotoProfileById(kelasId)
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -151,7 +154,9 @@ class HomeFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             homeViewModel.enrolledCoursesMapState.collectLatest { map ->
-                taskHomeAdapter.notifyDataSetChanged()
+                if (::taskHomeAdapter.isInitialized) {
+                    taskHomeAdapter.notifyDataSetChanged()
+                }
             }
         }
     }
@@ -161,19 +166,11 @@ class HomeFragment : Fragment() {
             homeViewModel.attendanceStreakState.collectLatest { resource ->
                 when (resource) {
                     is Resource.Loading -> {
-                        binding.ivDoesntHaveAnTask.visibility =
-                            View.GONE
-                        binding.tvDoesntHaveAnTask.visibility =
-                            View.GONE
                         binding.progressBarStatistic.visibility = View.VISIBLE
                     }
 
                     is Resource.Success -> {
                         val streakCount = resource.data
-                        binding.ivDoesntHaveAnTask.visibility =
-                            View.GONE
-                        binding.tvDoesntHaveAnTask.visibility =
-                            View.GONE
                         binding.progressBarStatistic.visibility = View.GONE
                         binding.ivFireIconStatistic.visibility = View.VISIBLE
                         binding.tvStreakStatistic.visibility = View.VISIBLE
@@ -189,10 +186,6 @@ class HomeFragment : Fragment() {
                     }
 
                     is Resource.Error -> {
-                        binding.ivDoesntHaveAnTask.visibility =
-                            View.VISIBLE
-                        binding.tvDoesntHaveAnTask.visibility =
-                            View.VISIBLE
                         binding.progressBarStatistic.visibility = View.GONE
                         Toast
                             .makeText(
@@ -248,7 +241,7 @@ class HomeFragment : Fragment() {
                                     ?.trim()
                             binding.tvSubjectScheduleHome.text = scheduleList[0].namaKelas
                             binding.btnScheduleDetailHome.visibility =
-                                View.VISIBLE // Ensure this is visible if there is a schedule
+                                View.VISIBLE
                         }
                     }
 
@@ -278,7 +271,10 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.rvTaskHome.adapter = null
+
+        if (_binding != null && ::taskHomeAdapter.isInitialized) {
+            binding.rvTaskHome.adapter = null
+        }
         _binding = null
     }
 }

@@ -20,7 +20,7 @@ class TaskViewModel(
     appPreference: AppPreference,
 ) : ViewModel() {
     @Suppress("ktlint:standard:backing-property-naming")
-    private val _allKelasMap = MutableStateFlow<Map<String, String>>(emptyMap())
+    private val _allKelasMap = MutableStateFlow<Map<String, Pair<String, String?>>>(emptyMap())
 
     val tasks: StateFlow<Resource<Pair<List<Tugas>, List<Tugas>>>> =
         appPreference
@@ -43,7 +43,7 @@ class TaskViewModel(
 
                             is Resource.Success -> {
                                 _allKelasMap.value = allClassesResource.data?.associate {
-                                    it.kelasId to it.namaKelas
+                                    it.kelasId to Pair(it.namaKelas, it.classImage)
                                 } ?: emptyMap()
 
                                 val activeTasksFlow =
@@ -95,5 +95,7 @@ class TaskViewModel(
         }
     }
 
-    fun getClassNameById(kelasId: String): String = _allKelasMap.value[kelasId] ?: "Kelas Tidak Dikenal"
+    fun getClassNameById(kelasId: String): String = _allKelasMap.value[kelasId]?.first ?: "Kelas Tidak Dikenal"
+
+    fun getClassPhotoProfileById(kelasId: String): String? = _allKelasMap.value[kelasId]?.second
 }

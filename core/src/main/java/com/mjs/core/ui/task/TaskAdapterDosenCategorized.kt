@@ -13,6 +13,7 @@ class TaskAdapterDosenCategorized : RecyclerView.Adapter<TaskAdapterDosenCategor
     private var activeTasks = ArrayList<Tugas>()
     private var pastDeadlineTasks = ArrayList<Tugas>()
     var getClassName: ((String) -> String)? = null
+    var getClassPhotoProfile: ((String) -> String?)? = null
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(
@@ -45,7 +46,7 @@ class TaskAdapterDosenCategorized : RecyclerView.Adapter<TaskAdapterDosenCategor
         holder: ListViewHolder,
         position: Int,
     ) {
-        holder.bind(activeTasks, pastDeadlineTasks, getClassName)
+        holder.bind(activeTasks, pastDeadlineTasks, getClassName, getClassPhotoProfile)
     }
 
     override fun getItemCount(): Int = 1
@@ -59,10 +60,12 @@ class TaskAdapterDosenCategorized : RecyclerView.Adapter<TaskAdapterDosenCategor
             currentActiveTasks: List<Tugas>,
             currentPastDeadlineTasks: List<Tugas>,
             getClassNameFunc: ((String) -> String)?,
+            getClassPhotoProfileFunc: ((String) -> String?)?,
         ) {
             with(binding) {
                 val activeAdapter = TaskAdapterDosen()
                 activeAdapter.getClassName = getClassNameFunc
+                activeAdapter.getClassPhotoProfile = getClassPhotoProfileFunc
                 activeAdapter.setData(currentActiveTasks)
                 rvActiveTasks.apply {
                     layoutManager = LinearLayoutManager(itemView.context)
@@ -82,6 +85,7 @@ class TaskAdapterDosenCategorized : RecyclerView.Adapter<TaskAdapterDosenCategor
 
                 val pastDeadlineAdapter = TaskAdapterDosen()
                 pastDeadlineAdapter.getClassName = getClassNameFunc
+                pastDeadlineAdapter.getClassPhotoProfile = getClassPhotoProfileFunc
                 pastDeadlineAdapter.setData(currentPastDeadlineTasks)
                 rvPastDeadlineTasks.apply {
                     layoutManager = LinearLayoutManager(itemView.context)

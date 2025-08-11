@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.mjs.core.R
 import com.mjs.core.databinding.ItemTaskDetailBinding
 import com.mjs.core.domain.model.Tugas
 import java.text.SimpleDateFormat
@@ -14,6 +16,7 @@ import java.util.TimeZone
 class TaskDetailAdapter : RecyclerView.Adapter<TaskDetailAdapter.ListViewHolder>() {
     private var listData = ArrayList<Tugas>()
     var getClassName: ((String) -> String)? = null
+    var getClassPhotoProfile: ((String) -> String?)? = null
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(newListData: List<Tugas>?) {
@@ -55,6 +58,20 @@ class TaskDetailAdapter : RecyclerView.Adapter<TaskDetailAdapter.ListViewHolder>
                 tvMeetingTask.text = data.judulTugas
                 tvDescriptionTask.text = data.deskripsi
                 tvDeadlineDate.text = formatDeadline(data.tanggalSelesai)
+
+                getClassPhotoProfile?.let { getClassPhotoProfileFunc ->
+                    val classPhotoProfile = getClassPhotoProfileFunc(data.kelasId)
+                    Glide
+                        .with(itemView.context)
+                        .load(classPhotoProfile)
+                        .placeholder(R.drawable.classroom_photo)
+                        .into(ivPhotoProfileSubject)
+                } ?: run {
+                    Glide
+                        .with(itemView.context)
+                        .load(R.drawable.classroom_photo)
+                        .into(ivPhotoProfileSubject)
+                }
             }
         }
 

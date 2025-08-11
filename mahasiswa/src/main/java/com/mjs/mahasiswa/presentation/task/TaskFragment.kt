@@ -47,6 +47,9 @@ class TaskFragment : Fragment() {
         taskAdapter.getClassName = {
             viewModel.getClassNameById(it)
         }
+        taskAdapter.getClassPhotoProfile = {
+            viewModel.getClassPhotoProfileById(it)
+        }
         binding.rvTaskTask.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = taskAdapter

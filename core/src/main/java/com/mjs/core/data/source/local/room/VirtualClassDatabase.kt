@@ -102,9 +102,9 @@ abstract class VirtualClassDatabase : RoomDatabase() {
             val roleDosen = "dosen"
             val roleMahasiswa = "mahasiswa"
 
-            val dosen1Nidn = 1122334455 // Dr. Arini Larasati
-            val dosen2Nidn = 2233445566.toInt() // Prof. Bambang Wijaya
-            val dosen3Nidn = 3344556677.toInt() // Chandra Kusuma, M.Sc.
+            val dosen1Nidn = 112233445 // Dr. Arini Larasati
+            val dosen2Nidn = 223344556 // Prof. Bambang Wijaya
+            val dosen3Nidn = 334455667 // Chandra Kusuma, M.Sc.
             authDao.registerDosen(
                 DosenEntity(
                     dosen1Nidn,

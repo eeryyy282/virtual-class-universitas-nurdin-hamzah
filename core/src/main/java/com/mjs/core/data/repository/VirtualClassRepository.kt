@@ -4,6 +4,7 @@ import com.mjs.core.data.Resource
 import com.mjs.core.data.source.local.LocalDataSource
 import com.mjs.core.data.source.local.entity.AssignmentEntity
 import com.mjs.core.data.source.local.entity.AttendanceEntity
+import com.mjs.core.data.source.local.entity.DosenEntity
 import com.mjs.core.data.source.local.entity.EnrollmentEntity
 import com.mjs.core.data.source.local.entity.KelasEntity
 import com.mjs.core.data.source.local.entity.MahasiswaEntity
@@ -20,9 +21,13 @@ import com.mjs.core.domain.model.Tugas
 import com.mjs.core.domain.repository.IVirtualClassRepository
 import com.mjs.core.utils.DataMapper
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEmpty
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.take
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -54,16 +59,20 @@ class VirtualClassRepository(
         }
 
     override fun getDosenByNidn(nidn: Int): Flow<Resource<Dosen>> =
-        flow {
-            emit(Resource.Loading())
-            localDataSource.getDosenByNidn(nidn).collect { entity ->
+        localDataSource
+            .getDosenByNidn(nidn)
+            .take(1)
+            .map<DosenEntity?, Resource<Dosen>> { entity ->
                 if (entity != null) {
-                    emit(Resource.Success(DataMapper.mapDosenEntityToDomain(entity)))
+                    Resource.Success(DataMapper.mapDosenEntityToDomain(entity))
                 } else {
-                    emit(Resource.Error("Dosen dengan NIDN $nidn tidak ditemukan"))
+                    Resource.Error("Dosen dengan NIDN $nidn tidak ditemukan (data tidak ada)")
                 }
-            }
-        }
+            }.onEmpty {
+                emit(Resource.Error("Dosen dengan NIDN $nidn tidak ditemukan (sumber data kosong)"))
+            }.catch { e ->
+                emit(Resource.Error("Kesalahan mengambil dosen NIDN $nidn: ${e.message}"))
+            }.onStart { emit(Resource.Loading()) }
 
     override suspend fun registerMahasiswa(mahasiswa: MahasiswaEntity): Flow<Resource<String>> =
         flow {
@@ -316,7 +325,7 @@ class VirtualClassRepository(
                     emit(Resource.Success(emptyList()))
                 }
             } catch (e: Exception) {
-                emit(Resource.Error(e.message ?: "Gagal mengambil semua jadwal mahasiswa"))
+                emit(Resource.Error(e.message ?: "Gagal mengambil semua jadwal mahasiswa."))
             }
         }
 
@@ -325,14 +334,10 @@ class VirtualClassRepository(
             emit(Resource.Loading())
             try {
                 val allClasses = localDataSource.getAllKelas().first()
-                if (allClasses.isNotEmpty()) {
-                    val dosenSchedules = allClasses.filter { it.nidn == nidn }
-                    emit(Resource.Success(DataMapper.mapKelasEntitiesToDomains(dosenSchedules)))
-                } else {
-                    emit(Resource.Success(emptyList()))
-                }
+                val dosenClasses = allClasses.filter { it.nidn == nidn }
+                emit(Resource.Success(DataMapper.mapKelasEntitiesToDomains(dosenClasses)))
             } catch (e: Exception) {
-                emit(Resource.Error(e.message ?: "Gagal mengambil semua jadwal dosen"))
+                emit(Resource.Error(e.message ?: "Gagal mengambil semua jadwal dosen."))
             }
         }
 
@@ -344,12 +349,11 @@ class VirtualClassRepository(
             emit(Resource.Loading())
             try {
                 val currentDate = getCurrentFormattedDate()
-                localDataSource
-                    .getNotFinishedTasks(nim, kelasId, currentDate)
-                    .map { DataMapper.mapTugasEntitiesToDomains(it) }
-                    .collect { emit(Resource.Success(it)) }
+                localDataSource.getNotFinishedTasks(nim, kelasId, currentDate).collect { tasks ->
+                    emit(Resource.Success(DataMapper.mapTugasEntitiesToDomains(tasks)))
+                }
             } catch (e: Exception) {
-                emit(Resource.Error(e.message ?: "Gagal mengambil tugas yang belum selesai"))
+                emit(Resource.Error(e.message ?: "Gagal mengambil tugas yang belum selesai."))
             }
         }
 
@@ -361,12 +365,11 @@ class VirtualClassRepository(
             emit(Resource.Loading())
             try {
                 val currentDate = getCurrentFormattedDate()
-                localDataSource
-                    .getLateTasks(nim, kelasId, currentDate)
-                    .map { DataMapper.mapTugasEntitiesToDomains(it) }
-                    .collect { emit(Resource.Success(it)) }
+                localDataSource.getLateTasks(nim, kelasId, currentDate).collect { tasks ->
+                    emit(Resource.Success(DataMapper.mapTugasEntitiesToDomains(tasks)))
+                }
             } catch (e: Exception) {
-                emit(Resource.Error(e.message ?: "Gagal mengambil tugas yang terlambat"))
+                emit(Resource.Error(e.message ?: "Gagal mengambil tugas yang terlambat."))
             }
         }
 
@@ -374,21 +377,24 @@ class VirtualClassRepository(
         flow {
             emit(Resource.Loading())
             try {
-                val allClasses = localDataSource.getAllKelas().first()
-                val dosenKelasIds = allClasses.filter { it.nidn == nidn }.map { it.kelasId }
-                if (dosenKelasIds.isNotEmpty()) {
-                    val currentDate = getCurrentFormattedDate()
+                val currentDate = getCurrentFormattedDate()
+                val kelasIds =
                     localDataSource
-                        .getAssignmentsByKelasIdsAndFutureDeadline(
-                            dosenKelasIds,
-                            currentDate,
-                        ).map { DataMapper.mapTugasEntitiesToDomains(it) }
-                        .collect { emit(Resource.Success(it)) }
+                        .getAllKelas()
+                        .first()
+                        .filter { it.nidn == nidn }
+                        .map { it.kelasId }
+                if (kelasIds.isNotEmpty()) {
+                    localDataSource
+                        .getAssignmentsByKelasIdsAndFutureDeadline(kelasIds, currentDate)
+                        .collect { assignments ->
+                            emit(Resource.Success(DataMapper.mapTugasEntitiesToDomains(assignments)))
+                        }
                 } else {
                     emit(Resource.Success(emptyList()))
                 }
             } catch (e: Exception) {
-                emit(Resource.Error(e.message ?: "Gagal mengambil tugas aktif untuk dosen"))
+                emit(Resource.Error(e.message ?: "Gagal mengambil tugas aktif untuk dosen."))
             }
         }
 
@@ -396,21 +402,28 @@ class VirtualClassRepository(
         flow {
             emit(Resource.Loading())
             try {
-                val allClasses = localDataSource.getAllKelas().first()
-                val dosenKelasIds = allClasses.filter { it.nidn == nidn }.map { it.kelasId }
-                if (dosenKelasIds.isNotEmpty()) {
-                    val currentDate = getCurrentFormattedDate()
+                val currentDate = getCurrentFormattedDate()
+                val kelasIds =
                     localDataSource
-                        .getAssignmentsByKelasIdsAndPastDeadline(
-                            dosenKelasIds,
-                            currentDate,
-                        ).map { DataMapper.mapTugasEntitiesToDomains(it) }
-                        .collect { emit(Resource.Success(it)) }
+                        .getAllKelas()
+                        .first()
+                        .filter { it.nidn == nidn }
+                        .map { it.kelasId }
+                if (kelasIds.isNotEmpty()) {
+                    localDataSource
+                        .getAssignmentsByKelasIdsAndPastDeadline(kelasIds, currentDate)
+                        .collect { assignments ->
+                            emit(Resource.Success(DataMapper.mapTugasEntitiesToDomains(assignments)))
+                        }
                 } else {
                     emit(Resource.Success(emptyList()))
                 }
             } catch (e: Exception) {
-                emit(Resource.Error(e.message ?: "Gagal mengambil tugas lewat tenggat untuk dosen"))
+                emit(
+                    Resource.Error(
+                        e.message ?: "Gagal mengambil tugas lewat tenggat untuk dosen.",
+                    ),
+                )
             }
         }
 
@@ -418,23 +431,21 @@ class VirtualClassRepository(
         flow {
             emit(Resource.Loading())
             try {
-                val currentMahasiswaEntity =
-                    localDataSource.getMahasiswaByNim(mahasiswa.nim).first()
-                if (currentMahasiswaEntity != null) {
-                    val updatedMahasiswaEntity =
-                        currentMahasiswaEntity.copy(
-                            nama = mahasiswa.nama,
-                            email = mahasiswa.email,
-                            fotoProfil = mahasiswa.fotoProfil,
-                            dosenPembimbing = mahasiswa.dosenPembimbing,
-                        )
-                    localDataSource.updateMahasiswa(updatedMahasiswaEntity)
-                    emit(Resource.Success("Profil Mahasiswa berhasil diperbarui"))
-                } else {
-                    emit(Resource.Error("Mahasiswa dengan NIM ${mahasiswa.nim} tidak ditemukan"))
-                }
+                val mahasiswaEntity =
+                    MahasiswaEntity(
+                        nim = mahasiswa.nim,
+                        nama = mahasiswa.nama,
+                        email = mahasiswa.email,
+                        password =
+                            localDataSource.getMahasiswaByNim(mahasiswa.nim).first()?.password
+                                ?: "",
+                        fotoProfil = mahasiswa.fotoProfil,
+                        dosenPembimbing = mahasiswa.dosenPembimbing,
+                    )
+                localDataSource.updateMahasiswa(mahasiswaEntity)
+                emit(Resource.Success("Profil berhasil diperbarui"))
             } catch (e: Exception) {
-                emit(Resource.Error(e.message ?: "Gagal memperbarui profil Mahasiswa"))
+                emit(Resource.Error(e.message ?: "Gagal memperbarui profil"))
             }
         }
 
@@ -442,21 +453,20 @@ class VirtualClassRepository(
         flow {
             emit(Resource.Loading())
             try {
-                val currentDosenEntity = localDataSource.getDosenByNidn(dosen.nidn).first()
-                if (currentDosenEntity != null) {
-                    val updatedDosenEntity =
-                        currentDosenEntity.copy(
-                            nama = dosen.nama,
-                            email = dosen.email,
-                            fotoProfil = dosen.fotoProfil,
-                        )
-                    localDataSource.updateDosen(updatedDosenEntity)
-                    emit(Resource.Success("Profil Dosen berhasil diperbarui"))
-                } else {
-                    emit(Resource.Error("Dosen dengan NIDN ${dosen.nidn} tidak ditemukan"))
-                }
+                val dosenEntity =
+                    DosenEntity(
+                        nidn = dosen.nidn,
+                        nama = dosen.nama,
+                        email = dosen.email,
+                        password =
+                            localDataSource.getDosenByNidn(dosen.nidn).first()?.password
+                                ?: "",
+                        fotoProfil = dosen.fotoProfil,
+                    )
+                localDataSource.updateDosen(dosenEntity)
+                emit(Resource.Success("Profil berhasil diperbarui"))
             } catch (e: Exception) {
-                emit(Resource.Error(e.message ?: "Gagal memperbarui profil Dosen"))
+                emit(Resource.Error(e.message ?: "Gagal memperbarui profil"))
             }
         }
 }

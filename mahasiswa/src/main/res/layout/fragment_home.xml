@@ -52,7 +52,6 @@
                 android:layout_height="match_parent"
                 android:padding="18dp">
 
-
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/iv_profile_user"
                     android:layout_width="80dp"

@@ -4,13 +4,16 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide // Import Glide
+import com.mjs.core.R // Import R class for drawable resources
 import com.mjs.core.databinding.ItemClassroomDetailBinding
 import com.mjs.core.domain.model.Kelas
 
+@Suppress("DEPRECATION")
 class ClassroomAdapterMahasiswa : RecyclerView.Adapter<ClassroomAdapterMahasiswa.ListViewHolder>() {
     private var listData = ArrayList<Kelas>()
     var onItemClick: ((Kelas) -> Unit)? = null
-    var getDosenName: ((String) -> String)? = null
+    var getDosenName: ((Int) -> String)? = null
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(newListData: List<Kelas>?) {
@@ -42,20 +45,35 @@ class ClassroomAdapterMahasiswa : RecyclerView.Adapter<ClassroomAdapterMahasiswa
     inner class ListViewHolder(
         private val binding: ItemClassroomDetailBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(data: Kelas) {
             with(binding) {
                 tvSubject.text = data.namaKelas
-                tvCodeSubject.text = data.deskripsi
-                tvClassroomLocation.text = data.jadwal
+                tvCodeSubject.text = data.kelasId
+                tvClassroomLocation.text = data.ruang
                 tvDosenClassroom.text =
-                    getDosenName?.invoke(data.nidn.toString()) ?: data.nidn.toString()
+                    getDosenName?.invoke(data.nidn) ?: data.nidn.toString()
+                tvCreditsSubject.text = "${data.credit} SKS"
+                tvCategorySubject.text = data.category
+
+                if (!data.classImage.isNullOrEmpty()) {
+                    Glide
+                        .with(itemView.context)
+                        .load(data.classImage)
+                        .placeholder(R.drawable.classroom_photo)
+                        .error(R.drawable.classroom_photo)
+                        .into(ivClassroom)
+                } else {
+                    ivClassroom.setImageResource(R.drawable.classroom_photo)
+                }
             }
         }
 
         init {
             binding.root.setOnClickListener {
-                @Suppress("DEPRECATION")
-                onItemClick?.invoke(listData[adapterPosition])
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    onItemClick?.invoke(listData[adapterPosition])
+                }
             }
         }
     }

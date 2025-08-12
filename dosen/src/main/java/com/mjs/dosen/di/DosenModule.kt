@@ -1,6 +1,7 @@
 package com.mjs.dosen.di
 
 import com.mjs.dosen.presentation.MainActivityViewModel
+import com.mjs.dosen.presentation.classroom.ClassroomViewModel
 import com.mjs.dosen.presentation.home.HomeViewModel
 import com.mjs.dosen.presentation.schedule.ScheduleViewModel
 import com.mjs.dosen.presentation.setting.SettingViewModel
@@ -15,4 +16,5 @@ val dosenModule =
         viewModel { HomeViewModel(get(), get()) }
         viewModel { ScheduleViewModel(get(), get()) }
         viewModel { TaskViewModel(get(), get()) }
+        viewModel { ClassroomViewModel(get(), get()) }
     }

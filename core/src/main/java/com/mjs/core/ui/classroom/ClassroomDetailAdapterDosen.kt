@@ -49,8 +49,8 @@ class ClassroomDetailAdapterDosen : RecyclerView.Adapter<ClassroomDetailAdapterD
         fun bind(data: Kelas) {
             with(binding) {
                 tvSubject.text = data.namaKelas
-                tvCodeSubject.text = data.deskripsi
-                tvClassroomLocation.text = data.jadwal
+                tvCodeSubject.text = data.kelasId
+                tvClassroomLocation.text = data.ruang
                 tvCreditsSubject.text = data.credit.toString()
                 tvCategorySubject.text = data.category
                 Glide

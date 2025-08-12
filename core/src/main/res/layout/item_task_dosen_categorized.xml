@@ -14,7 +14,6 @@
             android:id="@+id/tv_title_active_tasks"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:fontFamily="@font/lato"
             android:text="@string/active_tasks"
             android:textColor="@color/outline_color_theme"

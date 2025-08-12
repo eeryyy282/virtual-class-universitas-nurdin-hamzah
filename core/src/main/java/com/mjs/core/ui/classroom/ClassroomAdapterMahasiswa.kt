@@ -4,9 +4,9 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide // Import Glide
-import com.mjs.core.R // Import R class for drawable resources
-import com.mjs.core.databinding.ItemClassroomDetailBinding
+import com.bumptech.glide.Glide
+import com.mjs.core.R
+import com.mjs.core.databinding.ItemClassroomDetailMahasiswaBinding
 import com.mjs.core.domain.model.Kelas
 
 @Suppress("DEPRECATION")
@@ -28,7 +28,11 @@ class ClassroomAdapterMahasiswa : RecyclerView.Adapter<ClassroomAdapterMahasiswa
         viewType: Int,
     ): ListViewHolder {
         val binding =
-            ItemClassroomDetailBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemClassroomDetailMahasiswaBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false,
+            )
         return ListViewHolder(binding)
     }
 
@@ -43,7 +47,7 @@ class ClassroomAdapterMahasiswa : RecyclerView.Adapter<ClassroomAdapterMahasiswa
     override fun getItemCount(): Int = listData.size
 
     inner class ListViewHolder(
-        private val binding: ItemClassroomDetailBinding,
+        private val binding: ItemClassroomDetailMahasiswaBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(data: Kelas) {

@@ -12,7 +12,7 @@
         <item name="android:windowBackground">@color/white</item>
     </style>
 
-    <style name="ShapeAppearanceOverlay.App.Card.RightRounded" parent="Theme.VirtualClassUniversitasNurdinHamzah">
+    <style name="ShapeAppearanceOverlay.App.Card.RightRounded" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">0dp</item>
         <item name="cornerSizeTopRight">16dp</item>
@@ -20,12 +20,12 @@
         <item name="cornerSizeBottomRight">16dp</item>
     </style>
 
-    <style name="ShapeAppearanceOverlay.App.CircleImageView" parent="Theme.VirtualClassUniversitasNurdinHamzah">
+    <style name="ShapeAppearanceOverlay.App.CircleImageView" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
 
-    <style name="ShapeAppearanceOverlay.App.Card.RightBottomRounded" parent="Theme.VirtualClassUniversitasNurdinHamzah">
+    <style name="ShapeAppearanceOverlay.App.Card.RightBottomRounded" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">0dp</item>
         <item name="cornerSizeTopRight">0dp</item>
@@ -33,7 +33,7 @@
         <item name="cornerSizeBottomRight">16dp</item>
     </style>
 
-    <style name="ShapeAppearanceOverlay.App.Card.RoundedExceptLeftBottom" parent="Theme.VirtualClassUniversitasNurdinHamzah">
+    <style name="ShapeAppearanceOverlay.App.Card.RoundedExceptLeftBottom" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">16dp</item>
         <item name="cornerSizeTopRight">16dp</item>
@@ -41,7 +41,7 @@
         <item name="cornerSizeBottomRight">16dp</item>
     </style>
 
-    <style name="ShapeAppearanceOverlay.App.Card.RoundedExceptRightBottom" parent="Theme.VirtualClassUniversitasNurdinHamzah">
+    <style name="ShapeAppearanceOverlay.App.Card.RoundedExceptRightBottom" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">16dp</item>
         <item name="cornerSizeTopRight">16dp</item>
@@ -49,7 +49,7 @@
         <item name="cornerSizeBottomRight">0dp</item>
     </style>
 
-    <style name="ShapeAppearanceOverlay.App.Card.RoundedBottom" parent="Theme.VirtualClassUniversitasNurdinHamzah">
+    <style name="ShapeAppearanceOverlay.App.Card.RoundedBottom" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">0dp</item>
         <item name="cornerSizeTopRight">0dp</item>
@@ -57,7 +57,7 @@
         <item name="cornerSizeBottomRight">16dp</item>
     </style>
 
-    <style name="ShapeAppearanceOverlay.App.Card.RoundedTop" parent="Theme.VirtualClassUniversitasNurdinHamzah">
+    <style name="ShapeAppearanceOverlay.App.Card.RoundedTop" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">16dp</item>
         <item name="cornerSizeTopRight">16dp</item>
@@ -65,7 +65,7 @@
         <item name="cornerSizeBottomRight">0dp</item>
     </style>
 
-    <style name="ShapeAppearanceOverlay.App.Card.BackgroundProfileImage" parent="Theme.VirtualClassUniversitasNurdinHamzah">
+    <style name="ShapeAppearanceOverlay.App.Card.BackgroundProfileImage" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">50%</item>
         <item name="cornerSizeTopRight">50%</item>
@@ -73,7 +73,7 @@
         <item name="cornerSizeBottomRight">50%</item>
     </style>
 
-    <style name="ShapeAppearanceOverlay.App.Card.RoundedExceptTopLeft" parent="Theme.VirtualClassUniversitasNurdinHamzah">
+    <style name="ShapeAppearanceOverlay.App.Card.RoundedExceptTopLeft" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">16dp</item>
         <item name="cornerSizeTopRight">0dp</item>
@@ -81,7 +81,7 @@
         <item name="cornerSizeBottomRight">0dp</item>
     </style>
 
-    <style name="ShapeAppearanceOverlay.App.Card.RoundedJustRightBottom" parent="Theme.VirtualClassUniversitasNurdinHamzah">
+    <style name="ShapeAppearanceOverlay.App.Card.RoundedJustRightBottom" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">0dp</item>
         <item name="cornerSizeTopRight">0dp</item>

@@ -5,13 +5,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.mjs.core.databinding.ItemClassroomBinding
+import com.mjs.core.databinding.ItemClassroomDosenBinding
 import com.mjs.core.domain.model.Kelas
 
 class ClassroomAdapterDosen : RecyclerView.Adapter<ClassroomAdapterDosen.ListViewHolder>() {
     private val listData = ArrayList<Pair<String, List<Kelas>>>()
     var onItemClick: ((Kelas) -> Unit)? = null
-    var getDosenName: ((String) -> String)? = null
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(newListData: List<Pair<String, List<Kelas>>>?) {
@@ -26,7 +25,7 @@ class ClassroomAdapterDosen : RecyclerView.Adapter<ClassroomAdapterDosen.ListVie
         viewType: Int,
     ): ListViewHolder {
         val binding =
-            ItemClassroomBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemClassroomDosenBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ListViewHolder(binding)
     }
 
@@ -41,17 +40,16 @@ class ClassroomAdapterDosen : RecyclerView.Adapter<ClassroomAdapterDosen.ListVie
     }
 
     inner class ListViewHolder(
-        private val binding: ItemClassroomBinding,
+        private val binding: ItemClassroomDosenBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(
             semester: String,
             data: List<Kelas>,
         ) {
             binding.tvTitleClassroomSemester.text = semester
-            val detailAdapter = ClassroomDetailAdapter()
+            val detailAdapter = ClassroomDetailAdapterDosen()
             detailAdapter.setData(data)
             detailAdapter.onItemClick = onItemClick
-            detailAdapter.getDosenName = getDosenName
             binding.rvClassroomDetail.apply {
                 layoutManager = LinearLayoutManager(itemView.context)
                 adapter = detailAdapter

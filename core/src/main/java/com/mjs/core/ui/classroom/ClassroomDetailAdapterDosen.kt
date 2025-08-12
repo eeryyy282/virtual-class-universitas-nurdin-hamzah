@@ -5,13 +5,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.mjs.core.databinding.ItemClassroomDetailBinding
+import com.mjs.core.databinding.ItemClassroomDetailDosenBinding
 import com.mjs.core.domain.model.Kelas
 
-class ClassroomDetailAdapter : RecyclerView.Adapter<ClassroomDetailAdapter.ListViewHolder>() {
+class ClassroomDetailAdapterDosen : RecyclerView.Adapter<ClassroomDetailAdapterDosen.ListViewHolder>() {
     private var listData = ArrayList<Kelas>()
     var onItemClick: ((Kelas) -> Unit)? = null
-    var getDosenName: ((String) -> String)? = null
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(newListData: List<Kelas>?) {
@@ -26,7 +25,11 @@ class ClassroomDetailAdapter : RecyclerView.Adapter<ClassroomDetailAdapter.ListV
         viewType: Int,
     ): ListViewHolder {
         val binding =
-            ItemClassroomDetailBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemClassroomDetailDosenBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false,
+            )
         return ListViewHolder(binding)
     }
 
@@ -41,15 +44,13 @@ class ClassroomDetailAdapter : RecyclerView.Adapter<ClassroomDetailAdapter.ListV
     override fun getItemCount(): Int = listData.size
 
     inner class ListViewHolder(
-        private val binding: ItemClassroomDetailBinding,
+        private val binding: ItemClassroomDetailDosenBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Kelas) {
             with(binding) {
                 tvSubject.text = data.namaKelas
                 tvCodeSubject.text = data.deskripsi
                 tvClassroomLocation.text = data.jadwal
-                tvDosenClassroom.text =
-                    getDosenName?.invoke(data.nidn.toString()) ?: data.nidn.toString()
                 tvCreditsSubject.text = data.credit.toString()
                 tvCategorySubject.text = data.category
                 Glide

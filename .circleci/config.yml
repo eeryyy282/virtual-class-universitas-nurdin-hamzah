@@ -26,8 +26,38 @@ jobs:
           path: app/build/reports/ktlint
           destination: ktlint-reports
 
+  build:
+    executor: android-executor
+    working_directory: ~/project
+    steps:
+      - checkout
+      - run:
+          name: Chmod Gradle Wrapper
+          command: chmod +x ./gradlew
+      - run:
+          name: Build Project
+          command: ./gradlew assembleDebug
+
+  test:
+    executor: android-executor
+    working_directory: ~/project
+    steps:
+      - checkout
+      - run:
+          name: Chmod Gradle Wrapper
+          command: chmod +x ./gradlew
+      - run:
+          name: Run Unit Tests
+          command: ./gradlew testDebugUnitTest
+
 workflows:
   version: 2
-  klint_only:
+  build_and_test:
     jobs:
       - ktlint-check
+      - test:
+          requires:
+            - ktlint-check
+      - build:
+          requires:
+            - test

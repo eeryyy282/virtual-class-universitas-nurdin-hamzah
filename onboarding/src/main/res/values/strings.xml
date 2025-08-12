@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="onboarding_image_1">Onboarding Image 1</string>
-    <string name="title_onboarding_1">Selamat Datang di Virtual Class Universitas Nurdin Hamzah</string>
+    <string name="title_onboarding_1">Selamat Datang di Virtual Class\nUniversitas Nurdin Hamzah</string>
     <string name="title_logo_unh">Virtual Class</string>
     <string name="title_change_theme_mode"><u>Ubah Mode</u></string>
     <string name="title_icon_change_theme">Icon change theme</string>
     <string name="title_skip_button_onboarding"><u>Lewati</u></string>
     <string name="title_button_next">Selanjutnya</string>
+    <string name="title_onboarding_2">Akses berbagai materi dengan mudah\ndan cepat di Virtual Class\nUniversitas Nurdin Hamzah</string>
+    <string name="onboarding_image_2">On Boarding Image 2</string>
+    <string name="onboarding_image_3">On Boarding Image 3</string>
+    <string name="title_onboarding_3">Kerjakan tugas dengan cepat\ndan tepat waktu bersama Virtual Class\nUniversitas Nurdin Hamzah</string>
+    <string name="onboarding_image_4">On Boarding Image 4</string>
+    <string name="title_onboarding_4">"Siap memulai langkah awal bersama\nVirtual Class Universitas Nurdin Hamzah?</string>
+    <string name="register">Daftar</string>
+    <string name="have_an_account">Sudah memiliki akun?</string>
+    <string name="login_or_register_account_now">Masuk atau Daftar Akunmu Sekarang!</string>
+    <string name="login_as_mahasiswa">Masuk Sebagai Mahasiswa</string>
+    <string name="login_as_dosen">Masuk Sebagai Dosen</string>
 </resources>

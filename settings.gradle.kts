@@ -11,6 +11,8 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+@Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -23,3 +25,7 @@ rootProject.name = "Virtual Class Universitas Nurdin Hamzah"
 include(":app")
 include(":core")
 include(":onboarding")
+include(":authentication")
+include(":mahasiswa")
+include(":dosen")
+include(":profilesettings")

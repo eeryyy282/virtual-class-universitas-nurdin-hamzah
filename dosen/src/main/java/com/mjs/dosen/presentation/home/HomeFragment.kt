@@ -1,0 +1,235 @@
+package com.mjs.dosen.presentation.home
+
+import android.annotation.SuppressLint
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.mjs.core.data.Resource
+import com.mjs.core.ui.task.TaskHomeAdapter
+import com.mjs.dosen.R
+import com.mjs.dosen.databinding.FragmentHomeBinding
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
+class HomeFragment : Fragment() {
+    @Suppress("ktlint:standard:backing-property-naming")
+    private var _binding: FragmentHomeBinding? = null
+    internal val binding get() = _binding!!
+
+    private val homeViewModel: HomeViewModel by viewModel()
+    private lateinit var taskHomeAdapter: TaskHomeAdapter
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
+        super.onViewCreated(view, savedInstanceState)
+        setupProfileDosen()
+        setupRecyclerViewTugasDosen()
+        observeTugasDosen()
+        observeTodaySchedule()
+    }
+
+    private fun setupProfileDosen() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            homeViewModel.dosenData.collectLatest {
+                when (it) {
+                    is Resource.Loading -> {
+                    }
+
+                    is Resource.Success -> {
+                        val dosen = it.data
+                        if (dosen != null) {
+                            binding.tvNameHome.text = dosen.nama
+                            binding.tvIdUserHome.text = dosen.nidn.toString()
+                            Glide
+                                .with(requireContext())
+                                .load(dosen.fotoProfil)
+                                .placeholder(R.drawable.profile_photo)
+                                .error(R.drawable.profile_photo)
+                                .into(binding.ivProfileUser)
+                        } else {
+                            Toast
+                                .makeText(context, "Gagal memuat data dosen", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
+
+                    is Resource.Error -> {
+                        Toast
+                            .makeText(
+                                context,
+                                it.message ?: "Terjadi kesalahan",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                    }
+
+                    null -> {
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setupRecyclerViewTugasDosen() {
+        taskHomeAdapter = TaskHomeAdapter()
+        binding.rvTaskHome.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = taskHomeAdapter
+            setHasFixedSize(true)
+        }
+        taskHomeAdapter.getClassName = { kelasId ->
+            homeViewModel.getNamaKelasById(kelasId)
+        }
+        taskHomeAdapter.getClassPhotoProfile = { kelasId ->
+            homeViewModel.getKelasImageById(kelasId)
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun observeTugasDosen() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            homeViewModel.tugasListDosenState.collectLatest { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+                        binding.progressBarTaskHome.visibility =
+                            View.VISIBLE
+                        binding.tvDoesntHaveAnTask.visibility =
+                            View.GONE
+                        binding.ivDoesntHaveAnTask.visibility =
+                            View.GONE
+                        binding.rvTaskHome.visibility = View.GONE
+                    }
+
+                    is Resource.Success -> {
+                        binding.progressBarTaskHome.visibility = View.GONE
+                        val tugasList = resource.data
+                        if (tugasList.isNullOrEmpty()) {
+                            binding.tvDoesntHaveAnTask.visibility = View.VISIBLE
+                            binding.ivDoesntHaveAnTask.visibility = View.VISIBLE
+                            binding.rvTaskHome.visibility = View.GONE
+                        } else {
+                            binding.tvDoesntHaveAnTask.visibility = View.GONE
+                            binding.ivDoesntHaveAnTask.visibility = View.GONE
+                            binding.rvTaskHome.visibility = View.VISIBLE
+                            taskHomeAdapter.setData(tugasList)
+                        }
+                    }
+
+                    is Resource.Error -> {
+                        binding.progressBarTaskHome.visibility = View.GONE
+                        binding.tvDoesntHaveAnTask.visibility = View.VISIBLE
+                        binding.ivDoesntHaveAnTask.visibility = View.VISIBLE
+                        binding.rvTaskHome.visibility = View.GONE
+                    }
+
+                    null -> {
+                        binding.progressBarTaskHome.visibility = View.GONE
+                        binding.tvDoesntHaveAnTask.visibility = View.VISIBLE
+                        binding.ivDoesntHaveAnTask.visibility = View.VISIBLE
+                        binding.rvTaskHome.visibility = View.GONE
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            homeViewModel.kelasDosenMapState.collectLatest {
+                if (::taskHomeAdapter.isInitialized) {
+                    taskHomeAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
+    private fun observeTodaySchedule() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            homeViewModel.todayScheduleState.collectLatest { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+                        binding.progressBarSchedule.visibility = View.VISIBLE
+                        binding.ivDoesntHaveAnSchedule.visibility = View.GONE
+                        binding.tvDoesntHaveAnSchedule.visibility = View.GONE
+                        binding.tvScheduleClassroom.visibility = View.GONE
+                        binding.tvTimeScheduleHome.visibility = View.GONE
+                        binding.tvSubjectScheduleHome.visibility = View.GONE
+                        binding.btnScheduleDetailHome.visibility = View.GONE
+                    }
+
+                    is Resource.Success -> {
+                        binding.progressBarSchedule.visibility = View.GONE
+                        val scheduleList = resource.data
+                        if (scheduleList.isNullOrEmpty()) {
+                            binding.ivDoesntHaveAnSchedule.visibility = View.VISIBLE
+                            binding.tvDoesntHaveAnSchedule.visibility = View.VISIBLE
+                            binding.tvScheduleClassroom.visibility = View.GONE
+                            binding.tvTimeScheduleHome.visibility = View.GONE
+                            binding.tvSubjectScheduleHome.visibility = View.GONE
+                            binding.btnScheduleDetailHome.visibility = View.GONE
+                        } else {
+                            binding.ivDoesntHaveAnSchedule.visibility = View.GONE
+                            binding.tvDoesntHaveAnSchedule.visibility = View.GONE
+                            binding.tvScheduleClassroom.visibility = View.VISIBLE
+                            binding.tvTimeScheduleHome.visibility = View.VISIBLE
+                            binding.tvSubjectScheduleHome.visibility = View.VISIBLE
+                            binding.btnScheduleDetailHome.visibility = View.VISIBLE
+                            binding.tvScheduleClassroom.text = scheduleList[0].ruang
+                            binding.tvTimeScheduleHome.text =
+                                scheduleList[0]
+                                    .jadwal
+                                    .split(",")
+                                    .getOrNull(1)
+                                    ?.trim()
+                            binding.tvSubjectScheduleHome.text = scheduleList[0].namaKelas
+                        }
+                    }
+
+                    is Resource.Error -> {
+                        binding.progressBarSchedule.visibility = View.GONE
+                        binding.ivDoesntHaveAnSchedule.visibility = View.VISIBLE
+                        binding.tvDoesntHaveAnSchedule.visibility = View.VISIBLE
+                        binding.tvScheduleClassroom.visibility = View.GONE
+                        binding.tvTimeScheduleHome.visibility = View.GONE
+                        binding.tvSubjectScheduleHome.visibility = View.GONE
+                        binding.btnScheduleDetailHome.visibility = View.GONE
+                    }
+
+                    null -> {
+                        binding.progressBarSchedule.visibility = View.GONE
+                        binding.ivDoesntHaveAnSchedule.visibility = View.VISIBLE
+                        binding.tvDoesntHaveAnSchedule.visibility = View.VISIBLE
+                        binding.tvScheduleClassroom.visibility = View.GONE
+                        binding.tvTimeScheduleHome.visibility = View.GONE
+                        binding.tvSubjectScheduleHome.visibility = View.GONE
+                        binding.btnScheduleDetailHome.visibility = View.GONE
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        if (_binding != null && ::taskHomeAdapter.isInitialized) {
+            binding.rvTaskHome.adapter = null
+        }
+        _binding = null
+    }
+}

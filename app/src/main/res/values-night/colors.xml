@@ -7,6 +7,14 @@
     <color name="blue_gray">#608BC1</color>
     <color name="dodger_blue">#3D88FF</color>
     <color name="pale_gray">#C4C4C5</color>
-
+    <color name="dark_gray">#9E9E9E</color>
+    <color name="silver_sand">#BBC5C0</color>
     <color name="bottom_nav_background_themed">@color/black</color>
+    <color name="text_color_themed">@color/white</color>
+    <color name="text_color_title">@color/white</color>
+    <color name="text_color_themed_variant">@color/silver_sand</color>
+    <color name="background_color_theme">@color/black</color>
+    <color name="outline_color_theme">@color/white</color>
+    <color name="smoky_gray">#848884</color>
+    <color name="green_light">#2E8B57</color>
 </resources>

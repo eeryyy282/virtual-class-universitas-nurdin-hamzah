@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.login.dosen.LoginDosenActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="17dp"
+            android:contentDescription="@string/image_description_unh_logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/logo_unh" />
+
+        <TextView
+            android:id="@+id/tv_title_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/title_logo_unh"
+            android:textColor="@color/text_color_title"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_logo"
+            app:layout_constraintStart_toEndOf="@+id/iv_logo"
+            app:layout_constraintTop_toTopOf="@+id/iv_logo" />
+
+        <ImageView
+            android:id="@+id/iv_icon_change_theme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="-8dp"
+            android:contentDescription="@string/title_icon_change_theme"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_change_theme"
+            app:layout_constraintEnd_toStartOf="@+id/btn_change_theme"
+            app:layout_constraintTop_toTopOf="@+id/btn_change_theme"
+            app:srcCompat="@drawable/change_theme_icon"
+            app:tint="@color/text_color_themed" />
+
+        <Button
+            android:id="@+id/btn_change_theme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="9dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/lato"
+            android:text="@string/title_change_theme_mode"
+            android:textAllCaps="false"
+            android:textColor="@color/text_color_themed"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/iv_logo" />
+
+        <ImageView
+            android:id="@+id/iv_login_dosen"
+            android:layout_width="200dp"
+            android:layout_height="175dp"
+            android:contentDescription="@string/description_image_view_login_dosen"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_logo"
+            app:layout_constraintVertical_bias="0.10"
+            app:srcCompat="@drawable/login_image_dosen" />
+
+        <TextView
+            android:id="@+id/tv_login_dosen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/tv_login_dosen_text"
+            android:textAlignment="center"
+            android:textColor="@color/text_color_themed"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/iv_login_dosen"
+            app:layout_constraintStart_toStartOf="@+id/iv_login_dosen"
+            app:layout_constraintTop_toBottomOf="@+id/iv_login_dosen" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_nim"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="64dp"
+            android:layout_marginEnd="32dp"
+            android:hint="@string/hint_nip"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_login_dosen">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_nip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/profile_icon"
+                android:drawablePadding="12dp"
+                android:fontFamily="@font/lato"
+                android:inputType="number"
+                android:textColor="@color/text_color_themed" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_password"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="32dp"
+            android:hint="@string/password_hint"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:endIconMode="password_toggle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/til_nim">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/password_icon"
+                android:drawablePadding="12dp"
+                android:fontFamily="@font/lato"
+                android:inputType="textPassword"
+                android:textColor="@color/text_color_themed" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btn_forgot_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/lato"
+            android:paddingEnd="0dp"
+            android:text="@string/forgot_password_text"
+            android:textAlignment="textEnd"
+            android:textAllCaps="false"
+            android:textColor="@color/outline_color_theme"
+            app:layout_constraintEnd_toEndOf="@+id/til_password"
+            app:layout_constraintTop_toBottomOf="@+id/til_password"
+            tools:ignore="RtlSymmetry" />
+
+        <Button
+            android:id="@+id/btn_login_dosen"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:fontFamily="@font/lato"
+            android:padding="14dp"
+            android:text="@string/login_text"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:cornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/til_password"
+            app:layout_constraintStart_toStartOf="@+id/til_password"
+            app:layout_constraintTop_toBottomOf="@+id/btn_forgot_password" />
+
+        <TextView
+            android:id="@+id/tv_doenst_have_an_account"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="52dp"
+            android:fontFamily="@font/lato"
+            android:padding="10dp"
+            android:text="@string/doesnt_have_an_account_text"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@+id/btn_call_admin_login_dosen"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_login_dosen"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <Button
+            android:id="@+id/btn_call_admin_login_dosen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:backgroundTint="@color/blue_gray"
+            android:fontFamily="@font/lato"
+            android:padding="14dp"
+            android:text="@string/call_admin_text"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:cornerRadius="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

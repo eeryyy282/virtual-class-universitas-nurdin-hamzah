@@ -59,7 +59,7 @@ class ScheduleAdapter : RecyclerView.Adapter<ScheduleAdapter.ListViewHolder>() {
                 scheduleDetailAdapter.onItemClick = onItemClick
                 scheduleDetailAdapter.getDosenName = getDosenName
                 scheduleDetailAdapter.isForDosenView = isForDosenView
-                scheduleDetailAdapter.setData(scheduleList)
+                scheduleDetailAdapter.submitList(scheduleList)
                 rvScheduleDetail.adapter = scheduleDetailAdapter
             }
         }

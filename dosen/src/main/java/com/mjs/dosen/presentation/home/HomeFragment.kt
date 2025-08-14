@@ -128,7 +128,7 @@ class HomeFragment : Fragment() {
                             binding.tvDoesntHaveAnTask.visibility = View.GONE
                             binding.ivDoesntHaveAnTask.visibility = View.GONE
                             binding.rvTaskHome.visibility = View.VISIBLE
-                            taskHomeAdapter.setData(tugasList)
+                            taskHomeAdapter.submitList(tugasList)
                         }
                     }
 

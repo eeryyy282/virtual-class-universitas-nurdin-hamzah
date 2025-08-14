@@ -48,7 +48,7 @@ class ClassroomAdapterDosen : RecyclerView.Adapter<ClassroomAdapterDosen.ListVie
         ) {
             binding.tvTitleClassroomSemester.text = semester
             val detailAdapter = ClassroomDetailAdapterDosen()
-            detailAdapter.setData(data)
+            detailAdapter.submitList(data)
             detailAdapter.onItemClick = onItemClick
             binding.rvClassroomDetail.apply {
                 layoutManager = LinearLayoutManager(itemView.context)

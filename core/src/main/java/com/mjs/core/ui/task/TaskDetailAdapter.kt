@@ -2,8 +2,9 @@ package com.mjs.core.ui.task
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mjs.core.R
@@ -13,18 +14,10 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
 
-class TaskDetailAdapter : RecyclerView.Adapter<TaskDetailAdapter.ListViewHolder>() {
-    private var listData = ArrayList<Tugas>()
+class TaskDetailAdapter : ListAdapter<Tugas, TaskDetailAdapter.ListViewHolder>(TUGAS_DIFF_CALLBACK) {
     var getClassName: ((String) -> String)? = null
     var getClassPhotoProfile: ((String) -> String?)? = null
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun setData(newListData: List<Tugas>?) {
-        if (newListData == null) return
-        listData.clear()
-        listData.addAll(newListData)
-        notifyDataSetChanged()
-    }
+    var onItemClick: ((Tugas) -> Unit)? = null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -32,25 +25,21 @@ class TaskDetailAdapter : RecyclerView.Adapter<TaskDetailAdapter.ListViewHolder>
     ): ListViewHolder {
         val binding =
             ItemTaskDetailBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ListViewHolder(binding.root)
+        return ListViewHolder(binding)
     }
 
     override fun onBindViewHolder(
         holder: ListViewHolder,
         position: Int,
     ) {
-        val data = listData[position]
+        val data = getItem(position)
         holder.bind(data)
     }
 
-    override fun getItemCount(): Int = listData.size
-
     @Suppress("DEPRECATION")
     inner class ListViewHolder(
-        itemView: View,
-    ) : RecyclerView.ViewHolder(itemView) {
-        private val binding = ItemTaskDetailBinding.bind(itemView)
-
+        private val binding: ItemTaskDetailBinding,
+    ) : RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SimpleDateFormat")
         fun bind(data: Tugas) {
             with(binding) {
@@ -88,6 +77,29 @@ class TaskDetailAdapter : RecyclerView.Adapter<TaskDetailAdapter.ListViewHolder>
             } catch (e: Exception) {
                 e.printStackTrace()
                 dateString
+            }
+
+        init {
+            binding.root.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    onItemClick?.invoke(getItem(adapterPosition))
+                }
+            }
+        }
+    }
+
+    companion object {
+        private val TUGAS_DIFF_CALLBACK =
+            object : DiffUtil.ItemCallback<Tugas>() {
+                override fun areItemsTheSame(
+                    oldItem: Tugas,
+                    newItem: Tugas,
+                ): Boolean = oldItem.assignmentId == newItem.assignmentId
+
+                override fun areContentsTheSame(
+                    oldItem: Tugas,
+                    newItem: Tugas,
+                ): Boolean = oldItem == newItem
             }
     }
 }

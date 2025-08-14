@@ -90,7 +90,7 @@ class ClassroomFragment : Fragment() {
                         binding.rvClassroom.visibility = View.VISIBLE
                         binding.ivDoesntHaveAnClassroom.visibility = View.GONE
                         binding.tvDoesntHaveAnClassroom.visibility = View.GONE
-                        classroomAdapter.setData(classes)
+                        classroomAdapter.submitList(classes)
                         binding.tvTotalClassJoined.text = classes.size.toString()
                     }
                 }

@@ -62,7 +62,7 @@ class TaskAdapterMahasiswa : RecyclerView.Adapter<TaskAdapterMahasiswa.ListViewH
                 val notFinishedAdapter = TaskDetailAdapter()
                 notFinishedAdapter.getClassName = getClassNameFunc
                 notFinishedAdapter.getClassPhotoProfile = getClassPhotoProfileFunc
-                notFinishedAdapter.setData(notFinished)
+                notFinishedAdapter.submitList(notFinished)
                 rvNotFinishedTask.adapter = notFinishedAdapter
 
                 if (notFinished.isEmpty()) {
@@ -79,7 +79,7 @@ class TaskAdapterMahasiswa : RecyclerView.Adapter<TaskAdapterMahasiswa.ListViewH
                 val lateAdapter = TaskDetailAdapter()
                 lateAdapter.getClassName = getClassNameFunc
                 lateAdapter.getClassPhotoProfile = getClassPhotoProfileFunc
-                lateAdapter.setData(late)
+                lateAdapter.submitList(late)
                 rvLateTask.adapter = lateAdapter
 
                 if (late.isEmpty()) {

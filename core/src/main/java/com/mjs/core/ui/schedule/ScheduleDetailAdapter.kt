@@ -1,26 +1,18 @@
 package com.mjs.core.ui.schedule
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mjs.core.databinding.ItemScheduleDetailBinding
 import com.mjs.core.domain.model.Kelas
 
-class ScheduleDetailAdapter : RecyclerView.Adapter<ScheduleDetailAdapter.ListViewHolder>() {
-    private var listData = ArrayList<Kelas>()
+class ScheduleDetailAdapter : ListAdapter<Kelas, ScheduleDetailAdapter.ListViewHolder>(KELAS_DIFF_CALLBACK) {
     var onItemClick: ((Kelas) -> Unit)? = null
     var getDosenName: ((String) -> String)? = null
     var isForDosenView: Boolean = false
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun setData(newListData: List<Kelas>?) {
-        if (newListData == null) return
-        listData.clear()
-        listData.addAll(newListData)
-        notifyDataSetChanged()
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -35,12 +27,11 @@ class ScheduleDetailAdapter : RecyclerView.Adapter<ScheduleDetailAdapter.ListVie
         holder: ListViewHolder,
         position: Int,
     ) {
-        val data = listData[position]
+        val data = getItem(position)
         holder.bind(data)
     }
 
-    override fun getItemCount(): Int = listData.size
-
+    @Suppress("DEPRECATION")
     inner class ListViewHolder(
         private val binding: ItemScheduleDetailBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -66,9 +57,25 @@ class ScheduleDetailAdapter : RecyclerView.Adapter<ScheduleDetailAdapter.ListVie
 
         init {
             binding.root.setOnClickListener {
-                @Suppress("DEPRECATION")
-                onItemClick?.invoke(listData[adapterPosition])
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    onItemClick?.invoke(getItem(adapterPosition))
+                }
             }
         }
+    }
+
+    companion object {
+        private val KELAS_DIFF_CALLBACK =
+            object : DiffUtil.ItemCallback<Kelas>() {
+                override fun areItemsTheSame(
+                    oldItem: Kelas,
+                    newItem: Kelas,
+                ): Boolean = oldItem.kelasId == newItem.kelasId
+
+                override fun areContentsTheSame(
+                    oldItem: Kelas,
+                    newItem: Kelas,
+                ): Boolean = oldItem == newItem
+            }
     }
 }

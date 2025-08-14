@@ -66,7 +66,7 @@ class TaskAdapterDosenCategorized : RecyclerView.Adapter<TaskAdapterDosenCategor
                 val activeAdapter = TaskAdapterDosen()
                 activeAdapter.getClassName = getClassNameFunc
                 activeAdapter.getClassPhotoProfile = getClassPhotoProfileFunc
-                activeAdapter.setData(currentActiveTasks)
+                activeAdapter.submitList(currentActiveTasks)
                 rvActiveTasks.apply {
                     layoutManager = LinearLayoutManager(itemView.context)
                     adapter = activeAdapter
@@ -86,7 +86,7 @@ class TaskAdapterDosenCategorized : RecyclerView.Adapter<TaskAdapterDosenCategor
                 val pastDeadlineAdapter = TaskAdapterDosen()
                 pastDeadlineAdapter.getClassName = getClassNameFunc
                 pastDeadlineAdapter.getClassPhotoProfile = getClassPhotoProfileFunc
-                pastDeadlineAdapter.setData(currentPastDeadlineTasks)
+                pastDeadlineAdapter.submitList(currentPastDeadlineTasks)
                 rvPastDeadlineTasks.apply {
                     layoutManager = LinearLayoutManager(itemView.context)
                     adapter = pastDeadlineAdapter

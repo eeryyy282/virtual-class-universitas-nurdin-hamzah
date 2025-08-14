@@ -1,9 +1,9 @@
 package com.mjs.core.ui.task
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mjs.core.R
@@ -11,24 +11,10 @@ import com.mjs.core.databinding.ItemTaskHomeBinding
 import com.mjs.core.domain.model.Tugas
 import com.mjs.core.utils.DateUtils
 
-class TaskHomeAdapter : RecyclerView.Adapter<TaskHomeAdapter.ListViewHolder>() {
-    private var listData = ArrayList<Tugas>()
+class TaskHomeAdapter : ListAdapter<Tugas, TaskHomeAdapter.ListViewHolder>(TUGAS_DIFF_CALLBACK) {
     var getClassName: ((String) -> String)? = null
     var getClassPhotoProfile: ((String) -> String?)? = null
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun setData(newListData: List<Tugas>?) {
-        if (newListData == null) {
-            listData.clear()
-            notifyDataSetChanged()
-            return
-        }
-        listData.clear()
-        newListData.sortedByDescending { it.tanggalSelesai }.take(2).let {
-            listData.addAll(it)
-        }
-        notifyDataSetChanged()
-    }
+    var onItemClick: ((Tugas) -> Unit)? = null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -36,27 +22,21 @@ class TaskHomeAdapter : RecyclerView.Adapter<TaskHomeAdapter.ListViewHolder>() {
     ): ListViewHolder {
         val binding =
             ItemTaskHomeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ListViewHolder(binding.root)
+        return ListViewHolder(binding)
     }
 
     override fun onBindViewHolder(
         holder: ListViewHolder,
         position: Int,
     ) {
-        val data = listData[position]
+        val data = getItem(position)
         holder.bind(data)
     }
 
-    override fun getItemCount(): Int {
-        val count = listData.size
-        return count
-    }
-
+    @Suppress("DEPRECATION")
     inner class ListViewHolder(
-        itemView: View,
-    ) : RecyclerView.ViewHolder(itemView) {
-        private val binding = ItemTaskHomeBinding.bind(itemView)
-
+        private val binding: ItemTaskHomeBinding,
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Tugas) {
             with(binding) {
                 tvTaskSubject.text = data.judulTugas
@@ -84,5 +64,28 @@ class TaskHomeAdapter : RecyclerView.Adapter<TaskHomeAdapter.ListViewHolder>() {
                 }
             }
         }
+
+        init {
+            binding.root.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    onItemClick?.invoke(getItem(adapterPosition))
+                }
+            }
+        }
+    }
+
+    companion object {
+        private val TUGAS_DIFF_CALLBACK =
+            object : DiffUtil.ItemCallback<Tugas>() {
+                override fun areItemsTheSame(
+                    oldItem: Tugas,
+                    newItem: Tugas,
+                ): Boolean = oldItem.assignmentId == newItem.assignmentId
+
+                override fun areContentsTheSame(
+                    oldItem: Tugas,
+                    newItem: Tugas,
+                ): Boolean = oldItem == newItem
+            }
     }
 }

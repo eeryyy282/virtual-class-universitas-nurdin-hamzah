@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="28dp"
+    android:paddingTop="18dp"
+    android:paddingEnd="28dp"
+    tools:context=".registered.DetailClassRegisteredActivity">
+
+    <ImageView
+        android:id="@+id/iv_classroom"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:contentDescription="@string/icon_task_description"
+        android:src="@drawable/classroom_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/outline_color_theme" />
+
+    <ImageButton
+        android:id="@+id/btn_leave_classroom"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/btn_leave_classroom_description"
+        android:src="@drawable/exit_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/red_mahogany" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_photo_profile_classroom"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="24dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="@+id/iv_classroom"
+        app:layout_constraintTop_toBottomOf="@+id/iv_classroom"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card.CardViewDetailClass"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tv_subject_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:fontFamily="@font/lato"
+        android:text="@string/subject"
+        android:textColor="@color/outline_color_theme"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/btn_leave_classroom"
+        app:layout_constraintStart_toEndOf="@+id/iv_photo_profile_classroom"
+        app:layout_constraintTop_toTopOf="@+id/iv_photo_profile_classroom" />
+
+    <TextView
+        android:id="@+id/tv_classroom_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_rounded_textview"
+        android:fontFamily="@font/lato"
+        android:padding="8dp"
+        android:text="@string/classroom_location"
+        android:textAlignment="center"
+        android:textColor="@color/classic_blue"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/tv_subject_name"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tv_subject_name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_subject_name" />
+
+    <TextView
+        android:id="@+id/tv_credits_subject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_rounded_textview"
+        android:fontFamily="@font/lato"
+        android:padding="8dp"
+        android:text="@string/credits_classroom"
+        android:textAlignment="center"
+        android:textColor="@color/classic_blue"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/tv_classroom_location"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tv_classroom_location"
+        app:layout_constraintTop_toBottomOf="@+id/tv_classroom_location" />
+
+    <TextView
+        android:id="@+id/tv_category_subject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_rounded_textview"
+        android:fontFamily="@font/lato"
+        android:padding="8dp"
+        android:text="@string/category_subject"
+        android:textAlignment="center"
+        android:textColor="@color/classic_blue"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_photo_profile_classroom"
+        app:layout_constraintEnd_toEndOf="@+id/tv_credits_subject"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tv_credits_subject"
+        app:layout_constraintTop_toBottomOf="@+id/tv_credits_subject"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/iv_photo_profile_classroom"
+        tools:layout_editor_absoluteX="28dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/air_force_blue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato"
+                        android:text="@string/text_tv_day_schedule"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tv_schedule_classroom"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/lato"
+                android:text="@string/time_schedule"
+                android:textAlignment="center"
+                android:textColor="@color/text_color_themed"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cardView2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/btn_attendance"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="@color/green_light"
+        android:fontFamily="@font/lato"
+        android:text="@string/attendance"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/cardView"
+        app:layout_constraintStart_toStartOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:paddingBottom="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/btn_attendance"
+        app:layout_constraintStart_toStartOf="@+id/btn_attendance"
+        app:layout_constraintTop_toBottomOf="@+id/btn_attendance">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/btn_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/circle_button_background"
+                android:contentDescription="@string/task_button"
+                android:padding="12dp"
+                android:src="@drawable/task_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
+
+            <TextView
+                android:id="@+id/title_task_schedule"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:text="@string/task"
+                android:textAlignment="center"
+                android:textColor="@color/outline_color_theme"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/btn_task"
+                app:layout_constraintStart_toStartOf="@+id/btn_task"
+                app:layout_constraintTop_toBottomOf="@+id/btn_task"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageButton
+                android:id="@+id/btn_forum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="26dp"
+                android:background="@drawable/circle_button_background"
+                android:contentDescription="@string/forum_button"
+                android:padding="12dp"
+                android:src="@drawable/forum_icon"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_task"
+                app:layout_constraintStart_toEndOf="@+id/btn_task"
+                app:layout_constraintTop_toTopOf="@+id/btn_task"
+                app:tint="@color/white" />
+
+            <TextView
+                android:id="@+id/title_forum_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:text="@string/forum"
+                android:textAlignment="center"
+                android:textColor="@color/outline_color_theme"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/btn_forum"
+                app:layout_constraintStart_toStartOf="@+id/btn_forum"
+                app:layout_constraintTop_toBottomOf="@+id/btn_task"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageButton
+                android:id="@+id/btn_material"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="26dp"
+                android:background="@drawable/circle_button_background"
+                android:contentDescription="@string/material_button"
+                android:padding="12dp"
+                android:src="@drawable/material_icon"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_forum"
+                app:layout_constraintStart_toEndOf="@+id/btn_forum"
+                app:layout_constraintTop_toTopOf="@+id/btn_forum"
+                app:tint="@color/white" />
+
+            <TextView
+                android:id="@+id/title_material_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:text="@string/material"
+                android:textAlignment="center"
+                android:textColor="@color/outline_color_theme"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/btn_material"
+                app:layout_constraintStart_toStartOf="@+id/btn_material"
+                app:layout_constraintTop_toBottomOf="@+id/btn_forum"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageButton
+                android:id="@+id/btn_member"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="26dp"
+                android:background="@drawable/circle_button_background"
+                android:contentDescription="@string/member_button"
+                android:padding="12dp"
+                android:src="@drawable/classroom_icon"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_material"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btn_material"
+                app:layout_constraintTop_toTopOf="@+id/btn_material"
+                app:tint="@color/white" />
+
+            <TextView
+                android:id="@+id/title_member_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:text="@string/member"
+                android:textAlignment="center"
+                android:textColor="@color/outline_color_theme"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/btn_member"
+                app:layout_constraintStart_toStartOf="@+id/btn_member"
+                app:layout_constraintTop_toBottomOf="@+id/btn_material" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </HorizontalScrollView>
+
+    <TextView
+        android:id="@+id/tv_title_mentor_classroom"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:fontFamily="@font/lato"
+        android:text="@string/mentor_user_class"
+        android:textColor="@color/outline_color_theme"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/horizontalScrollView"
+        app:layout_constraintStart_toStartOf="@+id/horizontalScrollView"
+        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:cardCornerRadius="12dp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title_mentor_classroom"
+        app:layout_constraintStart_toStartOf="@+id/tv_title_mentor_classroom"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_mentor_classroom">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="8dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="4dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/photo_profile_mentor"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="4dp"
+                android:contentDescription="@string/photo_profile"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CircleImageView"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/tv_mentor_classroom"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:fontFamily="@font/lato"
+                android:text="@string/mentor_user"
+                android:textColor="@color/outline_color_theme"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/photo_profile_mentor"
+                app:layout_constraintTop_toTopOf="@+id/photo_profile_mentor" />
+
+            <TextView
+                android:id="@+id/tv_mentor_id"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:text="@string/id_text"
+                android:textColor="@color/outline_color_theme"
+                app:layout_constraintBottom_toBottomOf="@+id/photo_profile_mentor"
+                app:layout_constraintCircleRadius="12dp"
+                app:layout_constraintEnd_toEndOf="@+id/tv_mentor_classroom"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tv_mentor_classroom"
+                app:layout_constraintTop_toBottomOf="@+id/tv_mentor_classroom"
+                app:layout_constraintVertical_bias="0.0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/authentication" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/detailclass" />
             <option value="$PROJECT_DIR$/dosen" />
             <option value="$PROJECT_DIR$/mahasiswa" />
             <option value="$PROJECT_DIR$/onboarding" />

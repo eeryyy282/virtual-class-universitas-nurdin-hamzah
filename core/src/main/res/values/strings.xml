@@ -101,4 +101,5 @@
     <string name="no_active_tasks_text">Tidak ada tugas aktif</string>
     <string name="no_tasks_ready_for_grading_text">Tidak ada tugas yang siap dinilai</string>
     <string name="error_loading_tasks">Terjadi error saat memuat tugas anda.</string>
+    <string name="student">Mahasiswa</string>
 </resources>

@@ -43,4 +43,5 @@
     <string name="title_dosen">Dosen</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_profilesettings">Profile Settings</string>
+    <string name="title_detailclass">Detail Class</string>
 </resources>

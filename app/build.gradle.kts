@@ -51,6 +51,7 @@ android {
                 ":profilesettings",
             )
     }
+    dynamicFeatures += setOf(":detailclass")
 
     dependencies {
 

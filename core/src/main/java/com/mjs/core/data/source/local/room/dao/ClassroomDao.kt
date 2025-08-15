@@ -23,6 +23,12 @@ interface ClassroomDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertEnrollment(enrollment: EnrollmentEntity)
 
+    @Query("DELETE FROM enrollments WHERE nim = :nim AND kelas_id = :kelasId")
+    suspend fun deleteEnrollment(
+        nim: Int,
+        kelasId: String,
+    )
+
     @Query("SELECT * FROM enrollments WHERE nim = :nim")
     fun getEnrolledClasses(nim: Int): Flow<List<EnrollmentEntity>>
 

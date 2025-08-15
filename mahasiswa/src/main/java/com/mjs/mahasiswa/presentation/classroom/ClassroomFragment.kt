@@ -42,13 +42,16 @@ class ClassroomFragment : Fragment() {
         observeEnrolledClasses()
         observeDosenNames()
 
-        classroomViewModel.fetchEnrolledClasses()
-
         binding.btnEnrollClassClassroom.setOnClickListener {
             Toast
                 .makeText(requireContext(), "Fitur gabung kelas akan datang!", Toast.LENGTH_SHORT)
                 .show()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        classroomViewModel.fetchEnrolledClasses()
     }
 
     private fun setupRecyclerView() {

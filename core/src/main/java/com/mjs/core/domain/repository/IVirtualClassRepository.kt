@@ -34,6 +34,11 @@ interface IVirtualClassRepository {
 
     suspend fun enrollToClass(enrollment: EnrollmentEntity): Flow<Resource<String>>
 
+    suspend fun leaveClass(
+        nim: Int,
+        kelasId: String,
+    ): Flow<Resource<String>>
+
     fun getMaterialsByClass(kelasId: String): Flow<Resource<List<Materi>>>
 
     fun getAssignmentsByClass(kelasId: String): Flow<Resource<List<Tugas>>>

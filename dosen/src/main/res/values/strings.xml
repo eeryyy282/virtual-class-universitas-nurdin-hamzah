@@ -54,4 +54,6 @@
     <string name="no_active_tasks_text">Tidak ada tugas aktif</string>
     <string name="no_tasks_ready_for_grading_text">Tidak ada tugas yang siap dinilai</string>
     <string name="doesnt_have_an_task_text">Belum ada tugas yang tersedia.</string>
+    <string name="failed_to_load_class">Gagal memuat data kelas</string>
+    <string name="error_throuble">Terjadi kesalahan</string>
 </resources>

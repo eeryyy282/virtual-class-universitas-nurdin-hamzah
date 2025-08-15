@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mjs.core.data.Resource
 import com.mjs.core.ui.classroom.ClassroomAdapterDosen
+import com.mjs.dosen.R
 import com.mjs.dosen.databinding.FragmentClassroomBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -37,8 +38,6 @@ class ClassroomFragment : Fragment() {
         setupRecyclerView()
         observeClassroomData()
         observeTotalClasses()
-
-        classroomViewModel.fetchDosenClasses()
     }
 
     private fun setupRecyclerView() {
@@ -86,16 +85,22 @@ class ClassroomFragment : Fragment() {
                     binding.rvClassroom.visibility = View.GONE
                     binding.tvDoesntHaveAnClassroom.visibility = View.VISIBLE
                     binding.ivDoesntHaveAnClassroom.visibility = View.VISIBLE
-                    binding.tvDoesntHaveAnClassroom.text = resource.message ?: "Gagal memuat kelas"
+                    binding.tvDoesntHaveAnClassroom.text =
+                        resource.message ?: getString(R.string.failed_to_load_class)
                     Toast
                         .makeText(
                             requireContext(),
-                            resource.message ?: "Terjadi kesalahan",
+                            resource.message ?: getString(R.string.error_throuble),
                             Toast.LENGTH_LONG,
                         ).show()
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        classroomViewModel.fetchDosenClasses()
     }
 
     private fun observeTotalClasses() {

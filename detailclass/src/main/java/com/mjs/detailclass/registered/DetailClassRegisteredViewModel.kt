@@ -22,6 +22,9 @@ class DetailClassRegisteredViewModel(
     private val _dosenDetail = MutableLiveData<Resource<Dosen>>()
     val dosenDetail: LiveData<Resource<Dosen>> = _dosenDetail
 
+    private val _leaveClassStatus = MutableLiveData<Resource<String>>()
+    val leaveClassStatus: LiveData<Resource<String>> = _leaveClassStatus
+
     fun fetchClassDetails(kelasId: String) {
         viewModelScope.launch {
             _kelasDetails.value = Resource.Loading()
@@ -54,6 +57,18 @@ class DetailClassRegisteredViewModel(
             _dosenDetail.value = Resource.Loading()
             virtualClassUseCase.getDosenByNidn(nidn).collect { resource ->
                 _dosenDetail.value = resource
+            }
+        }
+    }
+
+    fun leaveClass(
+        nim: Int,
+        kelasId: String,
+    ) {
+        viewModelScope.launch {
+            _leaveClassStatus.value = Resource.Loading()
+            virtualClassUseCase.leaveClass(nim, kelasId).collect {
+                _leaveClassStatus.value = it
             }
         }
     }

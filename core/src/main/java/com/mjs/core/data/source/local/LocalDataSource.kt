@@ -51,6 +51,11 @@ class LocalDataSource(
 
     suspend fun insertEnrollment(enrollment: EnrollmentEntity) = classroomDao.insertEnrollment(enrollment)
 
+    suspend fun deleteEnrollment(
+        nim: Int,
+        kelasId: String,
+    ) = classroomDao.deleteEnrollment(nim, kelasId)
+
     fun getEnrolledClasses(nim: Int): Flow<List<EnrollmentEntity>> = classroomDao.getEnrolledClasses(nim)
 
     fun getMaterialsByClass(kelasId: String): Flow<List<MaterialEntity>> = classroomDao.getMaterialsByClass(kelasId)
@@ -65,7 +70,7 @@ class LocalDataSource(
 
     fun getSubmissionsByAssignment(assignmentId: Int): Flow<List<SubmissionEntity>> = taskDao.getSubmissionsByAssignment(assignmentId)
 
-    fun getForumsByClass(kelasId: String): Flow<List<ForumEntity>> = forumDao.getForumsByClass(kelasId) // Changed to String
+    fun getForumsByClass(kelasId: String): Flow<List<ForumEntity>> = forumDao.getForumsByClass(kelasId)
 
     suspend fun insertForum(forum: ForumEntity) = forumDao.insertForum(forum)
 

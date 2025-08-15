@@ -4,24 +4,31 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.mjs.core.data.Resource
+import com.mjs.core.data.source.local.pref.AppPreference
 import com.mjs.core.domain.model.Kelas
 import com.mjs.detailclass.R
 import com.mjs.detailclass.databinding.ActivityDetailClassRegisteredBinding
 import com.mjs.detailclass.di.detailClassModule
 import com.mjs.detailclass.utils.TimeFormat
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
 
 class DetailClassRegisteredActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailClassRegisteredBinding
     private val detailClassRegisteredViewModel: DetailClassRegisteredViewModel by viewModel()
+    private val appPreference: AppPreference by inject()
     private var kelasId: String? = null
+    private var currentNim: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,16 +45,21 @@ class DetailClassRegisteredActivity : AppCompatActivity() {
         }
 
         kelasId = intent.getStringExtra(EXTRA_KELAS_ID)
+        runBlocking {
+            currentNim = appPreference.getLoggedInUserId().first()
+        }
 
         checkDarkMode()
         observeClassDetails()
         observeDosenDetails()
+        observeLeaveClassStatus()
+        setupActionListeners()
 
         if (kelasId != null) {
             detailClassRegisteredViewModel.fetchClassDetails(kelasId!!)
         } else {
             Toast
-                .makeText(this, getString(R.string.cennot_find_class_id_error), Toast.LENGTH_LONG)
+                .makeText(this, getString(R.string.cannot_find_class_id_error), Toast.LENGTH_LONG)
                 .show()
             binding.progressBarDetailClass.visibility = View.GONE
             finish()
@@ -147,6 +159,58 @@ class DetailClassRegisteredActivity : AppCompatActivity() {
                 .into(binding.ivPhotoProfileClassroom)
         } else {
             binding.ivPhotoProfileClassroom.setImageResource(R.drawable.profile_photo)
+        }
+    }
+
+    private fun setupActionListeners() {
+        binding.btnLeaveClassroom.setOnClickListener {
+            showLeaveClassConfirmationDialog()
+        }
+    }
+
+    private fun showLeaveClassConfirmationDialog() {
+        AlertDialog
+            .Builder(this)
+            .setTitle(getString(R.string.leave_class_confirmation_title))
+            .setMessage(getString(R.string.leave_class_confirmation_message))
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                if (currentNim != null && kelasId != null) {
+                    detailClassRegisteredViewModel.leaveClass(currentNim!!, kelasId!!)
+                } else {
+                    Toast
+                        .makeText(
+                            this,
+                            getString(R.string.cannot_leave_class_error),
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                }
+            }.setNegativeButton(getString(R.string.no), null)
+            .show()
+    }
+
+    private fun observeLeaveClassStatus() {
+        detailClassRegisteredViewModel.leaveClassStatus.observe(this) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    binding.progressBarDetailClass.visibility = View.VISIBLE
+                }
+
+                is Resource.Success -> {
+                    binding.progressBarDetailClass.visibility = View.GONE
+                    Toast.makeText(this, resource.data, Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+
+                is Resource.Error -> {
+                    binding.progressBarDetailClass.visibility = View.GONE
+                    Toast
+                        .makeText(
+                            this,
+                            resource.message ?: getString(R.string.failed_to_leave_class),
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                }
+            }
         }
     }
 

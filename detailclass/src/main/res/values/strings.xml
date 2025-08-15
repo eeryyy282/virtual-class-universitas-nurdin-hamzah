@@ -23,5 +23,11 @@
     <string name="lecture_id_loading">Memuat NIDN dosen...</string>
     <string name="failed_to_load_class_data">Gagal memuat data kelas</string>
     <string name="cannot_find_class_detail">Detail kelas tidak ditemukan</string>
-    <string name="cennot_find_class_id_error">Error: Kelas ID tidak ditemukan</string>
+    <string name="cannot_find_class_id_error">Error: Kelas ID tidak ditemukan</string>
+    <string name="leave_class_confirmation_title">Konfirmasi Keluar Kelas</string>
+    <string name="leave_class_confirmation_message">Apakah Anda yakin ingin keluar dari kelas ini?</string>
+    <string name="cannot_leave_class_error">Gagal memproses permintaan keluar kelas. Data tidak lengkap.</string>
+    <string name="failed_to_leave_class">Gagal keluar dari kelas. Silakan coba lagi.</string>
+    <string name="yes">Ya</string>
+    <string name="no">Tidak</string>
 </resources>

@@ -121,6 +121,20 @@ class VirtualClassRepository(
             }
         }
 
+    override suspend fun leaveClass(
+        nim: Int,
+        kelasId: String,
+    ): Flow<Resource<String>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                localDataSource.deleteEnrollment(nim, kelasId)
+                emit(Resource.Success("Berhasil keluar dari kelas"))
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Gagal keluar dari kelas"))
+            }
+        }
+
     override fun getMaterialsByClass(kelasId: String): Flow<Resource<List<Materi>>> =
         flow {
             emit(Resource.Loading())

@@ -1,10 +1,12 @@
 package com.mjs.dosen.presentation.classroom
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mjs.core.data.Resource
@@ -49,9 +51,10 @@ class ClassroomFragment : Fragment() {
         }
 
         classroomAdapter.onItemClick = { kelas ->
-            Toast
-                .makeText(requireContext(), "Clicked on: ${kelas.namaKelas}", Toast.LENGTH_SHORT)
-                .show()
+            val uri = "detail_class://detail_class_registered_activity".toUri()
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            intent.putExtra("kelasId", kelas.kelasId)
+            startActivity(intent)
         }
     }
 

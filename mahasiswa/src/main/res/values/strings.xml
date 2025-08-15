@@ -95,4 +95,9 @@
     <string name="confirm_logout_message">Apakah Anda yakin ingin keluar?</string>
     <string name="yes">Ya</string>
     <string name="no">Tidak</string>
+    <string name="failed_to_load_class">Gagal memuat kelas</string>
+    <string name="trouble_error">Terjadi kesalahan</string>
+    <string name="failed_to_load_student_data">Gagal memuat data mahasiswa</string>
+    <string name="error_load_profile">Terjadi kesalahan saat memuat profil</string>
+    <string name="failed_to_load_streak_data">Gagal memuat data streak</string>
 </resources>

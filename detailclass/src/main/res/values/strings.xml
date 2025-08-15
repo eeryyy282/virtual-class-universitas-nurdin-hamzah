@@ -4,7 +4,7 @@
     <string name="subject">Matakuliah</string>
     <string name="attendance">Absensi</string>
     <string name="enroll">Gabung Kelas (Enroll)</string>
-    <string name="mentor_user_class">Dosen Pengampu</string>
+    <string name="lecture_user_class">Dosen Pengampu</string>
     <string name="member">Peserta</string>
     <string name="count_total_member_classroom">0 Mahasiswa Bergabung di Kelas Ini</string>
     <string name="task_button">Task Button</string>
@@ -16,4 +16,12 @@
     <string name="member_button">Member Button</string>
     <string name="material_button">Material Button</string>
     <string name="task_list">Daftar Tugas</string>
+    <string name="sks">%1$d SKS</string>
+    <string name="failed_to_load_lecture_name">Gagal memuat nama dosen</string>
+    <string name="lecture_name_not_available">Nama dosen tidak tersedia</string>
+    <string name="lecture_name_loading">Memuat nama dosen...</string>
+    <string name="lecture_id_loading">Memuat NIDN dosen...</string>
+    <string name="failed_to_load_class_data">Gagal memuat data kelas</string>
+    <string name="cannot_find_class_detail">Detail kelas tidak ditemukan</string>
+    <string name="cennot_find_class_id_error">Error: Kelas ID tidak ditemukan</string>
 </resources>

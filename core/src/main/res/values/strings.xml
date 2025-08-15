@@ -15,8 +15,8 @@
     <string name="name_text">Mahsiswa</string>
     <string name="id_text">0123456</string>
     <string name="id_text_title">NIM</string>
-    <string name="title_mentor_user_text">Dosen Pembimbing Akademik</string>
-    <string name="mentor_user">Dosen</string>
+    <string name="title_lecture_user_text">Dosen Pembimbing Akademik</string>
+    <string name="lecture_user">Dosen</string>
     <string name="icon_task_home_description">Icon Task Home</string>
     <string name="text_description_task_home">Pastikan untuk selalu mengerjakan tugasmu.</string>
     <string name="go_to_detail_task_button_description">Button Go To Detail Task</string>

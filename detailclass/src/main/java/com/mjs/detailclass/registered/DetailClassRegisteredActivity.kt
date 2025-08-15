@@ -1,20 +1,27 @@
 package com.mjs.detailclass.registered
 
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
+import com.mjs.core.data.Resource
+import com.mjs.core.domain.model.Kelas
 import com.mjs.detailclass.R
 import com.mjs.detailclass.databinding.ActivityDetailClassRegisteredBinding
 import com.mjs.detailclass.di.detailClassModule
+import com.mjs.detailclass.utils.TimeFormat
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
 
 class DetailClassRegisteredActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailClassRegisteredBinding
     private val detailClassRegisteredViewModel: DetailClassRegisteredViewModel by viewModel()
+    private var kelasId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,13 +31,123 @@ class DetailClassRegisteredActivity : AppCompatActivity() {
         binding = ActivityDetailClassRegisteredBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
+        kelasId = intent.getStringExtra(EXTRA_KELAS_ID)
+
         checkDarkMode()
+        observeClassDetails()
+        observeDosenDetails()
+
+        if (kelasId != null) {
+            detailClassRegisteredViewModel.fetchClassDetails(kelasId!!)
+        } else {
+            Toast
+                .makeText(this, getString(R.string.cennot_find_class_id_error), Toast.LENGTH_LONG)
+                .show()
+            binding.progressBarDetailClass.visibility = View.GONE
+            finish()
+        }
+    }
+
+    private fun observeClassDetails() {
+        detailClassRegisteredViewModel.kelasDetails.observe(this) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    binding.progressBarDetailClass.visibility = View.VISIBLE
+                }
+
+                is Resource.Success -> {
+                    resource.data?.let { setupView(it) }
+                        ?: run {
+                            binding.progressBarDetailClass.visibility = View.GONE
+                            Toast
+                                .makeText(
+                                    this,
+                                    getString(R.string.cannot_find_class_detail),
+                                    Toast.LENGTH_LONG,
+                                ).show()
+                        }
+                }
+
+                is Resource.Error -> {
+                    binding.progressBarDetailClass.visibility = View.GONE
+                    Toast
+                        .makeText(
+                            this,
+                            resource.message ?: getString(R.string.failed_to_load_class_data),
+                            Toast.LENGTH_LONG,
+                        ).show()
+                }
+            }
+        }
+    }
+
+    private fun observeDosenDetails() {
+        detailClassRegisteredViewModel.dosenDetail.observe(this) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    binding.progressBarDetailClass.visibility = View.VISIBLE
+                    binding.tvLectureClassroom.text = getString(R.string.lecture_name_loading)
+                    binding.tvLectureId.text = getString(R.string.lecture_id_loading)
+                }
+
+                is Resource.Success -> {
+                    binding.progressBarDetailClass.visibility = View.GONE
+                    resource.data?.let {
+                        binding.tvLectureClassroom.text = it.nama
+                        binding.tvLectureId.text = it.nidn.toString()
+                        Glide
+                            .with(this)
+                            .load(it.fotoProfil)
+                            .placeholder(R.drawable.profile_photo)
+                            .error(R.drawable.profile_photo)
+                            .into(binding.ivPhotoProfileLecture)
+                    } ?: run {
+                        binding.tvLectureClassroom.text =
+                            getString(R.string.lecture_name_not_available)
+                        binding.tvLectureId.visibility = View.GONE
+                    }
+                }
+
+                is Resource.Error -> {
+                    binding.progressBarDetailClass.visibility = View.GONE
+                    binding.tvLectureClassroom.text =
+                        resource.message ?: getString(R.string.failed_to_load_lecture_name)
+                    binding.tvLectureId.visibility = View.GONE
+                    Toast
+                        .makeText(
+                            this,
+                            resource.message ?: getString(R.string.failed_to_load_lecture_name),
+                            Toast.LENGTH_LONG,
+                        ).show()
+                }
+            }
+        }
+    }
+
+    private fun setupView(kelas: Kelas) {
+        binding.tvSubjectName.text = kelas.namaKelas
+        binding.tvClassroomLocation.text = kelas.ruang
+        binding.tvCreditsSubject.text = getString(R.string.sks, kelas.credit)
+        binding.tvCategorySubject.text = kelas.category
+        binding.tvScheduleClassroom.text = TimeFormat.formatSchedule(kelas.jadwal)
+        binding.tvDaySchedule.text = kelas.jadwal.split(",")[0].trim()
+
+        if (!kelas.classImage.isNullOrEmpty()) {
+            Glide
+                .with(this)
+                .load(kelas.classImage)
+                .placeholder(R.drawable.profile_photo)
+                .error(R.drawable.profile_photo)
+                .into(binding.ivPhotoProfileClassroom)
+        } else {
+            binding.ivPhotoProfileClassroom.setImageResource(R.drawable.profile_photo)
+        }
     }
 
     private fun checkDarkMode() {
@@ -41,5 +158,9 @@ class DetailClassRegisteredActivity : AppCompatActivity() {
                 delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_NO
             }
         }
+    }
+
+    companion object {
+        const val EXTRA_KELAS_ID = "kelasId"
     }
 }

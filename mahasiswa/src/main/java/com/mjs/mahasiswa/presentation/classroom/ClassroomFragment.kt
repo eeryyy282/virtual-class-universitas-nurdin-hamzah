@@ -1,15 +1,18 @@
 package com.mjs.mahasiswa.presentation.classroom
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mjs.core.data.Resource
 import com.mjs.core.ui.classroom.ClassroomAdapterMahasiswa
+import com.mjs.mahasiswa.R
 import com.mjs.mahasiswa.databinding.FragmentClassroomBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -62,9 +65,10 @@ class ClassroomFragment : Fragment() {
         }
 
         classroomAdapter.onItemClick = { kelas ->
-            Toast
-                .makeText(requireContext(), "Clicked on: ${kelas.namaKelas}", Toast.LENGTH_SHORT)
-                .show()
+            val uri = "detail_class://detail_class_registered_activity".toUri()
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            intent.putExtra("kelasId", kelas.kelasId)
+            startActivity(intent)
         }
     }
 
@@ -100,11 +104,12 @@ class ClassroomFragment : Fragment() {
                     binding.rvClassroom.visibility = View.GONE
                     binding.ivDoesntHaveAnClassroom.visibility = View.VISIBLE
                     binding.tvDoesntHaveAnClassroom.visibility = View.VISIBLE
-                    binding.tvDoesntHaveAnClassroom.text = resource.message ?: "Gagal memuat kelas"
+                    binding.tvDoesntHaveAnClassroom.text =
+                        resource.message ?: getString(R.string.failed_to_load_class)
                     Toast
                         .makeText(
                             requireContext(),
-                            resource.message ?: "Terjadi kesalahan",
+                            resource.message ?: getString(R.string.trouble_error),
                             Toast.LENGTH_LONG,
                         ).show()
                 }

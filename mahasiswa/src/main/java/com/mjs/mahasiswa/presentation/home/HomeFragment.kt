@@ -71,7 +71,7 @@ class HomeFragment : Fragment() {
                             Toast
                                 .makeText(
                                     context,
-                                    "Gagal memuat data mahasiswa",
+                                    getString(R.string.failed_to_load_student_data),
                                     Toast.LENGTH_SHORT,
                                 ).show()
                         }
@@ -81,7 +81,7 @@ class HomeFragment : Fragment() {
                         Toast
                             .makeText(
                                 context,
-                                resource.message ?: "Terjadi kesalahan saat memuat profil",
+                                resource.message ?: getString(R.string.error_load_profile),
                                 Toast.LENGTH_SHORT,
                             ).show()
                     }
@@ -190,7 +190,7 @@ class HomeFragment : Fragment() {
                         Toast
                             .makeText(
                                 context,
-                                resource.message ?: "Gagal memuat data streak",
+                                resource.message ?: getString(R.string.failed_to_load_streak_data),
                                 Toast.LENGTH_SHORT,
                             ).show()
                     }

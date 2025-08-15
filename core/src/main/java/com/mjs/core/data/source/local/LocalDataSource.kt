@@ -33,13 +33,30 @@ class LocalDataSource(
 
     fun getThemeSetting(): Flow<Boolean> = appPreference.getThemeSetting()
 
+    fun getLoginStatus(): Flow<Boolean> = appPreference.getLoginStatus()
+
+    suspend fun saveLoginSession(
+        userId: Int,
+        userType: String,
+    ) {
+        appPreference.saveLoginSession(userId, userType)
+    }
+
+    suspend fun clearLoginSession() {
+        appPreference.clearLoginSession()
+    }
+
+    fun getLoggedInUserId(): Flow<Int?> = appPreference.getLoggedInUserId()
+
+    fun getLoggedInUserType(): Flow<String?> = appPreference.getLoggedInUserType()
+
     suspend fun registerMahasiswa(mahasiswa: MahasiswaEntity) = authDao.registerMahasiswa(mahasiswa)
 
     fun getMahasiswaByNim(nim: Int): Flow<MahasiswaEntity?> = authDao.getMahasiswaByNim(nim)
 
-    fun getDosenByNidn(nidn: Int): Flow<DosenEntity?> = authDao.getDosenByNidn(nidn)
-
     suspend fun updateMahasiswa(mahasiswa: MahasiswaEntity) = authDao.updateMahasiswa(mahasiswa)
+
+    fun getDosenByNidn(nidn: Int): Flow<DosenEntity?> = authDao.getDosenByNidn(nidn)
 
     suspend fun updateDosen(dosen: DosenEntity) = authDao.updateDosen(dosen)
 

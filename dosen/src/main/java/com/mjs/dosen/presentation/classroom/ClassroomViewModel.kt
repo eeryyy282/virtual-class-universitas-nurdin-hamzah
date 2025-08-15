@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mjs.core.data.Resource
-import com.mjs.core.data.source.local.pref.AppPreference
 import com.mjs.core.domain.model.Kelas
 import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
 import kotlinx.coroutines.flow.first
@@ -13,7 +12,6 @@ import kotlinx.coroutines.launch
 
 class ClassroomViewModel(
     private val virtualClassUseCase: VirtualClassUseCase,
-    private val appPreference: AppPreference,
 ) : ViewModel() {
     private val _groupedClasses = MutableLiveData<Resource<List<Pair<String, List<Kelas>>>>>()
     val groupedClasses: LiveData<Resource<List<Pair<String, List<Kelas>>>>> = _groupedClasses
@@ -26,7 +24,7 @@ class ClassroomViewModel(
             _groupedClasses.value = Resource.Loading()
             _totalClasses.value = 0
             try {
-                val nidn = appPreference.getLoggedInUserId().first()
+                val nidn = virtualClassUseCase.getLoggedInUserId().first()
                 if (nidn != null) {
                     virtualClassUseCase.getAllSchedulesByNidn(nidn).collect { resource ->
                         if (resource is Resource.Success) {

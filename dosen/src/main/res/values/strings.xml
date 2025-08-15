@@ -56,4 +56,6 @@
     <string name="doesnt_have_an_task_text">Belum ada tugas yang tersedia.</string>
     <string name="failed_to_load_class">Gagal memuat data kelas</string>
     <string name="error_throuble">Terjadi kesalahan</string>
+    <string name="error">Terjadi kesalahan</string>
+    <string name="failed_to_load_lecture_data">Gagal memuat data dosen</string>
 </resources>

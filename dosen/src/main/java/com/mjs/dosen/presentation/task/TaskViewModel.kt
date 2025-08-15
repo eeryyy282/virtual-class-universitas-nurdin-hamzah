@@ -3,7 +3,6 @@ package com.mjs.dosen.presentation.task
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mjs.core.data.Resource
-import com.mjs.core.data.source.local.pref.AppPreference
 import com.mjs.core.domain.model.Tugas
 import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,16 +16,16 @@ import kotlinx.coroutines.flow.stateIn
 @OptIn(ExperimentalCoroutinesApi::class)
 class TaskViewModel(
     private val virtualClassUseCase: VirtualClassUseCase,
-    appPreference: AppPreference,
 ) : ViewModel() {
     @Suppress("ktlint:standard:backing-property-naming")
     private val _allKelasMap = MutableStateFlow<Map<String, Pair<String, String?>>>(emptyMap())
 
     val tasks: StateFlow<Resource<Pair<List<Tugas>, List<Tugas>>>> =
-        appPreference
+        virtualClassUseCase
             .getLoggedInUserId()
             .flatMapLatest { nidnResource ->
-                val nidn = nidnResource
+                val nidn =
+                    nidnResource
                 if (nidn == null) {
                     MutableStateFlow(Resource.Error("NIDN dosen tidak ditemukan."))
                 } else {

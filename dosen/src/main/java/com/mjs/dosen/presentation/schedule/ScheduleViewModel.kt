@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mjs.core.data.Resource
-import com.mjs.core.data.source.local.pref.AppPreference
 import com.mjs.core.domain.model.Kelas
 import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
 import kotlinx.coroutines.flow.firstOrNull
@@ -13,27 +12,29 @@ import kotlinx.coroutines.launch
 
 class ScheduleViewModel(
     private val virtualClassUseCase: VirtualClassUseCase,
-    private val appPreference: AppPreference,
 ) : ViewModel() {
     private val _schedule = MutableLiveData<Resource<List<Kelas>>>()
     val schedule: LiveData<Resource<List<Kelas>>> get() = _schedule
 
     fun getDosenSchedule() {
         viewModelScope.launch {
-            val nidn = appPreference.getLoggedInUserId().firstOrNull()
-            val userType = appPreference.getLoggedInUserType().firstOrNull()
+            val nidn = virtualClassUseCase.getLoggedInUserId().firstOrNull()
+            val userType = virtualClassUseCase.getLoggedInUserType().firstOrNull()
 
-            if (nidn != null && userType == AppPreference.USER_TYPE_DOSEN) {
+            if (nidn != null && userType == VirtualClassUseCase.USER_TYPE_DOSEN) {
                 try {
                     _schedule.value = Resource.Loading()
                     virtualClassUseCase.getAllSchedulesByNidn(nidn).collect {
                         _schedule.value = it
                     }
-                } catch (e: NumberFormatException) {
-                    _schedule.value = Resource.Error("Invalid NIDN format")
+                } catch (_: NumberFormatException) {
+                    _schedule.value = Resource.Error("Format NIDN tidak valid.")
+                } catch (e: Exception) {
+                    _schedule.value =
+                        Resource.Error(e.message ?: "Terjadi kesalahan saat mengambil jadwal dosen")
                 }
             } else {
-                _schedule.value = Resource.Error("User not logged in or not a Dosen")
+                _schedule.value = Resource.Error("Pengguna tidak Login atau bukan Dosen")
             }
         }
     }

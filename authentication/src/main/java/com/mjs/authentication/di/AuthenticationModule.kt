@@ -11,8 +11,6 @@ val loginDosenModule =
         viewModel {
             LoginDosenViewModel(
                 virtualClassUseCase = get(),
-                authDao = get(),
-                appPreference = get(),
             )
         }
     }
@@ -22,8 +20,6 @@ val loginMahasiswaModule =
         viewModel {
             LoginMahasiswaViewModel(
                 virtualClassUseCase = get(),
-                authDao = get(),
-                appPreference = get(),
             )
         }
     }

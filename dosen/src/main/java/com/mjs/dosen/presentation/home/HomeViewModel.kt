@@ -3,7 +3,6 @@ package com.mjs.dosen.presentation.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mjs.core.data.Resource
-import com.mjs.core.data.source.local.pref.AppPreference
 import com.mjs.core.domain.model.Dosen
 import com.mjs.core.domain.model.Kelas
 import com.mjs.core.domain.model.Tugas
@@ -20,7 +19,6 @@ import java.util.Locale
 
 class HomeViewModel(
     private val virtualClassUseCase: VirtualClassUseCase,
-    private val appPreference: AppPreference,
 ) : ViewModel() {
     private val _dosenData = MutableStateFlow<Resource<Dosen>?>(null)
     val dosenData: StateFlow<Resource<Dosen>?> = _dosenData
@@ -43,11 +41,11 @@ class HomeViewModel(
 
     private fun fetchDosenData() {
         viewModelScope.launch {
-            val nidn = appPreference.getLoggedInUserId().firstOrNull()
+            val nidn = virtualClassUseCase.getLoggedInUserId().firstOrNull()
             if (nidn != null &&
-                appPreference
+                virtualClassUseCase
                     .getLoggedInUserType()
-                    .firstOrNull() == AppPreference.USER_TYPE_DOSEN
+                    .firstOrNull() == VirtualClassUseCase.USER_TYPE_DOSEN
             ) {
                 virtualClassUseCase.getDosenByNidn(nidn).collect {
                     _dosenData.value = it
@@ -59,7 +57,7 @@ class HomeViewModel(
     private fun fetchTugasUntukDosen() {
         viewModelScope.launch {
             _tugasListDosenState.value = Resource.Loading()
-            val nidn = appPreference.getLoggedInUserId().firstOrNull()
+            val nidn = virtualClassUseCase.getLoggedInUserId().firstOrNull()
 
             if (nidn == null) {
                 _tugasListDosenState.value =
@@ -181,7 +179,7 @@ class HomeViewModel(
     private fun fetchTodaySchedule() {
         viewModelScope.launch {
             _todayScheduleState.value = Resource.Loading()
-            val nidn = appPreference.getLoggedInUserId().firstOrNull()
+            val nidn = virtualClassUseCase.getLoggedInUserId().firstOrNull()
             if (nidn != null) {
                 virtualClassUseCase.getTodayScheduleDosen(nidn).collect {
                     _todayScheduleState.value = it

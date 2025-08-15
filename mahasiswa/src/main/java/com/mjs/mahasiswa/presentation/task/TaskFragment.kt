@@ -11,6 +11,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mjs.core.data.Resource
 import com.mjs.core.ui.task.TaskAdapterMahasiswa
+import com.mjs.mahasiswa.R
 import com.mjs.mahasiswa.databinding.FragmentTaskBinding
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -91,7 +92,7 @@ class TaskFragment : Fragment() {
                             binding.progressBarTaskTask.visibility = View.GONE
                             binding.rvTaskTask.visibility = View.GONE
                             binding.tvDoesntHaveAnTask.text =
-                                resource.message ?: "Error memuat tugas"
+                                resource.message ?: getString(R.string.error_load_task)
                             binding.tvDoesntHaveAnTask.visibility = View.VISIBLE
                             binding.ivDoesntHaveAnTask.visibility =
                                 View.VISIBLE

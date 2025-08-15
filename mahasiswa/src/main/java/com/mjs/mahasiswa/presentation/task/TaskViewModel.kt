@@ -3,7 +3,6 @@ package com.mjs.mahasiswa.presentation.task
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mjs.core.data.Resource
-import com.mjs.core.data.source.local.pref.AppPreference
 import com.mjs.core.domain.model.Tugas
 import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -18,7 +17,6 @@ import kotlinx.coroutines.flow.stateIn
 @OptIn(ExperimentalCoroutinesApi::class)
 class TaskViewModel(
     private val virtualClassUseCase: VirtualClassUseCase,
-    appPreference: AppPreference,
 ) : ViewModel() {
     private val _enrolledCoursesMapState =
         MutableStateFlow<Map<String, Pair<String, String?>>>(emptyMap())
@@ -26,7 +24,7 @@ class TaskViewModel(
         _enrolledCoursesMapState
 
     val tasks: StateFlow<Resource<Pair<List<Tugas>, List<Tugas>>>> =
-        appPreference
+        virtualClassUseCase
             .getLoggedInUserId()
             .flatMapLatest { nimResource ->
                 val nim = nimResource

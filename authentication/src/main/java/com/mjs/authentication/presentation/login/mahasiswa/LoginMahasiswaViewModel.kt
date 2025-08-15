@@ -1,20 +1,18 @@
 package com.mjs.authentication.presentation.login.mahasiswa
 
+// Import AppPreference akan dihapus karena konstanta diambil dari UseCase
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.mjs.authentication.presentation.utils.LoginResult
-import com.mjs.core.data.source.local.pref.AppPreference
-import com.mjs.core.data.source.local.room.dao.AuthDao
+import com.mjs.core.data.Resource
 import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
 import kotlinx.coroutines.launch
 
 class LoginMahasiswaViewModel(
     private val virtualClassUseCase: VirtualClassUseCase,
-    private val authDao: AuthDao,
-    private val appPreference: AppPreference,
 ) : ViewModel() {
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
@@ -33,18 +31,33 @@ class LoginMahasiswaViewModel(
     ) {
         viewModelScope.launch {
             if (nim.isBlank() || password.isBlank()) {
-                _loginResult.value = LoginResult.Error("NIM and password cannot be empty")
+                _loginResult.value = LoginResult.Error("NIM dan Password tidak boleh kosong")
                 return@launch
             }
-            val mahasiswa = authDao.loginMahasiswa(nim.toInt(), password)
-            if (mahasiswa != null) {
-                appPreference.saveLoginSession(
-                    mahasiswa.nim,
-                    AppPreference.USER_TYPE_MAHASISWA,
-                )
-                _loginResult.value = LoginResult.Success(AppPreference.USER_TYPE_MAHASISWA)
-            } else {
-                _loginResult.value = LoginResult.Error("Invalid NIM or password")
+            virtualClassUseCase.loginMahasiswa(nim, password).collect { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+                    }
+
+                    is Resource.Success -> {
+                        val mahasiswa = resource.data
+                        if (mahasiswa != null) {
+                            virtualClassUseCase.saveLoginSession(
+                                mahasiswa.nim,
+                                VirtualClassUseCase.USER_TYPE_MAHASISWA,
+                            )
+                            _loginResult.value =
+                                LoginResult.Success(VirtualClassUseCase.USER_TYPE_MAHASISWA)
+                        } else {
+                            _loginResult.value = LoginResult.Error("NIM atau Password Invalid")
+                        }
+                    }
+
+                    is Resource.Error -> {
+                        _loginResult.value =
+                            LoginResult.Error(resource.message ?: "Terjadi Error")
+                    }
+                }
             }
         }
     }

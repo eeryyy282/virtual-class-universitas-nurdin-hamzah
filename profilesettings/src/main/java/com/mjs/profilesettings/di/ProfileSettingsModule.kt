@@ -9,6 +9,6 @@ import org.koin.dsl.module
 val profileSettingsModule =
     module {
         viewModel {
-            ProfileSettingsViewModel(get(), get())
+            ProfileSettingsViewModel(get())
         }
     }

@@ -1,7 +1,6 @@
 package com.mjs.mahasiswa.presentation.schedule
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mjs.core.data.Resource
 import com.mjs.core.ui.schedule.ScheduleAdapter
+import com.mjs.mahasiswa.R
 import com.mjs.mahasiswa.databinding.FragmentScheduleBinding
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -77,8 +77,6 @@ class ScheduleFragment : Fragment() {
                     binding.progressBarSchedule.visibility = View.GONE
                     val scheduleList = resource.data
                     if (scheduleList != null && scheduleList.isNotEmpty()) {
-                        Log.d("ScheduleFragment", "Raw scheduleList size: ${scheduleList.size}")
-                        Log.d("ScheduleFragment", "Raw scheduleList content: $scheduleList")
                         viewLifecycleOwner.lifecycleScope.launch {
                             dosenNamesMap.clear()
                             val uniqueNidns = scheduleList.map { it.nidn }.distinct()
@@ -92,7 +90,7 @@ class ScheduleFragment : Fragment() {
                                         kelas.jadwal
                                             .split(",")
                                             .firstOrNull()
-                                            ?.trim() ?: "Unknown Day"
+                                            ?.trim() ?: getString(R.string.unknown_day)
                                     }.map { entry ->
                                         Pair(entry.key, entry.value)
                                     }
@@ -113,12 +111,6 @@ class ScheduleFragment : Fragment() {
                                         if (index == -1) Int.MAX_VALUE else index
                                     },
                                 )
-
-                            Log.d(
-                                "ScheduleFragment",
-                                "Grouped schedule size: ${groupedSchedule.size}",
-                            )
-                            Log.d("ScheduleFragment", "Grouped schedule content: $groupedSchedule")
                             scheduleAdapter.setData(groupedSchedule)
                             binding.rvSchedule.visibility = View.VISIBLE
                             binding.ivDoesntHaveAnSchedule.visibility = View.GONE
@@ -139,7 +131,7 @@ class ScheduleFragment : Fragment() {
                     Toast
                         .makeText(
                             requireContext(),
-                            resource.message ?: "An error occurred",
+                            resource.message ?: getString(R.string.error_occurred),
                             Toast.LENGTH_LONG,
                         ).show()
                 }

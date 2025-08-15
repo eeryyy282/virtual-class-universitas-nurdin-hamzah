@@ -12,9 +12,9 @@ import org.koin.dsl.module
 val dosenModule =
     module {
         viewModel { MainActivityViewModel(get()) }
-        viewModel { SettingViewModel(get(), get(), get()) }
-        viewModel { HomeViewModel(get(), get()) }
-        viewModel { ScheduleViewModel(get(), get()) }
-        viewModel { TaskViewModel(get(), get()) }
-        viewModel { ClassroomViewModel(get(), get()) }
+        viewModel { SettingViewModel(get()) }
+        viewModel { HomeViewModel(get()) }
+        viewModel { ScheduleViewModel(get()) }
+        viewModel { TaskViewModel(get()) }
+        viewModel { ClassroomViewModel(get()) }
     }

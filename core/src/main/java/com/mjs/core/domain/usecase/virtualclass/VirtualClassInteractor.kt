@@ -23,9 +23,30 @@ class VirtualClassInteractor(
 ) : VirtualClassUseCase {
     override fun getThemeSetting(): Flow<Boolean> = virtualClassRepository.getThemeSetting()
 
-    override suspend fun saveThemeSetting(isDarkModeActive: Boolean) {
-        virtualClassRepository.saveThemeSetting(isDarkModeActive)
-    }
+    override suspend fun saveThemeSetting(isDarkModeActive: Boolean) = virtualClassRepository.saveThemeSetting(isDarkModeActive)
+
+    override fun getLoggedInUserId(): Flow<Int?> = virtualClassRepository.getLoggedInUserId()
+
+    override fun getLoggedInUserType(): Flow<String?> = virtualClassRepository.getLoggedInUserType()
+
+    override fun getLoginStatus(): Flow<Boolean> = virtualClassRepository.getLoginStatus()
+
+    override suspend fun saveLoginSession(
+        userId: Int,
+        userType: String,
+    ) = virtualClassRepository.saveLoginSession(userId, userType)
+
+    override suspend fun clearLoginSession() = virtualClassRepository.clearLoginSession()
+
+    override fun loginDosen(
+        nidn: String,
+        password: String,
+    ): Flow<Resource<Dosen>> = virtualClassRepository.loginDosen(nidn, password)
+
+    override fun loginMahasiswa(
+        nim: String,
+        password: String,
+    ): Flow<Resource<Mahasiswa>> = virtualClassRepository.loginMahasiswa(nim, password)
 
     override fun getMahasiswaByNim(nim: Int): Flow<Resource<Mahasiswa>> = virtualClassRepository.getMahasiswaByNim(nim)
 
@@ -33,6 +54,11 @@ class VirtualClassInteractor(
 
     override suspend fun registerMahasiswa(mahasiswa: MahasiswaEntity): Flow<Resource<String>> =
         virtualClassRepository.registerMahasiswa(mahasiswa)
+
+    override suspend fun updateMahasiswaProfile(mahasiswa: Mahasiswa): Flow<Resource<String>> =
+        virtualClassRepository.updateMahasiswaProfile(mahasiswa)
+
+    override suspend fun updateDosenProfile(dosen: Dosen): Flow<Resource<String>> = virtualClassRepository.updateDosenProfile(dosen)
 
     override fun getAllKelas(): Flow<Resource<List<Kelas>>> = virtualClassRepository.getAllKelas()
 
@@ -56,6 +82,22 @@ class VirtualClassInteractor(
     override suspend fun insertSubmission(submission: SubmissionEntity): Flow<Resource<String>> =
         virtualClassRepository.insertSubmission(submission)
 
+    override fun getNotFinishedTasks(
+        nim: Int,
+        kelasId: String,
+    ): Flow<Resource<List<Tugas>>> = virtualClassRepository.getNotFinishedTasks(nim, kelasId)
+
+    override fun getLateTasks(
+        nim: Int,
+        kelasId: String,
+    ): Flow<Resource<List<Tugas>>> = virtualClassRepository.getLateTasks(nim, kelasId)
+
+    override fun getActiveAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>> =
+        virtualClassRepository.getActiveAssignmentsForDosen(nidn)
+
+    override fun getPastDeadlineAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>> =
+        virtualClassRepository.getPastDeadlineAssignmentsForDosen(nidn)
+
     override fun getForumsByClass(kelasId: String): Flow<Resource<List<Forum>>> = virtualClassRepository.getForumsByClass(kelasId)
 
     override fun getPostsByForum(forumId: Int): Flow<Resource<List<Postingan>>> = virtualClassRepository.getPostsByForum(forumId)
@@ -78,24 +120,8 @@ class VirtualClassInteractor(
 
     override fun getAllSchedulesByNidn(nidn: Int): Flow<Resource<List<Kelas>>> = virtualClassRepository.getAllSchedulesByNidn(nidn)
 
-    override fun getNotFinishedTasks(
+    override fun getAttendanceStreak(
         nim: Int,
         kelasId: String,
-    ): Flow<Resource<List<Tugas>>> = virtualClassRepository.getNotFinishedTasks(nim, kelasId)
-
-    override fun getLateTasks(
-        nim: Int,
-        kelasId: String,
-    ): Flow<Resource<List<Tugas>>> = virtualClassRepository.getLateTasks(nim, kelasId)
-
-    override fun getActiveAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>> =
-        virtualClassRepository.getActiveAssignmentsForDosen(nidn)
-
-    override fun getPastDeadlineAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>> =
-        virtualClassRepository.getPastDeadlineAssignmentsForDosen(nidn)
-
-    override suspend fun updateMahasiswaProfile(mahasiswa: Mahasiswa): Flow<Resource<String>> =
-        virtualClassRepository.updateMahasiswaProfile(mahasiswa)
-
-    override suspend fun updateDosenProfile(dosen: Dosen): Flow<Resource<String>> = virtualClassRepository.updateDosenProfile(dosen)
+    ): Flow<Resource<Int>> = virtualClassRepository.getAttendanceStreak(nim, kelasId)
 }

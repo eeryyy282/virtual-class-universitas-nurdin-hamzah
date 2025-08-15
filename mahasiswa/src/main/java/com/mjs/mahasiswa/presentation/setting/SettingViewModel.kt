@@ -4,9 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.mjs.core.data.Resource
-import com.mjs.core.data.source.local.pref.AppPreference
 import com.mjs.core.domain.model.Mahasiswa
-import com.mjs.core.domain.repository.IVirtualClassRepository
 import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,9 +12,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class SettingViewModel(
-    private val virtualClassRepository: IVirtualClassRepository,
     private val virtualClassUseCase: VirtualClassUseCase,
-    private val appPreference: AppPreference,
 ) : ViewModel() {
     val getThemeSetting = virtualClassUseCase.getThemeSetting().asLiveData()
     private val _mahasiswaData = MutableStateFlow<Resource<Mahasiswa>?>(null)
@@ -34,9 +30,10 @@ class SettingViewModel(
 
     private fun fetchMahasiswaData() {
         viewModelScope.launch {
-            val nim = appPreference.getLoggedInUserId().firstOrNull()
+            val nim = virtualClassUseCase.getLoggedInUserId().firstOrNull()
+
             if (nim != null) {
-                virtualClassRepository.getMahasiswaByNim(nim).collect {
+                virtualClassUseCase.getMahasiswaByNim(nim).collect {
                     _mahasiswaData.value = it
                 }
             }
@@ -45,7 +42,7 @@ class SettingViewModel(
 
     fun logoutUser() {
         viewModelScope.launch {
-            appPreference.clearLoginSession()
+            virtualClassUseCase.clearLoginSession()
         }
     }
 }

@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.mjs.core.data.Resource
-import com.mjs.core.data.source.local.pref.AppPreference
 import com.mjs.core.domain.model.Dosen
 import com.mjs.core.domain.model.Mahasiswa
 import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
@@ -15,7 +14,6 @@ import kotlinx.coroutines.launch
 
 class ProfileSettingsViewModel(
     private val virtualClassUseCase: VirtualClassUseCase,
-    private val appPreference: AppPreference,
 ) : ViewModel() {
     val getThemeSetting = virtualClassUseCase.getThemeSetting().asLiveData()
 
@@ -30,15 +28,15 @@ class ProfileSettingsViewModel(
 
     fun loadProfile() {
         viewModelScope.launch {
-            val userId = appPreference.getLoggedInUserId().first()
-            val userType = appPreference.getLoggedInUserType().first()
+            val userId = virtualClassUseCase.getLoggedInUserId().first()
+            val userType = virtualClassUseCase.getLoggedInUserType().first()
 
             if (userId != null && userType != null) {
-                if (userType == AppPreference.USER_TYPE_MAHASISWA) {
+                if (userType == VirtualClassUseCase.USER_TYPE_MAHASISWA) {
                     virtualClassUseCase.getMahasiswaByNim(userId).collect {
                         _mahasiswaProfile.value = it
                     }
-                } else if (userType == AppPreference.USER_TYPE_DOSEN) {
+                } else if (userType == VirtualClassUseCase.USER_TYPE_DOSEN) {
                     virtualClassUseCase.getDosenByNidn(userId).collect {
                         _dosenProfile.value = it
                     }
@@ -52,12 +50,12 @@ class ProfileSettingsViewModel(
         email: String,
     ) {
         viewModelScope.launch {
-            val userId = appPreference.getLoggedInUserId().first()
-            val userType = appPreference.getLoggedInUserType().first()
+            val userId = virtualClassUseCase.getLoggedInUserId().first()
+            val userType = virtualClassUseCase.getLoggedInUserType().first()
 
             if (userId != null && userType != null) {
                 _updateProfileResult.value = Resource.Loading()
-                if (userType == AppPreference.USER_TYPE_MAHASISWA) {
+                if (userType == VirtualClassUseCase.USER_TYPE_MAHASISWA) {
                     val currentMahasiswa = mahasiswaProfile.value?.data
                     if (currentMahasiswa != null) {
                         val updatedMahasiswa = currentMahasiswa.copy(nama = nama, email = email)
@@ -68,7 +66,7 @@ class ProfileSettingsViewModel(
                         _updateProfileResult.value =
                             Resource.Error("Data mahasiswa tidak ditemukan")
                     }
-                } else if (userType == AppPreference.USER_TYPE_DOSEN) {
+                } else if (userType == VirtualClassUseCase.USER_TYPE_DOSEN) {
                     val currentDosen = dosenProfile.value?.data
                     if (currentDosen != null) {
                         val updatedDosen = currentDosen.copy(nama = nama, email = email)

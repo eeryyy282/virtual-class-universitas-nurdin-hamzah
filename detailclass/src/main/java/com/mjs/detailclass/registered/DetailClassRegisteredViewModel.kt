@@ -25,6 +25,29 @@ class DetailClassRegisteredViewModel(
     private val _leaveClassStatus = MutableLiveData<Resource<String>>()
     val leaveClassStatus: LiveData<Resource<String>> = _leaveClassStatus
 
+    private val _loggedInUserId = MutableLiveData<Int?>()
+    val loggedInUserId: LiveData<Int?> = _loggedInUserId
+
+    private val _loggedInUserType = MutableLiveData<String?>()
+    val loggedInUserType: LiveData<String?> = _loggedInUserType
+
+    init {
+        fetchLoggedInUserDetails()
+    }
+
+    private fun fetchLoggedInUserDetails() {
+        viewModelScope.launch {
+            virtualClassUseCase.getLoggedInUserId().collect { userId ->
+                _loggedInUserId.value = userId
+            }
+        }
+        viewModelScope.launch {
+            virtualClassUseCase.getLoggedInUserType().collect { userType ->
+                _loggedInUserType.value = userType
+            }
+        }
+    }
+
     fun fetchClassDetails(kelasId: String) {
         viewModelScope.launch {
             _kelasDetails.value = Resource.Loading()

@@ -10,6 +10,7 @@ import com.mjs.core.data.source.local.entity.KelasEntity
 import com.mjs.core.data.source.local.entity.MahasiswaEntity
 import com.mjs.core.data.source.local.entity.PostEntity
 import com.mjs.core.data.source.local.entity.SubmissionEntity
+import com.mjs.core.data.source.local.pref.AppPreference
 import com.mjs.core.domain.model.Dosen
 import com.mjs.core.domain.model.Forum
 import com.mjs.core.domain.model.Kehadiran
@@ -42,9 +43,88 @@ class VirtualClassRepository(
         return dateFormat.format(Date())
     }
 
+    override fun getLoginStatus(): Flow<Boolean> = localDataSource.getLoginStatus()
+
+    override suspend fun saveLoginSession(
+        userId: Int,
+        userType: String,
+    ) {
+        localDataSource.saveLoginSession(userId, userType)
+    }
+
+    override suspend fun clearLoginSession() {
+        localDataSource.clearLoginSession()
+    }
+
+    override fun loginDosen(
+        nidn: String,
+        password: String,
+    ): Flow<Resource<Dosen>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                val nidnInt = nidn.toIntOrNull()
+                if (nidnInt == null) {
+                    emit(Resource.Error("Format NIDN tidak valid."))
+                    return@flow
+                }
+
+                val dosenEntity = localDataSource.getDosenByNidn(nidnInt).first()
+                if (dosenEntity != null) {
+                    if (dosenEntity.password == password) {
+                        saveLoginSession(dosenEntity.nidn, AppPreference.USER_TYPE_DOSEN)
+                        emit(Resource.Success(DataMapper.mapDosenEntityToDomain(dosenEntity)))
+                    } else {
+                        emit(Resource.Error("Password salah."))
+                    }
+                } else {
+                    emit(Resource.Error("Dosen dengan NIDN $nidn tidak ditemukan."))
+                }
+            } catch (_: NumberFormatException) {
+                emit(Resource.Error("Format NIDN tidak valid."))
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Terjadi kesalahan saat login dosen."))
+            }
+        }
+
+    override fun loginMahasiswa(
+        nim: String,
+        password: String,
+    ): Flow<Resource<Mahasiswa>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                val nimInt = nim.toIntOrNull()
+                if (nimInt == null) {
+                    emit(Resource.Error("Format NIM tidak valid."))
+                    return@flow
+                }
+
+                val mahasiswaEntity = localDataSource.getMahasiswaByNim(nimInt).first()
+                if (mahasiswaEntity != null) {
+                    if (mahasiswaEntity.password == password) {
+                        saveLoginSession(mahasiswaEntity.nim, AppPreference.USER_TYPE_MAHASISWA)
+                        emit(Resource.Success(DataMapper.mapMahasiswaEntityToDomain(mahasiswaEntity)))
+                    } else {
+                        emit(Resource.Error("Password salah."))
+                    }
+                } else {
+                    emit(Resource.Error("Mahasiswa dengan NIM $nim tidak ditemukan."))
+                }
+            } catch (_: NumberFormatException) {
+                emit(Resource.Error("Format NIM tidak valid."))
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Terjadi kesalahan saat login mahasiswa."))
+            }
+        }
+
     override fun getThemeSetting(): Flow<Boolean> = localDataSource.getThemeSetting()
 
     override suspend fun saveThemeSetting(isDarkModeActive: Boolean) = localDataSource.saveThemeSetting(isDarkModeActive)
+
+    override fun getLoggedInUserId(): Flow<Int?> = localDataSource.getLoggedInUserId() // Added
+
+    override fun getLoggedInUserType(): Flow<String?> = localDataSource.getLoggedInUserType() // Added
 
     override fun getMahasiswaByNim(nim: Int): Flow<Resource<Mahasiswa>> =
         flow {
@@ -62,7 +142,7 @@ class VirtualClassRepository(
         localDataSource
             .getDosenByNidn(nidn)
             .take(1)
-            .map<DosenEntity?, Resource<Dosen>> { entity ->
+            .map { entity ->
                 if (entity != null) {
                     Resource.Success(DataMapper.mapDosenEntityToDomain(entity))
                 } else {

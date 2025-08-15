@@ -17,18 +17,15 @@ import com.mjs.detailclass.R
 import com.mjs.detailclass.databinding.ActivityDetailClassRegisteredBinding
 import com.mjs.detailclass.di.detailClassModule
 import com.mjs.detailclass.utils.TimeFormat
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
 
 class DetailClassRegisteredActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailClassRegisteredBinding
     private val detailClassRegisteredViewModel: DetailClassRegisteredViewModel by viewModel()
-    private val appPreference: AppPreference by inject()
     private var kelasId: String? = null
     private var currentNim: Int? = null
+    private var currentUserType: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,15 +42,21 @@ class DetailClassRegisteredActivity : AppCompatActivity() {
         }
 
         kelasId = intent.getStringExtra(EXTRA_KELAS_ID)
-        runBlocking {
-            currentNim = appPreference.getLoggedInUserId().first()
+
+        detailClassRegisteredViewModel.loggedInUserId.observe(this) { userId ->
+            currentNim = userId
+        }
+
+        detailClassRegisteredViewModel.loggedInUserType.observe(this) { userType ->
+            currentUserType = userType
+            setupButtonVisibility()
+            setupActionListeners()
         }
 
         checkDarkMode()
         observeClassDetails()
         observeDosenDetails()
         observeLeaveClassStatus()
-        setupActionListeners()
 
         if (kelasId != null) {
             detailClassRegisteredViewModel.fetchClassDetails(kelasId!!)
@@ -63,6 +66,15 @@ class DetailClassRegisteredActivity : AppCompatActivity() {
                 .show()
             binding.progressBarDetailClass.visibility = View.GONE
             finish()
+        }
+    }
+
+    private fun setupButtonVisibility() {
+        if (currentUserType != AppPreference.USER_TYPE_MAHASISWA) {
+            binding.btnLeaveClassroom.visibility = View.GONE
+        } else {
+            binding.btnLeaveClassroom.visibility =
+                View.VISIBLE
         }
     }
 
@@ -163,8 +175,12 @@ class DetailClassRegisteredActivity : AppCompatActivity() {
     }
 
     private fun setupActionListeners() {
-        binding.btnLeaveClassroom.setOnClickListener {
-            showLeaveClassConfirmationDialog()
+        if (currentUserType == AppPreference.USER_TYPE_MAHASISWA) {
+            binding.btnLeaveClassroom.setOnClickListener {
+                showLeaveClassConfirmationDialog()
+            }
+        } else {
+            binding.btnLeaveClassroom.setOnClickListener(null)
         }
     }
 

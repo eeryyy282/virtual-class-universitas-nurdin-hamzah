@@ -47,7 +47,7 @@ class SettingFragment : Fragment() {
                         Toast
                             .makeText(
                                 context,
-                                it.message ?: "Terjadi kesalahan",
+                                it.message ?: getString(R.string.error),
                                 Toast.LENGTH_SHORT,
                             ).show()
                     }
@@ -68,8 +68,11 @@ class SettingFragment : Fragment() {
                                 .into(binding.photoProfileSetting)
                         } else {
                             Toast
-                                .makeText(context, "Gagal memuat data dosen", Toast.LENGTH_SHORT)
-                                .show()
+                                .makeText(
+                                    context,
+                                    getString(R.string.failed_to_load_lecture_data),
+                                    Toast.LENGTH_SHORT,
+                                ).show()
                         }
                     }
 

@@ -100,4 +100,7 @@
     <string name="failed_to_load_student_data">Gagal memuat data mahasiswa</string>
     <string name="error_load_profile">Terjadi kesalahan saat memuat profil</string>
     <string name="failed_to_load_streak_data">Gagal memuat data streak</string>
+    <string name="error_occurred">Terjadi Error</string>
+    <string name="unknown_day">Hari tidak diketahui</string>
+    <string name="error_load_task">Error memuat tugas</string>
 </resources>

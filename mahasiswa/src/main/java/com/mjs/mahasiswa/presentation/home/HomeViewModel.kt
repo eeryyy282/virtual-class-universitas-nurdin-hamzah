@@ -3,11 +3,10 @@ package com.mjs.mahasiswa.presentation.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mjs.core.data.Resource
-import com.mjs.core.data.source.local.pref.AppPreference
 import com.mjs.core.domain.model.Kelas
 import com.mjs.core.domain.model.Mahasiswa
 import com.mjs.core.domain.model.Tugas
-import com.mjs.core.domain.repository.IVirtualClassRepository
+import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -21,8 +20,7 @@ import java.util.Date
 import java.util.Locale
 
 class HomeViewModel(
-    private val virtualClassRepository: IVirtualClassRepository,
-    private val appPreference: AppPreference,
+    private val virtualClassUseCase: VirtualClassUseCase,
 ) : ViewModel() {
     private val _mahasiswaData = MutableStateFlow<Resource<Mahasiswa>?>(null)
     val mahasiswaData: StateFlow<Resource<Mahasiswa>?> = _mahasiswaData
@@ -50,9 +48,9 @@ class HomeViewModel(
 
     private fun fetchMahasiswaData() {
         viewModelScope.launch {
-            val nim = appPreference.getLoggedInUserId().firstOrNull()
+            val nim = virtualClassUseCase.getLoggedInUserId().firstOrNull()
             if (nim != null) {
-                virtualClassRepository.getMahasiswaByNim(nim).collect {
+                virtualClassUseCase.getMahasiswaByNim(nim).collect {
                     _mahasiswaData.value = it
                 }
             }
@@ -62,15 +60,14 @@ class HomeViewModel(
     private fun fetchAttendanceStreak() {
         viewModelScope.launch {
             _attendanceStreakState.value = Resource.Loading()
-            val nim = appPreference.getLoggedInUserId().firstOrNull()
+            val nim = virtualClassUseCase.getLoggedInUserId().firstOrNull()
 
             if (nim == null) {
                 _attendanceStreakState.value = Resource.Error("NIM pengguna tidak ditemukan.")
                 return@launch
             }
-
             val enrolledClassesResource =
-                virtualClassRepository
+                virtualClassUseCase
                     .getEnrolledClasses(nim)
                     .filter { it !is Resource.Loading }
                     .firstOrNull()
@@ -78,8 +75,8 @@ class HomeViewModel(
             if (enrolledClassesResource is Resource.Success) {
                 val enrollments = enrolledClassesResource.data
                 if (!enrollments.isNullOrEmpty()) {
-                    val firstClassId = enrollments[0].kelasId
-                    virtualClassRepository.getAttendanceStreak(nim, firstClassId).collect {
+                    val firstKelasId = enrollments[0].kelasId
+                    virtualClassUseCase.getAttendanceStreak(nim, firstKelasId).collect {
                         _attendanceStreakState.value = it
                     }
                 } else {
@@ -89,11 +86,11 @@ class HomeViewModel(
                 _attendanceStreakState.value =
                     Resource.Error(
                         enrolledClassesResource.message
-                            ?: "Gagal memuat kelas yang diikuti untuk streak.",
+                            ?: "Gagal memuat kelas yang diikuti untuk mengambil streak.",
                     )
             } else {
                 _attendanceStreakState.value =
-                    Resource.Success(0)
+                    Resource.Error("Tidak dapat memuat data kelas untuk streak.")
             }
         }
     }
@@ -101,7 +98,7 @@ class HomeViewModel(
     private fun fetchTugasAndKelasMahasiswa() {
         viewModelScope.launch {
             _tugasListState.value = Resource.Loading()
-            val nim = appPreference.getLoggedInUserId().firstOrNull()
+            val nim = virtualClassUseCase.getLoggedInUserId().firstOrNull()
 
             if (nim == null) {
                 _tugasListState.value = Resource.Error("NIM pengguna tidak ditemukan.")
@@ -110,14 +107,14 @@ class HomeViewModel(
 
             val enrolledClassesDeferred =
                 async {
-                    virtualClassRepository
+                    virtualClassUseCase
                         .getEnrolledClasses(nim)
                         .filter { it !is Resource.Loading }
                         .firstOrNull()
                 }
             val allKelasDeferred =
                 async {
-                    virtualClassRepository
+                    virtualClassUseCase
                         .getAllKelas()
                         .filter { it !is Resource.Loading }
                         .firstOrNull()
@@ -161,7 +158,7 @@ class HomeViewModel(
                     val deferredTugasResources =
                         enrollments.map { enrollment ->
                             async {
-                                virtualClassRepository
+                                virtualClassUseCase
                                     .getAssignmentsByClass(enrollment.kelasId)
                                     .filter { it !is Resource.Loading }
                                     .firstOrNull()
@@ -251,9 +248,9 @@ class HomeViewModel(
     private fun fetchTodaySchedule() {
         viewModelScope.launch {
             _todayScheduleState.value = Resource.Loading()
-            val nim = appPreference.getLoggedInUserId().firstOrNull()
+            val nim = virtualClassUseCase.getLoggedInUserId().firstOrNull()
             if (nim != null) {
-                virtualClassRepository.getTodaySchedule(nim).collect {
+                virtualClassUseCase.getTodaySchedule(nim).collect {
                     _todayScheduleState.value = it
                 }
             } else {

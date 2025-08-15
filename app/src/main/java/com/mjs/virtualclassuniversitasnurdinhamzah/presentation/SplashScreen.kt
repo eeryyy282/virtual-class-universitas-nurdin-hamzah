@@ -12,7 +12,7 @@ import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import com.mjs.core.data.source.local.pref.AppPreference
+import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
 import com.mjs.virtual_class_universitas_nurdin_hamzah.R
 import com.mjs.virtual_class_universitas_nurdin_hamzah.databinding.ActivitySplashScreenBinding
 import kotlinx.coroutines.flow.first
@@ -47,12 +47,12 @@ class SplashScreen : AppCompatActivity() {
 
             if (isLoggedIn) {
                 when (userType) {
-                    AppPreference.USER_TYPE_MAHASISWA -> {
+                    VirtualClassUseCase.USER_TYPE_MAHASISWA -> {
                         val uri = "mahasiswa://mainactivity".toUri()
                         navigateTo(uri)
                     }
 
-                    AppPreference.USER_TYPE_DOSEN -> {
+                    VirtualClassUseCase.USER_TYPE_DOSEN -> {
                         val uri = "dosen://mainactivity".toUri()
                         navigateTo(uri)
                     }

@@ -7,6 +7,7 @@ import com.mjs.core.data.source.local.entity.EnrollmentEntity
 import com.mjs.core.data.source.local.entity.MahasiswaEntity
 import com.mjs.core.data.source.local.entity.PostEntity
 import com.mjs.core.data.source.local.entity.SubmissionEntity
+import com.mjs.core.data.source.local.pref.AppPreference
 import com.mjs.core.domain.model.Dosen
 import com.mjs.core.domain.model.Forum
 import com.mjs.core.domain.model.Kehadiran
@@ -22,11 +23,38 @@ interface VirtualClassUseCase {
 
     suspend fun saveThemeSetting(isDarkModeActive: Boolean)
 
+    fun getLoggedInUserId(): Flow<Int?>
+
+    fun getLoggedInUserType(): Flow<String?>
+
+    fun getLoginStatus(): Flow<Boolean>
+
+    suspend fun saveLoginSession(
+        userId: Int,
+        userType: String,
+    )
+
+    suspend fun clearLoginSession()
+
+    fun loginDosen(
+        nidn: String,
+        password: String,
+    ): Flow<Resource<Dosen>>
+
+    fun loginMahasiswa(
+        nim: String,
+        password: String,
+    ): Flow<Resource<Mahasiswa>>
+
     fun getMahasiswaByNim(nim: Int): Flow<Resource<Mahasiswa>>
 
     fun getDosenByNidn(nidn: Int): Flow<Resource<Dosen>>
 
     suspend fun registerMahasiswa(mahasiswa: MahasiswaEntity): Flow<Resource<String>>
+
+    suspend fun updateMahasiswaProfile(mahasiswa: Mahasiswa): Flow<Resource<String>>
+
+    suspend fun updateDosenProfile(dosen: Dosen): Flow<Resource<String>>
 
     fun getAllKelas(): Flow<Resource<List<Kelas>>>
 
@@ -46,6 +74,20 @@ interface VirtualClassUseCase {
     suspend fun insertAssignment(assignment: AssignmentEntity): Flow<Resource<String>>
 
     suspend fun insertSubmission(submission: SubmissionEntity): Flow<Resource<String>>
+
+    fun getNotFinishedTasks(
+        nim: Int,
+        kelasId: String,
+    ): Flow<Resource<List<Tugas>>>
+
+    fun getLateTasks(
+        nim: Int,
+        kelasId: String,
+    ): Flow<Resource<List<Tugas>>>
+
+    fun getActiveAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>>
+
+    fun getPastDeadlineAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>>
 
     fun getForumsByClass(kelasId: String): Flow<Resource<List<Forum>>>
 
@@ -68,21 +110,13 @@ interface VirtualClassUseCase {
 
     fun getAllSchedulesByNidn(nidn: Int): Flow<Resource<List<Kelas>>>
 
-    fun getNotFinishedTasks(
+    fun getAttendanceStreak(
         nim: Int,
         kelasId: String,
-    ): Flow<Resource<List<Tugas>>>
+    ): Flow<Resource<Int>>
 
-    fun getLateTasks(
-        nim: Int,
-        kelasId: String,
-    ): Flow<Resource<List<Tugas>>>
-
-    fun getActiveAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>>
-
-    fun getPastDeadlineAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>>
-
-    suspend fun updateMahasiswaProfile(mahasiswa: Mahasiswa): Flow<Resource<String>>
-
-    suspend fun updateDosenProfile(dosen: Dosen): Flow<Resource<String>>
+    companion object {
+        const val USER_TYPE_MAHASISWA = AppPreference.USER_TYPE_MAHASISWA
+        const val USER_TYPE_DOSEN = AppPreference.USER_TYPE_DOSEN
+    }
 }

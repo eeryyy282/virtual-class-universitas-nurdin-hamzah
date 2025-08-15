@@ -1,17 +1,21 @@
 package com.mjs.dosen.presentation.home
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.mjs.core.data.Resource
 import com.mjs.core.ui.task.TaskHomeAdapter
+import com.mjs.detailclass.registered.DetailClassRegisteredActivity
 import com.mjs.dosen.R
 import com.mjs.dosen.databinding.FragmentHomeBinding
 import kotlinx.coroutines.flow.collectLatest
@@ -44,6 +48,13 @@ class HomeFragment : Fragment() {
         setupRecyclerViewTugasDosen()
         observeTugasDosen()
         observeTodaySchedule()
+        setupTaskNavigation()
+    }
+
+    private fun setupTaskNavigation() {
+        binding.ibtnDetailTask.setOnClickListener {
+            findNavController().navigate(R.id.action_navigation_home_to_navigation_task)
+        }
     }
 
     private fun setupProfileDosen() {
@@ -183,20 +194,30 @@ class HomeFragment : Fragment() {
                             binding.tvSubjectScheduleHome.visibility = View.GONE
                             binding.btnScheduleDetailHome.visibility = View.GONE
                         } else {
+                            val todaySchedule = scheduleList[0]
                             binding.ivDoesntHaveAnSchedule.visibility = View.GONE
                             binding.tvDoesntHaveAnSchedule.visibility = View.GONE
                             binding.tvScheduleClassroom.visibility = View.VISIBLE
                             binding.tvTimeScheduleHome.visibility = View.VISIBLE
                             binding.tvSubjectScheduleHome.visibility = View.VISIBLE
                             binding.btnScheduleDetailHome.visibility = View.VISIBLE
-                            binding.tvScheduleClassroom.text = scheduleList[0].ruang
+                            binding.tvScheduleClassroom.text = todaySchedule.ruang
                             binding.tvTimeScheduleHome.text =
-                                scheduleList[0]
+                                todaySchedule
                                     .jadwal
                                     .split(",")
                                     .getOrNull(1)
                                     ?.trim()
-                            binding.tvSubjectScheduleHome.text = scheduleList[0].namaKelas
+                            binding.tvSubjectScheduleHome.text = todaySchedule.namaKelas
+                            binding.btnScheduleDetailHome.setOnClickListener {
+                                val uri = "detail_class://detail_class_registered_activity".toUri()
+                                val intent = Intent(Intent.ACTION_VIEW, uri)
+                                intent.putExtra(
+                                    DetailClassRegisteredActivity.EXTRA_KELAS_ID,
+                                    todaySchedule.kelasId,
+                                )
+                                startActivity(intent)
+                            }
                         }
                     }
 

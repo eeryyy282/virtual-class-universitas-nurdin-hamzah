@@ -9,7 +9,11 @@
         android:id="@+id/navigation_home"
         android:name="com.mjs.mahasiswa.presentation.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_task"
+            app:destination="@id/navigation_task" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_task"

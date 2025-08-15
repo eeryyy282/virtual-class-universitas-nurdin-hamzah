@@ -47,6 +47,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(project(":core"))
+    implementation(project(":detailclass"))
 
     debugImplementation(libs.leakcanary.android)
 

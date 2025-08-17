@@ -28,6 +28,8 @@ object DataMapper {
             jurusan = input.jurusan,
         )
 
+    fun mapMahasiswaEntitiesToDomains(input: List<MahasiswaEntity>): List<Mahasiswa> = input.map { mapMahasiswaEntityToDomain(it) }
+
     fun mapDosenEntityToDomain(input: DosenEntity): Dosen =
         Dosen(
             nidn = input.nidn,

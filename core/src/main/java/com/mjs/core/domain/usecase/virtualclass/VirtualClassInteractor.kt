@@ -135,4 +135,10 @@ class VirtualClassInteractor(
         nim: Int,
         kelasId: String,
     ): Flow<Resource<Int>> = virtualClassRepository.getAttendanceStreak(nim, kelasId)
+
+    override fun getMahasiswaByKelasId(kelasId: String): Flow<Resource<List<Mahasiswa>>> =
+        virtualClassRepository.getMahasiswaByKelasId(kelasId)
+
+    override fun getMahasiswaCountByKelasId(kelasId: String): Flow<Resource<Int>> =
+        virtualClassRepository.getMahasiswaCountByKelasId(kelasId)
 }

@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.mjs.core.data.source.local.entity.EnrollmentEntity
 import com.mjs.core.data.source.local.entity.KelasEntity
+import com.mjs.core.data.source.local.entity.MahasiswaEntity
 import com.mjs.core.data.source.local.entity.MaterialEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -46,4 +47,10 @@ interface ClassroomDao {
 
     @Query("SELECT * FROM classes WHERE jurusan = :jurusan")
     fun getAllKelasByJurusan(jurusan: String): Flow<List<KelasEntity>>
+
+    @Query("SELECT m.* FROM mahasiswa m INNER JOIN enrollments e ON m.nim = e.nim WHERE e.kelas_id = :kelasId")
+    fun getMahasiswaByKelasId(kelasId: String): Flow<List<MahasiswaEntity>>
+
+    @Query("SELECT COUNT(nim) FROM enrollments WHERE kelas_id = :kelasId")
+    fun getMahasiswaCountByKelasId(kelasId: String): Flow<Int>
 }

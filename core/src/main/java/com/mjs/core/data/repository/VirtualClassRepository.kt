@@ -619,4 +619,26 @@ class VirtualClassRepository(
                 emit(Resource.Error(e.message ?: "Gagal memperbarui profil"))
             }
         }
+
+    override fun getMahasiswaByKelasId(kelasId: String): Flow<Resource<List<Mahasiswa>>> =
+        flow {
+            emit(Resource.Loading())
+            localDataSource
+                .getMahasiswaByKelasId(kelasId)
+                .map {
+                    DataMapper.mapMahasiswaEntitiesToDomains(it)
+                }.collect {
+                    emit(Resource.Success(it))
+                }
+        }
+
+    override fun getMahasiswaCountByKelasId(kelasId: String): Flow<Resource<Int>> =
+        flow {
+            emit(Resource.Loading())
+            localDataSource
+                .getMahasiswaCountByKelasId(kelasId)
+                .collect {
+                    emit(Resource.Success(it))
+                }
+        }
 }

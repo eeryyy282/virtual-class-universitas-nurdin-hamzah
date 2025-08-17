@@ -117,4 +117,8 @@ interface IVirtualClassRepository {
     fun getAllSchedulesByNim(nim: Int): Flow<Resource<List<Kelas>>>
 
     fun getAllSchedulesByNidn(nidn: Int): Flow<Resource<List<Kelas>>>
+
+    fun getMahasiswaByKelasId(kelasId: String): Flow<Resource<List<Mahasiswa>>>
+
+    fun getMahasiswaCountByKelasId(kelasId: String): Flow<Resource<Int>>
 }

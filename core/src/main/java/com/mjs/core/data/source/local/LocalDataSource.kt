@@ -132,4 +132,8 @@ class LocalDataSource(
         kelasIds: List<String>,
         currentDate: String,
     ): Flow<List<AssignmentEntity>> = taskDao.getAssignmentsByKelasIdsAndPastDeadline(kelasIds, currentDate)
+
+    fun getMahasiswaByKelasId(kelasId: String): Flow<List<MahasiswaEntity>> = classroomDao.getMahasiswaByKelasId(kelasId)
+
+    fun getMahasiswaCountByKelasId(kelasId: String): Flow<Int> = classroomDao.getMahasiswaCountByKelasId(kelasId)
 }

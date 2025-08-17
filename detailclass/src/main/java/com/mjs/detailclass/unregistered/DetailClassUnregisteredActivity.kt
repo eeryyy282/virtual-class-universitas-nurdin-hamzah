@@ -9,9 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.mjs.core.data.Resource
 import com.mjs.core.domain.model.Kelas
+import com.mjs.core.ui.MahasiswaListAdapter
 import com.mjs.detailclass.R
 import com.mjs.detailclass.databinding.ActivityDetailClassUnregisteredBinding
 import com.mjs.detailclass.di.detailClassModule
@@ -22,6 +24,7 @@ import org.koin.core.context.loadKoinModules
 class DetailClassUnregisteredActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailClassUnregisteredBinding
     private val detailClassViewModel: DetailClassUnregisteredViewModel by viewModel()
+    private lateinit var mahasiswaListAdapter: MahasiswaListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +41,7 @@ class DetailClassUnregisteredActivity : AppCompatActivity() {
         }
 
         checkDarkMode()
+        setupRecyclerView()
 
         val kelasId = intent.getStringExtra("kelasId")
         if (kelasId != null) {
@@ -49,6 +53,78 @@ class DetailClassUnregisteredActivity : AppCompatActivity() {
 
         observeKelasDetails()
         observeDosenDetails()
+        observeMahasiswaList()
+        observeMahasiswaCount()
+    }
+
+    private fun setupRecyclerView() {
+        mahasiswaListAdapter =
+            MahasiswaListAdapter { mahasiswa ->
+            }
+        binding.rvMemberClassroom.apply {
+            layoutManager = LinearLayoutManager(this@DetailClassUnregisteredActivity)
+            adapter = mahasiswaListAdapter
+        }
+    }
+
+    private fun observeMahasiswaList() {
+        detailClassViewModel.mahasiswaList.observe(this) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    binding.progressBarDetailClass.visibility = View.VISIBLE
+                }
+
+                is Resource.Success -> {
+                    binding.progressBarDetailClass.visibility = View.GONE
+                    resource.data?.let {
+                        mahasiswaListAdapter.submitList(it)
+                    }
+                }
+
+                is Resource.Error -> {
+                    binding.progressBarDetailClass.visibility = View.GONE
+                    Toast
+                        .makeText(
+                            this,
+                            resource.message ?: "Gagal memuat daftar mahasiswa",
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                }
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun observeMahasiswaCount() {
+        detailClassViewModel.mahasiswaCount.observe(this) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                }
+
+                is Resource.Success -> {
+                    resource.data?.let {
+                        if (it != 0) {
+                            binding.tvMemberClassroomCountTotal.text =
+                                "$it Mahasiswa bergabung di kelas ini."
+                        } else {
+                            binding.tvMemberClassroomCountTotal.text =
+                                "Belum ada mahasiswa yang bergabung di kelas ini."
+                        }
+                    }
+                }
+
+                is Resource.Error -> {
+                    binding.tvMemberClassroomCountTotal.text =
+                        "Terjadi kesalahan saat memuat jumlah mahasiswa."
+                    Toast
+                        .makeText(
+                            this,
+                            resource.message ?: "Gagal memuat jumlah mahasiswa",
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                }
+            }
+        }
     }
 
     private fun observeKelasDetails() {

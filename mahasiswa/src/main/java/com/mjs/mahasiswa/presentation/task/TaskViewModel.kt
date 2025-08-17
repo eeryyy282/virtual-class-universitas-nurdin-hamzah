@@ -44,13 +44,13 @@ class TaskViewModel(
                                 )
 
                             is Resource.Success -> {
-                                val enrolledKelasIds =
+                                val approvedEnrolledKelasIds =
                                     enrolledClassesDetailsResult.data?.first ?: emptyList()
-                                val allKelasMap =
+                                val approvedAllKelasMap =
                                     enrolledClassesDetailsResult.data?.second ?: emptyMap()
-                                _enrolledCoursesMapState.value = allKelasMap
+                                _enrolledCoursesMapState.value = approvedAllKelasMap
 
-                                if (enrolledKelasIds.isEmpty()) {
+                                if (approvedEnrolledKelasIds.isEmpty()) {
                                     flowOf(
                                         Resource.Success(
                                             Pair(
@@ -61,11 +61,11 @@ class TaskViewModel(
                                     )
                                 } else {
                                     val notFinishedTasksFlows =
-                                        enrolledKelasIds.map { kelasId ->
+                                        approvedEnrolledKelasIds.map { kelasId ->
                                             virtualClassUseCase.getNotFinishedTasks(nim, kelasId)
                                         }
                                     val lateTasksFlows =
-                                        enrolledKelasIds.map { kelasId ->
+                                        approvedEnrolledKelasIds.map { kelasId ->
                                             virtualClassUseCase.getLateTasks(nim, kelasId)
                                         }
 
@@ -91,18 +91,22 @@ class TaskViewModel(
             .getEnrolledClasses(nim)
             .combine(virtualClassUseCase.getAllKelas()) { enrolledClassesResource, allKelasResource ->
                 if (enrolledClassesResource is Resource.Success && allKelasResource is Resource.Success) {
-                    val enrolledKelasIds =
-                        enrolledClassesResource.data?.map { it.kelasId } ?: emptyList()
-                    val allKelasMap =
-                        allKelasResource.data?.associate {
-                            it.kelasId to
-                                Pair(
-                                    it.namaKelas,
-                                    it.classImage,
-                                )
-                        }
+                    val approvedEnrollments =
+                        enrolledClassesResource.data?.filter { it.status == "approved" }
+                    val approvedEnrolledKelasIds =
+                        approvedEnrollments?.map { it.kelasId } ?: emptyList()
+                    val allKelasList = allKelasResource.data
+                    val approvedAllKelasMap =
+                        allKelasList
+                            ?.associate {
+                                it.kelasId to
+                                    Pair(
+                                        it.namaKelas,
+                                        it.classImage,
+                                    )
+                            }?.filterKeys { it in approvedEnrolledKelasIds }
                             ?: emptyMap()
-                    Resource.Success(Pair(enrolledKelasIds, allKelasMap))
+                    Resource.Success(Pair(approvedEnrolledKelasIds, approvedAllKelasMap))
                 } else if (enrolledClassesResource is Resource.Error) {
                     Resource.Error(
                         enrolledClassesResource.message ?: "Gagal memuat kelas yang diikuti.",

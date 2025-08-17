@@ -3,11 +3,13 @@ package com.mjs.mahasiswa.presentation.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mjs.core.data.Resource
+import com.mjs.core.data.source.local.entity.EnrollmentEntity
 import com.mjs.core.domain.model.Kelas
 import com.mjs.core.domain.model.Mahasiswa
 import com.mjs.core.domain.model.Tugas
 import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -15,9 +17,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class HomeViewModel(
     private val virtualClassUseCase: VirtualClassUseCase,
@@ -80,11 +79,17 @@ class HomeViewModel(
                                     is Resource.Success -> {
                                         val enrollments = enrolledClassesResource.data
                                         if (!enrollments.isNullOrEmpty()) {
-                                            val firstKelasId = enrollments[0].kelasId
-                                            virtualClassUseCase.getAttendanceStreak(
-                                                nim,
-                                                firstKelasId,
-                                            )
+                                            val approvedEnrollments =
+                                                enrollments.filter { it.status == "approved" }
+                                            if (approvedEnrollments.isNotEmpty()) {
+                                                val firstKelasId = approvedEnrollments[0].kelasId
+                                                virtualClassUseCase.getAttendanceStreak(
+                                                    nim,
+                                                    firstKelasId,
+                                                )
+                                            } else {
+                                                flowOf(Resource.Success(0))
+                                            }
                                         } else {
                                             flowOf(Resource.Success(0))
                                         }
@@ -116,19 +121,24 @@ class HomeViewModel(
 
             virtualClassUseCase
                 .getLoggedInUserId()
-                .flatMapLatest { nim ->
-                    if (nim == null) {
+                .flatMapLatest { loggedInNim ->
+                    if (loggedInNim == null) {
                         flowOf(Resource.Error("NIM pengguna tidak ditemukan."))
                     } else {
-                        val enrolledClassesFlow = virtualClassUseCase.getEnrolledClasses(nim)
-                        val allKelasFlow = virtualClassUseCase.getAllKelas()
+                        val enrolledClassesFlow: Flow<Resource<List<EnrollmentEntity>>> =
+                            virtualClassUseCase.getEnrolledClasses(loggedInNim)
+                        val allKelasFlow: Flow<Resource<List<Kelas>>> =
+                            virtualClassUseCase.getAllKelas()
 
                         combine(
                             enrolledClassesFlow,
                             allKelasFlow,
                         ) { enrolledClassesResource, allKelasResource ->
-                            Triple(enrolledClassesResource, allKelasResource, nim)
-                        }.flatMapLatest { (enrolledClassesResource, allKelasResource, _) ->
+                            Pair(
+                                enrolledClassesResource,
+                                allKelasResource,
+                            )
+                        }.flatMapLatest { (enrolledClassesResource, allKelasResource) ->
                             if (enrolledClassesResource is Resource.Success && allKelasResource is Resource.Success) {
                                 val enrollments = enrolledClassesResource.data
                                 val allKelasList = allKelasResource.data
@@ -142,9 +152,11 @@ class HomeViewModel(
                                         Resource.Error("Gagal memuat detail kelas untuk mata kuliah yang diikuti."),
                                     )
                                 } else {
+                                    val approvedEnrollments =
+                                        enrollments.filter { it.status == "approved" }
                                     val allKelasMap = allKelasList.associateBy { it.kelasId }
                                     _enrolledCoursesMapState.value =
-                                        enrollments
+                                        approvedEnrollments
                                             .mapNotNull { enrollment ->
                                                 allKelasMap[enrollment.kelasId]?.let {
                                                     enrollment.kelasId to
@@ -155,70 +167,46 @@ class HomeViewModel(
                                                 }
                                             }.toMap()
 
-                                    if (enrollments.isEmpty()) {
+                                    if (approvedEnrollments.isEmpty()) {
                                         flowOf(Resource.Success(emptyList()))
                                     } else {
-                                        val assignmentFlows =
-                                            enrollments.map { enrollment ->
-                                                virtualClassUseCase.getAssignmentsByClass(enrollment.kelasId)
+                                        val assignmentFlows: List<Flow<Resource<List<Tugas>>>> =
+                                            approvedEnrollments.map { enrollment ->
+                                                virtualClassUseCase.getNotFinishedTasks(
+                                                    loggedInNim,
+                                                    enrollment.kelasId,
+                                                )
                                             }
 
-                                        combine(assignmentFlows) { resources ->
-                                            val allTugas = mutableListOf<Tugas>()
-                                            var hasError = false
-                                            var errorMessage: String? = null
+                                        combine(assignmentFlows) { results: Array<Resource<List<Tugas>>> ->
+                                            val allTasks = mutableListOf<Tugas>()
+                                            var firstError: String? = null
+                                            var isLoadingCombined = false
 
-                                            resources.forEach { resource ->
+                                            results.forEach { resource ->
                                                 when (resource) {
                                                     is Resource.Success ->
-                                                        resource.data?.let {
-                                                            allTugas.addAll(
-                                                                it,
-                                                            )
-                                                        }
+                                                        allTasks.addAll(
+                                                            resource.data ?: emptyList(),
+                                                        )
 
-                                                    is Resource.Error -> {
-                                                        hasError = true
-                                                        if (errorMessage == null) {
-                                                            errorMessage =
+                                                    is Resource.Error ->
+                                                        if (firstError == null) {
+                                                            firstError =
                                                                 resource.message
                                                         }
-                                                    }
 
-                                                    is Resource.Loading -> {
-                                                    }
+                                                    is Resource.Loading -> isLoadingCombined = true
                                                 }
                                             }
-
-                                            if (allTugas.isNotEmpty()) {
-                                                val distinctTugas =
-                                                    allTugas.distinctBy { it.assignmentId }
-                                                val dateFormat =
-                                                    SimpleDateFormat(
-                                                        "yyyy-MM-dd HH:mm:ss",
-                                                        Locale.getDefault(),
+                                            when {
+                                                firstError != null ->
+                                                    Resource.Error(
+                                                        firstError,
                                                     )
-                                                val currentDate = Date()
-                                                val activeTasks =
-                                                    distinctTugas.filter {
-                                                        try {
-                                                            val deadlineDate =
-                                                                dateFormat.parse(it.tanggalSelesai)
-                                                            deadlineDate != null &&
-                                                                deadlineDate.after(
-                                                                    currentDate,
-                                                                )
-                                                        } catch (_: Exception) {
-                                                            false
-                                                        }
-                                                    }
-                                                Resource.Success(activeTasks)
-                                            } else if (hasError) {
-                                                Resource.Error(
-                                                    errorMessage ?: "Gagal memuat beberapa tugas.",
-                                                )
-                                            } else {
-                                                Resource.Success(emptyList())
+
+                                                isLoadingCombined && allTasks.isEmpty() -> Resource.Loading()
+                                                else -> Resource.Success(allTasks.distinctBy { it.assignmentId })
                                             }
                                         }
                                     }
@@ -227,14 +215,14 @@ class HomeViewModel(
                                 flowOf(
                                     Resource.Error(
                                         enrolledClassesResource.message
-                                            ?: "Gagal memuat mata kuliah yang diikuti untuk tugas.",
+                                            ?: "Gagal memuat kelas yang diikuti.",
                                     ),
                                 )
                             } else if (allKelasResource is Resource.Error) {
                                 flowOf(
                                     Resource.Error(
                                         allKelasResource.message
-                                            ?: "Gagal memuat informasi semua mata kuliah.",
+                                            ?: "Gagal memuat semua data kelas.",
                                     ),
                                 )
                             } else {
@@ -242,8 +230,8 @@ class HomeViewModel(
                             }
                         }
                     }
-                }.collectLatest {
-                    _tugasListState.value = it
+                }.collectLatest { resource: Resource<List<Tugas>> ->
+                    _tugasListState.value = resource
                 }
         }
     }
@@ -255,10 +243,10 @@ class HomeViewModel(
             virtualClassUseCase
                 .getLoggedInUserId()
                 .flatMapLatest { nim ->
-                    if (nim != null) {
-                        virtualClassUseCase.getTodaySchedule(nim)
-                    } else {
+                    if (nim == null) {
                         flowOf(Resource.Error("NIM pengguna tidak ditemukan."))
+                    } else {
+                        virtualClassUseCase.getTodaySchedule(nim)
                     }
                 }.collectLatest {
                     _todayScheduleState.value = it

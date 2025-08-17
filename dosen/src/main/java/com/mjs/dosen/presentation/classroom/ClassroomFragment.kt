@@ -8,16 +8,21 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mjs.core.data.Resource
 import com.mjs.core.ui.classroom.ClassroomAdapterDosen
 import com.mjs.dosen.R
 import com.mjs.dosen.databinding.FragmentClassroomBinding
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ClassroomFragment : Fragment() {
+    @Suppress("ktlint:standard:backing-property-naming")
     private var _binding: FragmentClassroomBinding? = null
-    val binding get() = _binding!!
+    private val binding get() = _binding!!
 
     private val classroomViewModel: ClassroomViewModel by viewModel()
     private lateinit var classroomAdapter: ClassroomAdapterDosen
@@ -59,56 +64,70 @@ class ClassroomFragment : Fragment() {
     }
 
     private fun observeClassroomData() {
-        classroomViewModel.groupedClasses.observe(viewLifecycleOwner) { resource ->
-            when (resource) {
-                is Resource.Loading -> {
-                    binding.progressBarClassroom.visibility = View.VISIBLE
-                    binding.rvClassroom.visibility = View.GONE
-                    binding.tvDoesntHaveAnClassroom.visibility = View.GONE
-                    binding.ivDoesntHaveAnClassroom.visibility = View.GONE
-                }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                classroomViewModel.groupedClasses.collect { resource ->
+                    when (resource) {
+                        is Resource.Loading -> {
+                            binding.progressBarClassroom.visibility = View.VISIBLE
+                            binding.rvClassroom.visibility = View.GONE
+                            binding.tvDoesntHaveAnClassroom.visibility = View.GONE
+                            binding.ivDoesntHaveAnClassroom.visibility = View.GONE
+                        }
 
-                is Resource.Success -> {
-                    binding.progressBarClassroom.visibility = View.GONE
-                    val groupedClasses = resource.data
-                    if (groupedClasses.isNullOrEmpty()) {
-                        binding.rvClassroom.visibility = View.GONE
-                        binding.tvDoesntHaveAnClassroom.visibility = View.VISIBLE
-                        binding.ivDoesntHaveAnClassroom.visibility = View.VISIBLE
-                    } else {
-                        binding.rvClassroom.visibility = View.VISIBLE
-                        binding.tvDoesntHaveAnClassroom.visibility = View.GONE
-                        binding.ivDoesntHaveAnClassroom.visibility = View.GONE
-                        classroomAdapter.setData(groupedClasses)
+                        is Resource.Success -> {
+                            binding.progressBarClassroom.visibility = View.GONE
+                            val groupedClassesData = resource.data
+                            if (groupedClassesData.isNullOrEmpty()) {
+                                binding.rvClassroom.visibility = View.GONE
+                                binding.tvDoesntHaveAnClassroom.visibility = View.VISIBLE
+                                binding.ivDoesntHaveAnClassroom.visibility = View.VISIBLE
+                            } else {
+                                binding.rvClassroom.visibility = View.VISIBLE
+                                binding.tvDoesntHaveAnClassroom.visibility = View.GONE
+                                binding.ivDoesntHaveAnClassroom.visibility = View.GONE
+                                classroomAdapter.setData(groupedClassesData)
+                            }
+                        }
+
+                        is Resource.Error -> {
+                            binding.progressBarClassroom.visibility = View.GONE
+                            binding.rvClassroom.visibility = View.GONE
+                            binding.tvDoesntHaveAnClassroom.visibility = View.VISIBLE
+                            binding.ivDoesntHaveAnClassroom.visibility = View.VISIBLE
+                            binding.tvDoesntHaveAnClassroom.text =
+                                resource.message ?: getString(R.string.failed_to_load_class)
+                            Toast
+                                .makeText(
+                                    requireContext(),
+                                    resource.message ?: getString(R.string.error_throuble),
+                                    Toast.LENGTH_LONG,
+                                ).show()
+                        }
                     }
-                }
-
-                is Resource.Error -> {
-                    binding.progressBarClassroom.visibility = View.GONE
-                    binding.rvClassroom.visibility = View.GONE
-                    binding.tvDoesntHaveAnClassroom.visibility = View.VISIBLE
-                    binding.ivDoesntHaveAnClassroom.visibility = View.VISIBLE
-                    binding.tvDoesntHaveAnClassroom.text =
-                        resource.message ?: getString(R.string.failed_to_load_class)
-                    Toast
-                        .makeText(
-                            requireContext(),
-                            resource.message ?: getString(R.string.error_throuble),
-                            Toast.LENGTH_LONG,
-                        ).show()
                 }
             }
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        classroomViewModel.fetchDosenClasses()
-    }
-
     private fun observeTotalClasses() {
-        classroomViewModel.totalClasses.observe(viewLifecycleOwner) { total ->
-            binding.tvTotalClassJoined.text = total.toString()
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                classroomViewModel.totalClasses.collect { resource ->
+                    when (resource) {
+                        is Resource.Loading -> {
+                        }
+
+                        is Resource.Success -> {
+                            binding.tvTotalClassJoined.text = resource.data.toString()
+                        }
+
+                        is Resource.Error -> {
+                            binding.tvTotalClassJoined.text = "-"
+                        }
+                    }
+                }
+            }
         }
     }
 

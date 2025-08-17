@@ -7,11 +7,13 @@ import com.mjs.core.domain.model.Dosen
 import com.mjs.core.domain.model.Kelas
 import com.mjs.core.domain.model.Tugas
 import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -39,155 +41,156 @@ class HomeViewModel(
         fetchTodaySchedule()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun fetchDosenData() {
         viewModelScope.launch {
-            val nidn = virtualClassUseCase.getLoggedInUserId().firstOrNull()
-            if (nidn != null &&
-                virtualClassUseCase
-                    .getLoggedInUserType()
-                    .firstOrNull() == VirtualClassUseCase.USER_TYPE_DOSEN
-            ) {
-                virtualClassUseCase.getDosenByNidn(nidn).collect {
+            virtualClassUseCase
+                .getLoggedInUserId()
+                .flatMapLatest { nidn ->
+                    if (nidn != null) {
+                        virtualClassUseCase.getLoggedInUserType().flatMapLatest { userType ->
+                            if (userType == VirtualClassUseCase.USER_TYPE_DOSEN) {
+                                virtualClassUseCase.getDosenByNidn(nidn)
+                            } else {
+                                flowOf(Resource.Error("User is not a Dosen"))
+                            }
+                        }
+                    } else {
+                        flowOf(Resource.Error("NIDN not found"))
+                    }
+                }.collectLatest {
                     _dosenData.value = it
                 }
-            }
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun fetchTugasUntukDosen() {
         viewModelScope.launch {
             _tugasListDosenState.value = Resource.Loading()
-            val nidn = virtualClassUseCase.getLoggedInUserId().firstOrNull()
 
-            if (nidn == null) {
-                _tugasListDosenState.value =
-                    Resource.Error("NIDN dosen tidak ditemukan atau tidak valid.")
-                return@launch
-            }
-
-            val allKelasResource =
-                virtualClassUseCase
-                    .getAllKelas()
-                    .firstOrNull { it !is Resource.Loading }
-
-            when (allKelasResource) {
-                is Resource.Success -> {
-                    val semuaKelas = allKelasResource.data ?: emptyList()
-                    val kelasYangDiajar = semuaKelas.filter { it.nidn == nidn }
-
-                    if (kelasYangDiajar.isEmpty()) {
-                        _tugasListDosenState.value = Resource.Success(emptyList())
-                        _kelasDosenMapState.value = emptyMap()
-                        return@launch
-                    }
-
-                    _kelasDosenMapState.value =
-                        kelasYangDiajar.associate {
-                            it.kelasId to
-                                Pair(
-                                    it.namaKelas,
-                                    it.classImage,
-                                )
-                        }
-
-                    val semuaTugasDariKelasDosen = mutableListOf<Tugas>()
-                    var hasError = false
-                    var errorMessage: String? = null
-
-                    try {
-                        val deferredTugasResources =
-                            kelasYangDiajar.map { kelas ->
-                                async {
-                                    virtualClassUseCase
-                                        .getAssignmentsByClass(kelas.kelasId)
-                                        .firstOrNull { it !is Resource.Loading }
-                                }
-                            }
-
-                        val tugasResources = deferredTugasResources.awaitAll()
-
-                        tugasResources.forEach { resource ->
-                            when (resource) {
+            virtualClassUseCase
+                .getLoggedInUserId()
+                .flatMapLatest { nidn ->
+                    if (nidn == null) {
+                        flowOf(Resource.Error("NIDN dosen tidak ditemukan atau tidak valid."))
+                    } else {
+                        virtualClassUseCase.getAllKelas().flatMapLatest { allKelasResource ->
+                            when (allKelasResource) {
                                 is Resource.Success -> {
-                                    resource.data?.let { tugasList ->
-                                        semuaTugasDariKelasDosen.addAll(tugasList)
+                                    val semuaKelas = allKelasResource.data ?: emptyList()
+                                    val kelasYangDiajar = semuaKelas.filter { it.nidn == nidn }
+
+                                    if (kelasYangDiajar.isEmpty()) {
+                                        _kelasDosenMapState.value = emptyMap()
+                                        flowOf(Resource.Success(emptyList()))
+                                    } else {
+                                        _kelasDosenMapState.value =
+                                            kelasYangDiajar.associate {
+                                                it.kelasId to Pair(it.namaKelas, it.classImage)
+                                            }
+
+                                        val assignmentFlows =
+                                            kelasYangDiajar.map { kelas ->
+                                                virtualClassUseCase.getAssignmentsByClass(kelas.kelasId)
+                                            }
+
+                                        combine(assignmentFlows) { resources ->
+                                            val allTugas = mutableListOf<Tugas>()
+                                            var hasError = false
+                                            var errorMessage: String? = null
+
+                                            resources.forEach { resource ->
+                                                when (resource) {
+                                                    is Resource.Success -> {
+                                                        resource.data?.let { tugasList ->
+                                                            allTugas.addAll(tugasList)
+                                                        }
+                                                    }
+
+                                                    is Resource.Error -> {
+                                                        hasError = true
+                                                        if (errorMessage == null) {
+                                                            errorMessage = resource.message
+                                                        }
+                                                    }
+
+                                                    is Resource.Loading -> {
+                                                    }
+                                                }
+                                            }
+
+                                            if (allTugas.isNotEmpty()) {
+                                                val distinctTugas =
+                                                    allTugas.distinctBy { it.assignmentId }
+                                                val dateFormat =
+                                                    SimpleDateFormat(
+                                                        "yyyy-MM-dd HH:mm:ss",
+                                                        Locale.getDefault(),
+                                                    )
+                                                val currentDate = Date()
+                                                val activeTasks =
+                                                    distinctTugas.filter {
+                                                        try {
+                                                            val deadlineDate =
+                                                                dateFormat.parse(it.tanggalSelesai)
+                                                            deadlineDate != null &&
+                                                                deadlineDate.after(
+                                                                    currentDate,
+                                                                )
+                                                        } catch (_: Exception) {
+                                                            false
+                                                        }
+                                                    }
+                                                Resource.Success(activeTasks)
+                                            } else if (hasError) {
+                                                Resource.Error(
+                                                    errorMessage
+                                                        ?: "Gagal memuat tugas untuk kelas dosen.",
+                                                )
+                                            } else {
+                                                Resource.Success(emptyList())
+                                            }
+                                        }
                                     }
                                 }
 
                                 is Resource.Error -> {
-                                    hasError = true
-                                    if (errorMessage == null) {
-                                        errorMessage = resource.message
-                                    }
+                                    flowOf(
+                                        Resource.Error(
+                                            allKelasResource.message
+                                                ?: "Gagal memuat daftar semua kelas.",
+                                        ),
+                                    )
                                 }
 
-                                else -> {
-                                    hasError = true
-                                    if (errorMessage == null) {
-                                        errorMessage =
-                                            "Gagal memuat beberapa tugas (data tidak lengkap)."
-                                    }
+                                is Resource.Loading -> {
+                                    flowOf(Resource.Loading())
                                 }
                             }
                         }
-
-                        if (semuaTugasDariKelasDosen.isNotEmpty()) {
-                            val distinctTugas =
-                                semuaTugasDariKelasDosen.distinctBy { it.assignmentId }
-                            val dateFormat =
-                                SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-                            val currentDate = Date()
-                            val activeTasks =
-                                distinctTugas.filter {
-                                    try {
-                                        val deadlineDate = dateFormat.parse(it.tanggalSelesai)
-                                        deadlineDate != null && deadlineDate.after(currentDate)
-                                    } catch (_: Exception) {
-                                        false
-                                    }
-                                }
-                            _tugasListDosenState.value = Resource.Success(activeTasks)
-                        } else if (hasError) {
-                            _tugasListDosenState.value =
-                                Resource.Error(
-                                    errorMessage ?: "Gagal memuat tugas untuk kelas dosen.",
-                                )
-                        } else {
-                            _tugasListDosenState.value = Resource.Success(emptyList())
-                        }
-                    } catch (e: Exception) {
-                        _tugasListDosenState.value =
-                            Resource.Error("Terjadi kesalahan saat mengambil tugas: ${e.message}")
                     }
+                }.collectLatest {
+                    _tugasListDosenState.value = it
                 }
-
-                is Resource.Error -> {
-                    _tugasListDosenState.value =
-                        Resource.Error(
-                            allKelasResource.message ?: "Gagal memuat daftar semua kelas.",
-                        )
-                }
-
-                else -> {
-                    _tugasListDosenState.value =
-                        Resource.Error("Tidak dapat memuat informasi kelas untuk mengambil tugas.")
-                }
-            }
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun fetchTodaySchedule() {
         viewModelScope.launch {
             _todayScheduleState.value = Resource.Loading()
-            val nidn = virtualClassUseCase.getLoggedInUserId().firstOrNull()
-            if (nidn != null) {
-                virtualClassUseCase.getTodayScheduleDosen(nidn).collect {
+            virtualClassUseCase
+                .getLoggedInUserId()
+                .flatMapLatest { nidn ->
+                    if (nidn != null) {
+                        virtualClassUseCase.getTodayScheduleDosen(nidn)
+                    } else {
+                        flowOf(Resource.Error("NIDN pengguna tidak ditemukan atau tidak valid."))
+                    }
+                }.collectLatest {
                     _todayScheduleState.value = it
                 }
-            } else {
-                _todayScheduleState.value =
-                    Resource.Error("NIDN pengguna tidak ditemukan atau tidak valid.")
-            }
         }
     }
 

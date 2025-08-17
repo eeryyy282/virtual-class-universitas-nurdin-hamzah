@@ -1,41 +1,38 @@
 package com.mjs.dosen.presentation.schedule
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mjs.core.data.Resource
 import com.mjs.core.domain.model.Kelas
 import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.stateIn
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class ScheduleViewModel(
     private val virtualClassUseCase: VirtualClassUseCase,
 ) : ViewModel() {
-    private val _schedule = MutableLiveData<Resource<List<Kelas>>>()
-    val schedule: LiveData<Resource<List<Kelas>>> get() = _schedule
-
-    fun getDosenSchedule() {
-        viewModelScope.launch {
-            val nidn = virtualClassUseCase.getLoggedInUserId().firstOrNull()
-            val userType = virtualClassUseCase.getLoggedInUserType().firstOrNull()
-
-            if (nidn != null && userType == VirtualClassUseCase.USER_TYPE_DOSEN) {
-                try {
-                    _schedule.value = Resource.Loading()
-                    virtualClassUseCase.getAllSchedulesByNidn(nidn).collect {
-                        _schedule.value = it
-                    }
-                } catch (_: NumberFormatException) {
-                    _schedule.value = Resource.Error("Format NIDN tidak valid.")
-                } catch (e: Exception) {
-                    _schedule.value =
-                        Resource.Error(e.message ?: "Terjadi kesalahan saat mengambil jadwal dosen")
+    val schedule: StateFlow<Resource<List<Kelas>>> =
+        virtualClassUseCase
+            .getLoggedInUserId()
+            .combine(virtualClassUseCase.getLoggedInUserType()) { nidn, userType ->
+                Pair(nidn, userType)
+            }.flatMapLatest { (nidn, userType) ->
+                if (nidn != null && userType == VirtualClassUseCase.USER_TYPE_DOSEN) {
+                    virtualClassUseCase.getAllSchedulesByNidn(nidn)
+                } else if (nidn == null) {
+                    flowOf(Resource.Error("Pengguna tidak Login atau NIDN tidak ditemukan."))
+                } else {
+                    flowOf(Resource.Error("Pengguna bukan Dosen."))
                 }
-            } else {
-                _schedule.value = Resource.Error("Pengguna tidak Login atau bukan Dosen")
-            }
-        }
-    }
+            }.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = Resource.Loading(),
+            )
 }

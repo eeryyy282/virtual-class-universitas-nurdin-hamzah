@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -29,13 +30,13 @@ class TaskViewModel(
             .flatMapLatest { nimResource ->
                 val nim = nimResource
                 if (nim == null) {
-                    MutableStateFlow(Resource.Error("NIM pengguna tidak ditemukan."))
+                    flowOf(Resource.Error("NIM pengguna tidak ditemukan."))
                 } else {
                     loadEnrolledClassesAndAllKelasDetails(nim).flatMapLatest { enrolledClassesDetailsResult ->
                         when (enrolledClassesDetailsResult) {
-                            is Resource.Loading -> MutableStateFlow(Resource.Loading())
+                            is Resource.Loading -> flowOf(Resource.Loading())
                             is Resource.Error ->
-                                MutableStateFlow(
+                                flowOf(
                                     Resource.Error(
                                         enrolledClassesDetailsResult.message
                                             ?: "Gagal memuat detail kelas.",
@@ -50,7 +51,7 @@ class TaskViewModel(
                                 _enrolledCoursesMapState.value = allKelasMap
 
                                 if (enrolledKelasIds.isEmpty()) {
-                                    MutableStateFlow(
+                                    flowOf(
                                         Resource.Success(
                                             Pair(
                                                 emptyList(),

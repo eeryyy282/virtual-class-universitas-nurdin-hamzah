@@ -7,13 +7,13 @@ import com.mjs.core.domain.model.Kelas
 import com.mjs.core.domain.model.Mahasiswa
 import com.mjs.core.domain.model.Tugas
 import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -46,216 +46,223 @@ class HomeViewModel(
         fetchTodaySchedule()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun fetchMahasiswaData() {
         viewModelScope.launch {
-            val nim = virtualClassUseCase.getLoggedInUserId().firstOrNull()
-            if (nim != null) {
-                virtualClassUseCase.getMahasiswaByNim(nim).collect {
+            virtualClassUseCase
+                .getLoggedInUserId()
+                .flatMapLatest { nim ->
+                    if (nim != null) {
+                        virtualClassUseCase.getMahasiswaByNim(nim)
+                    } else {
+                        flowOf(Resource.Error("NIM tidak ditemukan"))
+                    }
+                }.collectLatest {
                     _mahasiswaData.value = it
                 }
-            }
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun fetchAttendanceStreak() {
         viewModelScope.launch {
             _attendanceStreakState.value = Resource.Loading()
-            val nim = virtualClassUseCase.getLoggedInUserId().firstOrNull()
+            virtualClassUseCase
+                .getLoggedInUserId()
+                .flatMapLatest { nim ->
+                    if (nim == null) {
+                        flowOf(Resource.Error("NIM pengguna tidak ditemukan."))
+                    } else {
+                        virtualClassUseCase
+                            .getEnrolledClasses(nim)
+                            .flatMapLatest { enrolledClassesResource ->
+                                when (enrolledClassesResource) {
+                                    is Resource.Success -> {
+                                        val enrollments = enrolledClassesResource.data
+                                        if (!enrollments.isNullOrEmpty()) {
+                                            val firstKelasId = enrollments[0].kelasId
+                                            virtualClassUseCase.getAttendanceStreak(
+                                                nim,
+                                                firstKelasId,
+                                            )
+                                        } else {
+                                            flowOf(Resource.Success(0))
+                                        }
+                                    }
 
-            if (nim == null) {
-                _attendanceStreakState.value = Resource.Error("NIM pengguna tidak ditemukan.")
-                return@launch
-            }
-            val enrolledClassesResource =
-                virtualClassUseCase
-                    .getEnrolledClasses(nim)
-                    .filter { it !is Resource.Loading }
-                    .firstOrNull()
+                                    is Resource.Error -> {
+                                        flowOf(
+                                            Resource.Error(
+                                                enrolledClassesResource.message
+                                                    ?: "Gagal memuat kelas yang diikuti untuk mengambil streak.",
+                                            ),
+                                        )
+                                    }
 
-            if (enrolledClassesResource is Resource.Success) {
-                val enrollments = enrolledClassesResource.data
-                if (!enrollments.isNullOrEmpty()) {
-                    val firstKelasId = enrollments[0].kelasId
-                    virtualClassUseCase.getAttendanceStreak(nim, firstKelasId).collect {
-                        _attendanceStreakState.value = it
+                                    is Resource.Loading -> flowOf(Resource.Loading())
+                                }
+                            }
                     }
-                } else {
-                    _attendanceStreakState.value = Resource.Success(0)
+                }.collectLatest {
+                    _attendanceStreakState.value = it
                 }
-            } else if (enrolledClassesResource is Resource.Error) {
-                _attendanceStreakState.value =
-                    Resource.Error(
-                        enrolledClassesResource.message
-                            ?: "Gagal memuat kelas yang diikuti untuk mengambil streak.",
-                    )
-            } else {
-                _attendanceStreakState.value =
-                    Resource.Error("Tidak dapat memuat data kelas untuk streak.")
-            }
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun fetchTugasAndKelasMahasiswa() {
         viewModelScope.launch {
             _tugasListState.value = Resource.Loading()
-            val nim = virtualClassUseCase.getLoggedInUserId().firstOrNull()
 
-            if (nim == null) {
-                _tugasListState.value = Resource.Error("NIM pengguna tidak ditemukan.")
-                return@launch
-            }
+            virtualClassUseCase
+                .getLoggedInUserId()
+                .flatMapLatest { nim ->
+                    if (nim == null) {
+                        flowOf(Resource.Error("NIM pengguna tidak ditemukan."))
+                    } else {
+                        val enrolledClassesFlow = virtualClassUseCase.getEnrolledClasses(nim)
+                        val allKelasFlow = virtualClassUseCase.getAllKelas()
 
-            val enrolledClassesDeferred =
-                async {
-                    virtualClassUseCase
-                        .getEnrolledClasses(nim)
-                        .filter { it !is Resource.Loading }
-                        .firstOrNull()
-                }
-            val allKelasDeferred =
-                async {
-                    virtualClassUseCase
-                        .getAllKelas()
-                        .filter { it !is Resource.Loading }
-                        .firstOrNull()
-                }
+                        combine(
+                            enrolledClassesFlow,
+                            allKelasFlow,
+                        ) { enrolledClassesResource, allKelasResource ->
+                            Triple(enrolledClassesResource, allKelasResource, nim)
+                        }.flatMapLatest { (enrolledClassesResource, allKelasResource, _) ->
+                            if (enrolledClassesResource is Resource.Success && allKelasResource is Resource.Success) {
+                                val enrollments = enrolledClassesResource.data
+                                val allKelasList = allKelasResource.data
 
-            val enrolledClassesResource = enrolledClassesDeferred.await()
-            val allKelasResource = allKelasDeferred.await()
+                                if (enrollments.isNullOrEmpty()) {
+                                    _enrolledCoursesMapState.value = emptyMap()
+                                    flowOf(Resource.Success(emptyList()))
+                                } else if (allKelasList.isNullOrEmpty()) {
+                                    _enrolledCoursesMapState.value = emptyMap()
+                                    flowOf(
+                                        Resource.Error("Gagal memuat detail kelas untuk mata kuliah yang diikuti."),
+                                    )
+                                } else {
+                                    val allKelasMap = allKelasList.associateBy { it.kelasId }
+                                    _enrolledCoursesMapState.value =
+                                        enrollments
+                                            .mapNotNull { enrollment ->
+                                                allKelasMap[enrollment.kelasId]?.let {
+                                                    enrollment.kelasId to
+                                                        Pair(
+                                                            it.namaKelas,
+                                                            it.classImage,
+                                                        )
+                                                }
+                                            }.toMap()
 
-            if (enrolledClassesResource is Resource.Success && allKelasResource is Resource.Success) {
-                val enrollments = enrolledClassesResource.data
-                val allKelasList = allKelasResource.data
+                                    if (enrollments.isEmpty()) {
+                                        flowOf(Resource.Success(emptyList()))
+                                    } else {
+                                        val assignmentFlows =
+                                            enrollments.map { enrollment ->
+                                                virtualClassUseCase.getAssignmentsByClass(enrollment.kelasId)
+                                            }
 
-                if (enrollments.isNullOrEmpty()) {
-                    _tugasListState.value = Resource.Success(emptyList())
-                    _enrolledCoursesMapState.value = emptyMap()
-                    return@launch
-                }
+                                        combine(assignmentFlows) { resources ->
+                                            val allTugas = mutableListOf<Tugas>()
+                                            var hasError = false
+                                            var errorMessage: String? = null
 
-                if (allKelasList.isNullOrEmpty()) {
-                    _tugasListState.value =
-                        Resource.Error("Gagal memuat detail kelas untuk mata kuliah yang diikuti.")
-                    _enrolledCoursesMapState.value = emptyMap()
-                    return@launch
-                }
+                                            resources.forEach { resource ->
+                                                when (resource) {
+                                                    is Resource.Success ->
+                                                        resource.data?.let {
+                                                            allTugas.addAll(
+                                                                it,
+                                                            )
+                                                        }
 
-                val allKelasMap = allKelasList.associateBy { it.kelasId }
+                                                    is Resource.Error -> {
+                                                        hasError = true
+                                                        if (errorMessage == null) {
+                                                            errorMessage =
+                                                                resource.message
+                                                        }
+                                                    }
 
-                _enrolledCoursesMapState.value =
-                    enrollments
-                        .mapNotNull { enrollment ->
-                            allKelasMap[enrollment.kelasId]?.let { kelas ->
-                                enrollment.kelasId to Pair(kelas.namaKelas, kelas.classImage)
-                            }
-                        }.toMap()
+                                                    is Resource.Loading -> {
+                                                    }
+                                                }
+                                            }
 
-                val allTugas = mutableListOf<Tugas>()
-                var errorMessage: String? = null
-                var hasError = false
-
-                try {
-                    val deferredTugasResources =
-                        enrollments.map { enrollment ->
-                            async {
-                                virtualClassUseCase
-                                    .getAssignmentsByClass(enrollment.kelasId)
-                                    .filter { it !is Resource.Loading }
-                                    .firstOrNull()
+                                            if (allTugas.isNotEmpty()) {
+                                                val distinctTugas =
+                                                    allTugas.distinctBy { it.assignmentId }
+                                                val dateFormat =
+                                                    SimpleDateFormat(
+                                                        "yyyy-MM-dd HH:mm:ss",
+                                                        Locale.getDefault(),
+                                                    )
+                                                val currentDate = Date()
+                                                val activeTasks =
+                                                    distinctTugas.filter {
+                                                        try {
+                                                            val deadlineDate =
+                                                                dateFormat.parse(it.tanggalSelesai)
+                                                            deadlineDate != null &&
+                                                                deadlineDate.after(
+                                                                    currentDate,
+                                                                )
+                                                        } catch (_: Exception) {
+                                                            false
+                                                        }
+                                                    }
+                                                Resource.Success(activeTasks)
+                                            } else if (hasError) {
+                                                Resource.Error(
+                                                    errorMessage ?: "Gagal memuat beberapa tugas.",
+                                                )
+                                            } else {
+                                                Resource.Success(emptyList())
+                                            }
+                                        }
+                                    }
+                                }
+                            } else if (enrolledClassesResource is Resource.Error) {
+                                flowOf(
+                                    Resource.Error(
+                                        enrolledClassesResource.message
+                                            ?: "Gagal memuat mata kuliah yang diikuti untuk tugas.",
+                                    ),
+                                )
+                            } else if (allKelasResource is Resource.Error) {
+                                flowOf(
+                                    Resource.Error(
+                                        allKelasResource.message
+                                            ?: "Gagal memuat informasi semua mata kuliah.",
+                                    ),
+                                )
+                            } else {
+                                flowOf(Resource.Loading())
                             }
                         }
-
-                    val tugasResources = deferredTugasResources.awaitAll()
-
-                    for ((_, resource) in tugasResources.withIndex()) {
-                        when (resource) {
-                            is Resource.Success -> {
-                                resource.data?.let {
-                                    allTugas.addAll(it)
-                                }
-                            }
-
-                            is Resource.Error -> {
-                                hasError = true
-                                if (errorMessage == null) {
-                                    errorMessage = resource.message
-                                }
-                            }
-
-                            is Resource.Loading -> {
-                            }
-
-                            null -> {
-                                hasError = true
-                                if (errorMessage == null) {
-                                    errorMessage = "Menerima sumber daya null untuk tugas"
-                                }
-                            }
-                        }
                     }
-
-                    if (allTugas.isNotEmpty()) {
-                        val distinctTugas = allTugas.distinctBy { it.assignmentId }
-                        val dateFormat =
-                            SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-                        val currentDate = Date()
-                        val activeTasks =
-                            distinctTugas.filter {
-                                try {
-                                    val deadlineDate = dateFormat.parse(it.tanggalSelesai)
-                                    deadlineDate != null && deadlineDate.after(currentDate)
-                                } catch (_: Exception) {
-                                    false
-                                }
-                            }
-                        _tugasListState.value = Resource.Success(activeTasks)
-                    } else if (hasError) {
-                        _tugasListState.value =
-                            Resource.Error(errorMessage ?: "Gagal memuat beberapa tugas.")
-                    } else {
-                        _tugasListState.value = Resource.Success(emptyList())
-                    }
-                } catch (ce: CancellationException) {
-                    throw ce
-                } catch (e: Exception) {
-                    _tugasListState.value =
-                        Resource.Error("Terjadi pengecualian saat mengambil tugas: ${e.message}")
+                }.collectLatest {
+                    _tugasListState.value = it
                 }
-            } else if (enrolledClassesResource is Resource.Error) {
-                _tugasListState.value =
-                    Resource.Error(
-                        enrolledClassesResource.message
-                            ?: "Gagal memuat mata kuliah yang diikuti untuk tugas.",
-                    )
-            } else if (allKelasResource is Resource.Error) {
-                _tugasListState.value =
-                    Resource.Error(
-                        allKelasResource.message
-                            ?: "Gagal memuat informasi semua mata kuliah.",
-                    )
-            } else {
-                val finalErrorMessage =
-                    if (enrolledClassesResource == null || allKelasResource == null) {
-                        "Data mata kuliah yang diikuti atau semua data mata kuliah adalah null setelah memfilter status pemuatan."
-                    } else {
-                        "Gagal mendapatkan informasi mata kuliah yang diikuti atau semua mata kuliah karena alasan yang tidak diketahui."
-                    }
-                _tugasListState.value = Resource.Error(finalErrorMessage)
-            }
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun fetchTodaySchedule() {
         viewModelScope.launch {
             _todayScheduleState.value = Resource.Loading()
-            val nim = virtualClassUseCase.getLoggedInUserId().firstOrNull()
-            if (nim != null) {
-                virtualClassUseCase.getTodaySchedule(nim).collect {
+            virtualClassUseCase
+                .getLoggedInUserId()
+                .flatMapLatest { nim ->
+                    if (nim != null) {
+                        virtualClassUseCase.getTodaySchedule(nim)
+                    } else {
+                        flowOf(Resource.Error("NIM pengguna tidak ditemukan."))
+                    }
+                }.collectLatest {
                     _todayScheduleState.value = it
                 }
-            } else {
-                _todayScheduleState.value = Resource.Error("NIM pengguna tidak ditemukan.")
-            }
         }
     }
 

@@ -1,107 +1,130 @@
 package com.mjs.mahasiswa.presentation.classroom
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mjs.core.data.Resource
 import com.mjs.core.domain.model.Kelas
 import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class ClassroomViewModel(
     private val virtualClassUseCase: VirtualClassUseCase,
 ) : ViewModel() {
-    private val _enrolledClasses = MutableLiveData<Resource<List<Kelas>>>()
-    val enrolledClasses: LiveData<Resource<List<Kelas>>> = _enrolledClasses
-
-    private val _dosenNamesMap = MutableLiveData<Map<String, String>>(emptyMap())
-    val dosenNamesMap: LiveData<Map<String, String>> = _dosenNamesMap
-
-    fun fetchEnrolledClasses() {
-        viewModelScope.launch {
-            _enrolledClasses.value = Resource.Loading()
-            try {
-                val nim = virtualClassUseCase.getLoggedInUserId().first()
-                if (nim != null) {
-                    virtualClassUseCase.getAllSchedulesByNim(nim).collect { resource ->
-                        if (resource is Resource.Success) {
-                            resource.data?.let { classes ->
-                                fetchDosenNamesForClasses(classes)
-                            }
-                        }
-                        _enrolledClasses.value = resource
-                    }
+    private val enrolledClassesRaw: StateFlow<Resource<List<Kelas>>> =
+        virtualClassUseCase
+            .getLoggedInUserId()
+            .flatMapLatest { nim ->
+                if (nim == null) {
+                    flowOf(Resource.Error("NIM pengguna tidak ditemukan. Silakan masuk kembali."))
                 } else {
-                    _enrolledClasses.value =
-                        Resource.Error("NIM pengguna tidak ditemukan. Silakan masuk kembali.")
+                    virtualClassUseCase.getAllSchedulesByNim(nim)
                 }
-            } catch (e: Exception) {
-                _enrolledClasses.value =
-                    Resource.Error(e.message ?: "Gagal mengambil data kelas yang diikuti")
-            }
-        }
-    }
+            }.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = Resource.Loading(),
+            )
 
-    private fun fetchDosenNamesForClasses(classes: List<Kelas>) {
-        viewModelScope.launch {
-            classes.forEach { kelas ->
-                val nidnString = kelas.nidn.toString()
-                val currentNameInMap = _dosenNamesMap.value?.get(nidnString)
+    val enrolledClassesWithDosenNames: StateFlow<Resource<List<Pair<Kelas, String>>>> =
+        enrolledClassesRaw
+            .flatMapLatest { classesResource ->
+                when (classesResource) {
+                    is Resource.Loading -> flowOf(Resource.Loading())
+                    is Resource.Error ->
+                        flowOf(
+                            Resource.Error(
+                                classesResource.message
+                                    ?: "Gagal mengambil data kelas yang diikuti",
+                            ),
+                        )
 
-                if (currentNameInMap == null || currentNameInMap == nidnString) {
-                    try {
-                        virtualClassUseCase.getDosenByNidn(kelas.nidn).collect { dosenResource ->
-                            val currentMapSnapshot = _dosenNamesMap.value ?: emptyMap()
-                            val tempMapForUpdate = currentMapSnapshot.toMutableMap()
-                            var needsLiveUpdate = false
+                    is Resource.Success -> {
+                        val classes = classesResource.data
+                        if (classes.isNullOrEmpty()) {
+                            flowOf(Resource.Success(emptyList()))
+                        } else {
+                            val dosenNameFlows =
+                                classes.map { kelas ->
+                                    virtualClassUseCase
+                                        .getDosenByNidn(kelas.nidn)
+                                        .map { dosenResource ->
+                                            val dosenName =
+                                                when (dosenResource) {
+                                                    is Resource.Success ->
+                                                        dosenResource.data?.nama
+                                                            ?: kelas.nidn.toString()
 
-                            when (dosenResource) {
-                                is Resource.Success -> {
-                                    dosenResource.data?.let { dosen ->
-                                        if (tempMapForUpdate[nidnString] != dosen.nama) {
-                                            tempMapForUpdate[nidnString] = dosen.nama
-                                            needsLiveUpdate = true
+                                                    is Resource.Error -> kelas.nidn.toString()
+                                                    is Resource.Loading -> null
+                                                }
+                                            Pair(kelas, dosenName)
                                         }
-                                    } ?: run {
-                                        if (tempMapForUpdate[nidnString] != nidnString) {
-                                            tempMapForUpdate[nidnString] = nidnString
-                                            needsLiveUpdate = true
-                                        }
+                                }
+
+                            combine(dosenNameFlows) { kelasWithMaybeDosenNameList ->
+                                val resultList =
+                                    kelasWithMaybeDosenNameList.mapNotNull { (kelas, dosenName) ->
+                                        dosenName?.let { Pair(kelas, it) }
                                     }
-                                }
-
-                                is Resource.Error -> {
-                                    if (tempMapForUpdate[nidnString] != nidnString) {
-                                        tempMapForUpdate[nidnString] = nidnString
-                                        needsLiveUpdate = true
-                                    }
-                                }
-
-                                is Resource.Loading -> {
-                                }
+                                Resource.Success(resultList)
                             }
-
-                            if (needsLiveUpdate) {
-                                _dosenNamesMap.value = tempMapForUpdate
-                            }
-                        }
-                    } catch (_: Exception) {
-                        val currentMapSnapshot = _dosenNamesMap.value ?: emptyMap()
-                        if (currentMapSnapshot[nidnString] != nidnString) {
-                            val tempMapForUpdateOnError = currentMapSnapshot.toMutableMap()
-                            tempMapForUpdateOnError[nidnString] = nidnString
-                            _dosenNamesMap.value = tempMapForUpdateOnError
                         }
                     }
                 }
-            }
-        }
-    }
+            }.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = Resource.Loading(),
+            )
 
-    fun getResolvedDosenName(nidn: Int): String {
-        val nidnString = nidn.toString()
-        return _dosenNamesMap.value?.get(nidnString) ?: nidnString
-    }
+    val enrolledClassesForUi: StateFlow<Resource<List<Kelas>>> =
+        enrolledClassesWithDosenNames
+            .map { resource ->
+                when (resource) {
+                    is Resource.Loading -> Resource.Loading()
+                    is Resource.Error ->
+                        Resource.Error(
+                            resource.message ?: "Error memproses list jadwal",
+                        )
+
+                    is Resource.Success -> {
+                        val data = resource.data
+                        if (data != null) {
+                            Resource.Success(data.map { it.first })
+                        } else {
+                            Resource.Success(emptyList())
+                        }
+                    }
+                }
+            }.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = Resource.Loading(),
+            )
+
+    val dosenNamesMap: StateFlow<Map<Int, String>> =
+        enrolledClassesWithDosenNames
+            .map { resource ->
+                when (resource) {
+                    is Resource.Success -> {
+                        val data = resource.data
+                        data?.associate { (kelas, dosenName) -> kelas.nidn to dosenName }
+                            ?: emptyMap()
+                    }
+
+                    else -> emptyMap()
+                }
+            }.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = emptyMap(),
+            )
 }

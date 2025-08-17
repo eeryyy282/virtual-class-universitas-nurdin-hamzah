@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -27,13 +28,13 @@ class TaskViewModel(
                 val nidn =
                     nidnResource
                 if (nidn == null) {
-                    MutableStateFlow(Resource.Error("NIDN dosen tidak ditemukan."))
+                    flowOf(Resource.Error("NIDN dosen tidak ditemukan."))
                 } else {
                     virtualClassUseCase.getAllKelas().flatMapLatest { allClassesResource ->
                         when (allClassesResource) {
-                            is Resource.Loading -> MutableStateFlow(Resource.Loading())
+                            is Resource.Loading -> flowOf(Resource.Loading())
                             is Resource.Error ->
-                                MutableStateFlow(
+                                flowOf(
                                     Resource.Error(
                                         allClassesResource.message
                                             ?: "Gagal memuat detail semua kelas.",

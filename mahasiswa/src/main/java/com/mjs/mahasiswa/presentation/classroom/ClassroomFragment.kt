@@ -9,11 +9,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mjs.core.data.Resource
 import com.mjs.core.ui.classroom.ClassroomAdapterMahasiswa
 import com.mjs.mahasiswa.R
 import com.mjs.mahasiswa.databinding.FragmentClassroomBinding
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ClassroomFragment : Fragment() {
@@ -40,18 +44,13 @@ class ClassroomFragment : Fragment() {
 
         setupRecyclerView()
         observeEnrolledClasses()
-        observeDosenNames()
+        observeDosenNamesMap()
 
         binding.btnEnrollClassClassroom.setOnClickListener {
             val uri = "enroll_class://enroll_class_activity".toUri()
             val intent = Intent(Intent.ACTION_VIEW, uri)
             startActivity(intent)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        classroomViewModel.fetchEnrolledClasses()
     }
 
     private fun setupRecyclerView() {
@@ -63,8 +62,7 @@ class ClassroomFragment : Fragment() {
         }
 
         classroomAdapter.getDosenName = { nidn ->
-            val resolvedName = classroomViewModel.getResolvedDosenName(nidn)
-            resolvedName
+            classroomViewModel.dosenNamesMap.value[nidn] ?: nidn.toString()
         }
 
         classroomAdapter.onItemClick = { kelas ->
@@ -76,55 +74,63 @@ class ClassroomFragment : Fragment() {
     }
 
     private fun observeEnrolledClasses() {
-        classroomViewModel.enrolledClasses.observe(viewLifecycleOwner) { resource ->
-            when (resource) {
-                is Resource.Loading -> {
-                    binding.progressBarClassroom.visibility = View.VISIBLE
-                    binding.rvClassroom.visibility = View.GONE
-                    binding.ivDoesntHaveAnClassroom.visibility = View.GONE
-                    binding.tvDoesntHaveAnClassroom.visibility = View.GONE
-                }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                classroomViewModel.enrolledClassesForUi.collect { resource ->
+                    when (resource) {
+                        is Resource.Loading -> {
+                            binding.progressBarClassroom.visibility = View.VISIBLE
+                            binding.rvClassroom.visibility = View.GONE
+                            binding.ivDoesntHaveAnClassroom.visibility = View.GONE
+                            binding.tvDoesntHaveAnClassroom.visibility = View.GONE
+                        }
 
-                is Resource.Success -> {
-                    binding.progressBarClassroom.visibility = View.GONE
-                    val classes = resource.data
-                    if (classes.isNullOrEmpty()) {
-                        binding.rvClassroom.visibility = View.GONE
-                        binding.ivDoesntHaveAnClassroom.visibility = View.VISIBLE
-                        binding.tvDoesntHaveAnClassroom.visibility = View.VISIBLE
-                        binding.tvTotalClassJoined.text = "0"
-                    } else {
-                        binding.rvClassroom.visibility = View.VISIBLE
-                        binding.ivDoesntHaveAnClassroom.visibility = View.GONE
-                        binding.tvDoesntHaveAnClassroom.visibility = View.GONE
-                        classroomAdapter.submitList(classes)
-                        binding.tvTotalClassJoined.text = classes.size.toString()
+                        is Resource.Success -> {
+                            binding.progressBarClassroom.visibility = View.GONE
+                            val classes = resource.data
+                            if (classes.isNullOrEmpty()) {
+                                binding.rvClassroom.visibility = View.GONE
+                                binding.ivDoesntHaveAnClassroom.visibility = View.VISIBLE
+                                binding.tvDoesntHaveAnClassroom.visibility = View.VISIBLE
+                                binding.tvTotalClassJoined.text = "0"
+                            } else {
+                                binding.rvClassroom.visibility = View.VISIBLE
+                                binding.ivDoesntHaveAnClassroom.visibility = View.GONE
+                                binding.tvDoesntHaveAnClassroom.visibility = View.GONE
+                                classroomAdapter.submitList(classes)
+                                binding.tvTotalClassJoined.text = classes.size.toString()
+                            }
+                        }
+
+                        is Resource.Error -> {
+                            binding.progressBarClassroom.visibility = View.GONE
+                            binding.rvClassroom.visibility = View.GONE
+                            binding.ivDoesntHaveAnClassroom.visibility = View.VISIBLE
+                            binding.tvDoesntHaveAnClassroom.visibility = View.VISIBLE
+                            binding.tvDoesntHaveAnClassroom.text =
+                                resource.message ?: getString(R.string.failed_to_load_class)
+                            Toast
+                                .makeText(
+                                    requireContext(),
+                                    resource.message ?: getString(R.string.trouble_error),
+                                    Toast.LENGTH_LONG,
+                                ).show()
+                        }
                     }
-                }
-
-                is Resource.Error -> {
-                    binding.progressBarClassroom.visibility = View.GONE
-                    binding.rvClassroom.visibility = View.GONE
-                    binding.ivDoesntHaveAnClassroom.visibility = View.VISIBLE
-                    binding.tvDoesntHaveAnClassroom.visibility = View.VISIBLE
-                    binding.tvDoesntHaveAnClassroom.text =
-                        resource.message ?: getString(R.string.failed_to_load_class)
-                    Toast
-                        .makeText(
-                            requireContext(),
-                            resource.message ?: getString(R.string.trouble_error),
-                            Toast.LENGTH_LONG,
-                        ).show()
                 }
             }
         }
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun observeDosenNames() {
-        classroomViewModel.dosenNamesMap.observe(viewLifecycleOwner) { map ->
-            if (::classroomAdapter.isInitialized && binding.rvClassroom.adapter != null) {
-                classroomAdapter.notifyDataSetChanged()
+    private fun observeDosenNamesMap() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                classroomViewModel.dosenNamesMap.collect {
+                    if (::classroomAdapter.isInitialized && binding.rvClassroom.adapter != null) {
+                        classroomAdapter.notifyDataSetChanged()
+                    }
+                }
             }
         }
     }

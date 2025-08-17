@@ -1,11 +1,13 @@
 package com.mjs.mahasiswa.presentation.schedule
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -13,6 +15,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mjs.core.data.Resource
 import com.mjs.core.ui.schedule.ScheduleAdapter
+import com.mjs.detailclass.registered.DetailClassRegisteredActivity
 import com.mjs.mahasiswa.R
 import com.mjs.mahasiswa.databinding.FragmentScheduleBinding
 import kotlinx.coroutines.flow.collectLatest
@@ -65,9 +68,10 @@ class ScheduleFragment : Fragment() {
         }
 
         scheduleAdapter.onItemClick = { kelas ->
-            Toast
-                .makeText(requireContext(), "Clicked on ${kelas.namaKelas}", Toast.LENGTH_SHORT)
-                .show()
+            val uri = "detail_class://detail_class_registered_activity".toUri()
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            intent.putExtra(DetailClassRegisteredActivity.EXTRA_KELAS_ID, kelas.kelasId)
+            startActivity(intent)
         }
     }
 

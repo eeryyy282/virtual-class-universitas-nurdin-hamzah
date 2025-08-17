@@ -57,8 +57,9 @@ class ScheduleDetailAdapter : ListAdapter<Kelas, ScheduleDetailAdapter.ListViewH
 
         init {
             binding.root.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    onItemClick?.invoke(getItem(adapterPosition))
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onItemClick?.invoke(getItem(position))
                 }
             }
         }

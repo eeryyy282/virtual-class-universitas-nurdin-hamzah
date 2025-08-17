@@ -1,11 +1,13 @@
 package com.mjs.dosen.presentation.schedule
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -13,6 +15,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mjs.core.data.Resource
 import com.mjs.core.ui.schedule.ScheduleAdapter
+import com.mjs.detailclass.registered.DetailClassRegisteredActivity
 import com.mjs.dosen.databinding.FragmentScheduleBinding
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -52,9 +55,10 @@ class ScheduleFragment : Fragment() {
         }
 
         scheduleAdapter.onItemClick = { kelas ->
-            Toast
-                .makeText(requireContext(), "Clicked on ${kelas.namaKelas}", Toast.LENGTH_SHORT)
-                .show()
+            val uri = "detail_class://detail_class_registered_activity".toUri()
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            intent.putExtra(DetailClassRegisteredActivity.EXTRA_KELAS_ID, kelas.kelasId)
+            startActivity(intent)
         }
     }
 

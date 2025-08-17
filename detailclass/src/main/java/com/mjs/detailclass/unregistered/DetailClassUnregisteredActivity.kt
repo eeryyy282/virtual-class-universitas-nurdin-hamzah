@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
@@ -25,6 +26,7 @@ class DetailClassUnregisteredActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailClassUnregisteredBinding
     private val detailClassViewModel: DetailClassUnregisteredViewModel by viewModel()
     private lateinit var mahasiswaListAdapter: MahasiswaListAdapter
+    private var currentKelasId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,9 +45,9 @@ class DetailClassUnregisteredActivity : AppCompatActivity() {
         checkDarkMode()
         setupRecyclerView()
 
-        val kelasId = intent.getStringExtra("kelasId")
-        if (kelasId != null) {
-            detailClassViewModel.fetchKelasDetails(kelasId)
+        currentKelasId = intent.getStringExtra("kelasId")
+        if (currentKelasId != null) {
+            detailClassViewModel.fetchKelasDetailsAndEnrollmentStatus(currentKelasId!!)
         } else {
             Toast.makeText(this, "Error: Kelas ID tidak ditemukan", Toast.LENGTH_LONG).show()
             finish()
@@ -55,6 +57,78 @@ class DetailClassUnregisteredActivity : AppCompatActivity() {
         observeDosenDetails()
         observeMahasiswaList()
         observeMahasiswaCount()
+        observeEnrollmentRequestStatus()
+        observeCurrentEnrollmentState()
+
+        binding.btnEnroll.setOnClickListener {
+            showEnrollConfirmationDialog()
+        }
+    }
+
+    private fun showEnrollConfirmationDialog() {
+        currentKelasId?.let {
+            AlertDialog
+                .Builder(this)
+                .setTitle("Konfirmasi Pendaftaran")
+                .setMessage("Apakah Anda yakin ingin mendaftar di kelas ini?")
+                .setPositiveButton("Ya") { _, _ ->
+                    detailClassViewModel.enrollToClass(it)
+                }.setNegativeButton("Tidak", null)
+                .show()
+        }
+    }
+
+    private fun observeCurrentEnrollmentState() {
+        detailClassViewModel.currentEnrollmentState.observe(this) { enrollment ->
+            if (enrollment != null) {
+                when (enrollment.status) {
+                    "pending" -> {
+                        binding.btnEnroll.isEnabled = false
+                        binding.btnEnroll.text = getString(R.string.enrollment_pending)
+                    }
+
+                    "approved" -> {
+                        binding.btnEnroll.isEnabled = false
+                        binding.btnEnroll.text = getString(R.string.already_enrolled)
+                    }
+
+                    else -> {
+                        binding.btnEnroll.isEnabled = true
+                        binding.btnEnroll.text = getString(R.string.enroll)
+                    }
+                }
+            } else {
+                binding.btnEnroll.isEnabled = true
+                binding.btnEnroll.text = getString(R.string.enroll)
+            }
+        }
+    }
+
+    private fun observeEnrollmentRequestStatus() {
+        detailClassViewModel.enrollmentRequestStatus.observe(this) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    binding.progressBarDetailClass.visibility = View.VISIBLE
+                }
+
+                is Resource.Success -> {
+                    binding.progressBarDetailClass.visibility = View.GONE
+                    Toast.makeText(this, resource.data, Toast.LENGTH_LONG).show()
+                }
+
+                is Resource.Error -> {
+                    binding.progressBarDetailClass.visibility = View.GONE
+                    Toast
+                        .makeText(this, resource.message ?: "Gagal mendaftar", Toast.LENGTH_LONG)
+                        .show()
+                    val currentState = detailClassViewModel.currentEnrollmentState.value
+                    if (currentState == null || currentState.status != "approved") {
+                        binding.btnEnroll.isEnabled = true
+                        binding.btnEnroll.text = getString(R.string.enroll)
+                    }
+                }
+            }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -71,18 +145,15 @@ class DetailClassUnregisteredActivity : AppCompatActivity() {
         detailClassViewModel.mahasiswaList.observe(this) { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    binding.progressBarDetailClass.visibility = View.VISIBLE
                 }
 
                 is Resource.Success -> {
-                    binding.progressBarDetailClass.visibility = View.GONE
                     resource.data?.let {
                         mahasiswaListAdapter.submitList(it)
                     }
                 }
 
                 is Resource.Error -> {
-                    binding.progressBarDetailClass.visibility = View.GONE
                     Toast
                         .makeText(
                             this,

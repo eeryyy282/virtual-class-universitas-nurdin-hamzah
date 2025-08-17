@@ -77,6 +77,11 @@ class LocalDataSource(
 
     fun getEnrolledClasses(nim: Int): Flow<List<EnrollmentEntity>> = classroomDao.getEnrolledClasses(nim)
 
+    fun getEnrollmentByNimAndKelasId(
+        nim: Int,
+        kelasId: String,
+    ): Flow<EnrollmentEntity?> = classroomDao.getEnrollmentByNimAndKelasId(nim, kelasId)
+
     fun getMaterialsByClass(kelasId: String): Flow<List<MaterialEntity>> = classroomDao.getMaterialsByClass(kelasId)
 
     suspend fun insertMaterial(material: MaterialEntity) = classroomDao.insertMaterial(material)
@@ -136,4 +141,6 @@ class LocalDataSource(
     fun getMahasiswaByKelasId(kelasId: String): Flow<List<MahasiswaEntity>> = classroomDao.getMahasiswaByKelasId(kelasId)
 
     fun getMahasiswaCountByKelasId(kelasId: String): Flow<Int> = classroomDao.getMahasiswaCountByKelasId(kelasId)
+
+    fun getAllSchedulesByNim(nim: Int): Flow<List<KelasEntity>> = classroomDao.getAllSchedulesByNim(nim)
 }

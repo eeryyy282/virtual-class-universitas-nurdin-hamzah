@@ -6,6 +6,7 @@ import com.mjs.core.data.Resource
 import com.mjs.core.domain.model.Kelas
 import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -18,15 +19,25 @@ import kotlinx.coroutines.flow.stateIn
 class ClassroomViewModel(
     private val virtualClassUseCase: VirtualClassUseCase,
 ) : ViewModel() {
+    @Suppress("ktlint:standard:backing-property-naming")
+    private val _refreshTrigger = MutableStateFlow(0)
+
+    fun triggerRefresh() {
+        _refreshTrigger.value++
+    }
+
     private val enrolledClassesRaw: StateFlow<Resource<List<Kelas>>> =
-        virtualClassUseCase
-            .getLoggedInUserId()
-            .flatMapLatest { nim ->
-                if (nim == null) {
-                    flowOf(Resource.Error("NIM pengguna tidak ditemukan. Silakan masuk kembali."))
-                } else {
-                    virtualClassUseCase.getAllSchedulesByNim(nim)
-                }
+        _refreshTrigger
+            .flatMapLatest { _ ->
+                virtualClassUseCase
+                    .getLoggedInUserId()
+                    .flatMapLatest { nim ->
+                        if (nim == null) {
+                            flowOf(Resource.Error("NIM pengguna tidak ditemukan. Silakan masuk kembali."))
+                        } else {
+                            virtualClassUseCase.getAllSchedulesByNim(nim)
+                        }
+                    }
             }.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000),

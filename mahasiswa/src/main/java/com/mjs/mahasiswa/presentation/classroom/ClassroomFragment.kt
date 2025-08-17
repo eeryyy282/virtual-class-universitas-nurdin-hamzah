@@ -3,10 +3,12 @@ package com.mjs.mahasiswa.presentation.classroom
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -15,6 +17,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mjs.core.data.Resource
 import com.mjs.core.ui.classroom.ClassroomAdapterMahasiswa
+import com.mjs.detailclass.registered.DetailClassRegisteredActivity
 import com.mjs.mahasiswa.R
 import com.mjs.mahasiswa.databinding.FragmentClassroomBinding
 import kotlinx.coroutines.launch
@@ -26,6 +29,16 @@ class ClassroomFragment : Fragment() {
 
     private val classroomViewModel: ClassroomViewModel by viewModel()
     private lateinit var classroomAdapter: ClassroomAdapterMahasiswa
+
+    private val detailClassLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult(),
+        ) { result ->
+            if (result.resultCode == DetailClassRegisteredActivity.RESULT_REFRESH_REQUESTED) {
+                Log.d("ClassroomFragment", "Refresh requested from DetailClassRegisteredActivity")
+                classroomViewModel.triggerRefresh()
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,10 +79,9 @@ class ClassroomFragment : Fragment() {
         }
 
         classroomAdapter.onItemClick = { kelas ->
-            val uri = "detail_class://detail_class_registered_activity".toUri()
-            val intent = Intent(Intent.ACTION_VIEW, uri)
-            intent.putExtra("kelasId", kelas.kelasId)
-            startActivity(intent)
+            val intent = Intent(requireContext(), DetailClassRegisteredActivity::class.java)
+            intent.putExtra(DetailClassRegisteredActivity.EXTRA_KELAS_ID, kelas.kelasId)
+            detailClassLauncher.launch(intent)
         }
     }
 
@@ -77,6 +89,7 @@ class ClassroomFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 classroomViewModel.enrolledClassesForUi.collect { resource ->
+                    Log.d("ClassroomFragmentData", "Collected resource: $resource")
                     when (resource) {
                         is Resource.Loading -> {
                             binding.progressBarClassroom.visibility = View.VISIBLE
@@ -88,6 +101,7 @@ class ClassroomFragment : Fragment() {
                         is Resource.Success -> {
                             binding.progressBarClassroom.visibility = View.GONE
                             val classes = resource.data
+                            Log.d("ClassroomFragmentData", "Success data: $classes")
                             if (classes.isNullOrEmpty()) {
                                 binding.rvClassroom.visibility = View.GONE
                                 binding.ivDoesntHaveAnClassroom.visibility = View.VISIBLE
@@ -98,6 +112,7 @@ class ClassroomFragment : Fragment() {
                                 binding.ivDoesntHaveAnClassroom.visibility = View.GONE
                                 binding.tvDoesntHaveAnClassroom.visibility = View.GONE
                                 classroomAdapter.submitList(classes)
+                                Log.d("ClassroomFragmentData", "Submitted to adapter: $classes")
                                 binding.tvTotalClassJoined.text = classes.size.toString()
                             }
                         }

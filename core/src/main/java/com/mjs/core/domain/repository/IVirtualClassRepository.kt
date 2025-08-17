@@ -63,6 +63,11 @@ interface IVirtualClassRepository {
 
     fun getEnrolledClasses(nim: Int): Flow<Resource<List<EnrollmentEntity>>>
 
+    fun getEnrollmentByNimAndKelasId(
+        nim: Int,
+        kelasId: String,
+    ): Flow<EnrollmentEntity?>
+
     suspend fun enrollToClass(enrollment: EnrollmentEntity): Flow<Resource<String>>
 
     suspend fun leaveClass(

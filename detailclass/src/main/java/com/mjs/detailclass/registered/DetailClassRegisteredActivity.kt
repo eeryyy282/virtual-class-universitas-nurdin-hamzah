@@ -1,5 +1,6 @@
 package com.mjs.detailclass.registered
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -238,6 +239,8 @@ class DetailClassRegisteredActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     binding.progressBarDetailClass.visibility = View.GONE
                     Toast.makeText(this, resource.data, Toast.LENGTH_SHORT).show()
+                    val resultIntent = Intent()
+                    setResult(RESULT_REFRESH_REQUESTED, resultIntent)
                     finish()
                 }
 
@@ -266,5 +269,6 @@ class DetailClassRegisteredActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_KELAS_ID = "kelasId"
+        const val RESULT_REFRESH_REQUESTED = RESULT_FIRST_USER + 1
     }
 }

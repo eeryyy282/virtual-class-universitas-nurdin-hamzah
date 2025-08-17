@@ -34,7 +34,7 @@ internal suspend fun populateEnrollments(
             mhs3Nim,
             kelasPML,
             oneMonthAgo,
-            "Aktif",
+            "approved",
         ),
     )
     classroomDao.insertEnrollment(
@@ -43,7 +43,7 @@ internal suspend fun populateEnrollments(
             mhs3Nim,
             kelasAI,
             oneMonthAgo,
-            "Aktif",
+            "approved",
         ),
     )
     classroomDao.insertEnrollment(
@@ -52,7 +52,7 @@ internal suspend fun populateEnrollments(
             mhs3Nim,
             kelasWEB,
             twoWeeksAgo,
-            "Aktif",
+            "approved",
         ),
     )
     classroomDao.insertEnrollment(
@@ -61,7 +61,7 @@ internal suspend fun populateEnrollments(
             mhs3Nim,
             kelasJARKOM,
             oneWeekAgo,
-            "Aktif",
+            "approved",
         ),
     )
     classroomDao.insertEnrollment(
@@ -70,7 +70,7 @@ internal suspend fun populateEnrollments(
             mhs1Nim,
             kelasBDT,
             oneMonthAgo,
-            "Aktif",
+            "approved",
         ),
     )
     classroomDao.insertEnrollment(
@@ -79,7 +79,7 @@ internal suspend fun populateEnrollments(
             mhs1Nim,
             kelasAPSI,
             twoWeeksAgo,
-            "Aktif",
+            "approved",
         ),
     )
     classroomDao.insertEnrollment(
@@ -88,7 +88,7 @@ internal suspend fun populateEnrollments(
             mhs1Nim,
             kelasPML,
             oneWeekAgo,
-            "Aktif",
+            "approved",
         ),
     ) // Cross-major
     classroomDao.insertEnrollment(
@@ -97,7 +97,7 @@ internal suspend fun populateEnrollments(
             mhs2Nim,
             kelasBDT,
             oneMonthAgo,
-            "Aktif",
+            "approved",
         ),
     )
     classroomDao.insertEnrollment(
@@ -106,7 +106,7 @@ internal suspend fun populateEnrollments(
             mhs2Nim,
             kelasMANPROSI,
             oneWeekAgo,
-            "Aktif",
+            "approved",
         ),
     )
     classroomDao.insertEnrollment(
@@ -115,7 +115,7 @@ internal suspend fun populateEnrollments(
             mhs4Nim,
             kelasKOMMAS,
             oneMonthAgo,
-            "Aktif",
+            "approved",
         ),
     )
     classroomDao.insertEnrollment(
@@ -124,7 +124,7 @@ internal suspend fun populateEnrollments(
             mhs4Nim,
             kelasJURDIG,
             twoWeeksAgo,
-            "Aktif",
+            "approved",
         ),
     )
     classroomDao.insertEnrollment(
@@ -133,7 +133,7 @@ internal suspend fun populateEnrollments(
             mhs4Nim,
             kelasWEB,
             oneWeekAgo,
-            "Aktif",
+            "approved",
         ),
     ) // Cross-major
     classroomDao.insertEnrollment(
@@ -142,7 +142,7 @@ internal suspend fun populateEnrollments(
             mhs5Nim,
             kelasPOLPEM,
             oneMonthAgo,
-            "Aktif",
+            "approved",
         ),
     )
     classroomDao.insertEnrollment(
@@ -151,7 +151,7 @@ internal suspend fun populateEnrollments(
             mhs5Nim,
             kelasKEBPUB,
             twoWeeksAgo,
-            "Aktif",
+            "approved",
         ),
     )
     classroomDao.insertEnrollment(
@@ -160,7 +160,7 @@ internal suspend fun populateEnrollments(
             mhs6Nim,
             kelasPOLPEM,
             oneMonthAgo,
-            "Aktif",
+            "approved",
         ),
     )
     classroomDao.insertEnrollment(
@@ -169,7 +169,7 @@ internal suspend fun populateEnrollments(
             mhs6Nim,
             kelasPEMDA,
             oneWeekAgo,
-            "Aktif",
+            "approved",
         ),
     )
     classroomDao.insertEnrollment(
@@ -178,7 +178,7 @@ internal suspend fun populateEnrollments(
             mhs5Nim,
             kelasJARKOM,
             threeDaysAgo,
-            "Aktif",
+            "approved",
         ),
     )
 }

@@ -69,6 +69,11 @@ class VirtualClassInteractor(
 
     override fun getEnrolledClasses(nim: Int): Flow<Resource<List<EnrollmentEntity>>> = virtualClassRepository.getEnrolledClasses(nim)
 
+    override fun getEnrollmentByNimAndKelasId(
+        nim: Int,
+        kelasId: String,
+    ): Flow<EnrollmentEntity?> = virtualClassRepository.getEnrollmentByNimAndKelasId(nim, kelasId)
+
     override suspend fun enrollToClass(enrollment: EnrollmentEntity): Flow<Resource<String>> =
         virtualClassRepository.enrollToClass(enrollment)
 

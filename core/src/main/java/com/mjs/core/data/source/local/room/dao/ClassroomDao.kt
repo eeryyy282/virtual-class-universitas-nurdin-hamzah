@@ -33,6 +33,12 @@ interface ClassroomDao {
     @Query("SELECT * FROM enrollments WHERE nim = :nim")
     fun getEnrolledClasses(nim: Int): Flow<List<EnrollmentEntity>>
 
+    @Query("SELECT * FROM enrollments WHERE nim = :nim AND kelas_id = :kelasId")
+    fun getEnrollmentByNimAndKelasId(
+        nim: Int,
+        kelasId: String,
+    ): Flow<EnrollmentEntity?>
+
     @Query("SELECT * FROM materials WHERE kelas_id = :kelasId")
     fun getMaterialsByClass(kelasId: String): Flow<List<MaterialEntity>>
 
@@ -48,9 +54,12 @@ interface ClassroomDao {
     @Query("SELECT * FROM classes WHERE jurusan = :jurusan")
     fun getAllKelasByJurusan(jurusan: String): Flow<List<KelasEntity>>
 
-    @Query("SELECT m.* FROM mahasiswa m INNER JOIN enrollments e ON m.nim = e.nim WHERE e.kelas_id = :kelasId")
+    @Query("SELECT m.* FROM mahasiswa m INNER JOIN enrollments e ON m.nim = e.nim WHERE e.kelas_id = :kelasId AND e.status = 'approved'")
     fun getMahasiswaByKelasId(kelasId: String): Flow<List<MahasiswaEntity>>
 
-    @Query("SELECT COUNT(nim) FROM enrollments WHERE kelas_id = :kelasId")
+    @Query("SELECT COUNT(e.nim) FROM enrollments e WHERE e.kelas_id = :kelasId AND e.status = 'approved'")
     fun getMahasiswaCountByKelasId(kelasId: String): Flow<Int>
+
+    @Query("SELECT c.* FROM classes c INNER JOIN enrollments e ON c.kelas_id = e.kelas_id WHERE e.nim = :nim AND e.status = 'approved'")
+    fun getAllSchedulesByNim(nim: Int): Flow<List<KelasEntity>>
 }

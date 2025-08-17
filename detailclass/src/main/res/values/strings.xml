@@ -34,4 +34,6 @@
     <string name="lecture_user_not_found">Dosen pengampu tidak ditemukan.</string>
     <string name="day_not_available">"Jadwal hari tidak ditemukan. "</string>
     <string name="_0">0</string>
+    <string name="already_enrolled">Terdaftar (Menunggu Konfirmasi)</string>
+    <string name="enrollment_pending">Menunggu Persetujuan</string>
 </resources>

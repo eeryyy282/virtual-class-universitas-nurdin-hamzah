@@ -187,12 +187,16 @@ class EnrollClassViewModel(
                             val enrolledClasses = enrolledClassesResource.data
 
                             if (allClasses != null && enrolledClasses != null) {
-                                val enrolledClassIds = enrolledClasses.map { it.kelasId }.toSet()
-                                val unenrolledClasses =
-                                    allClasses.filter { it.kelasId !in enrolledClassIds }
+                                val enrolledApprovedClassIds =
+                                    enrolledClasses
+                                        .filter { it.status == "approved" }
+                                        .map { it.kelasId }
+                                        .toSet()
+                                val displayClasses =
+                                    allClasses.filter { it.kelasId !in enrolledApprovedClassIds }
 
                                 val grouped =
-                                    unenrolledClasses
+                                    displayClasses
                                         .groupBy { it.semester }
                                         .toList()
                                         .sortedBy { it.first }
@@ -200,7 +204,7 @@ class EnrollClassViewModel(
                                 _originalGroupedClasses.value = successResult
                                 filterClasses(searchQuery.value)
 
-                                val allNidns = unenrolledClasses.map { it.nidn }.distinct()
+                                val allNidns = displayClasses.map { it.nidn }.distinct()
                                 allNidns.forEach { nidn ->
                                     fetchDosenName(nidn)
                                 }

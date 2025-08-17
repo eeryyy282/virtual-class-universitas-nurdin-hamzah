@@ -661,7 +661,6 @@ class VirtualClassRepository(
                             nama = mahasiswa.nama,
                             email = mahasiswa.email,
                             fotoProfil = mahasiswa.fotoProfil,
-                            // password tidak diupdate di sini, jika perlu, tambahkan parameter password
                         )
                     localDataSource.updateMahasiswa(updatedEntity)
                     emit(Resource.Success("Profil berhasil diperbarui"))
@@ -692,6 +691,27 @@ class VirtualClassRepository(
                 }
             } catch (e: Exception) {
                 emit(Resource.Error(e.message ?: "Gagal memperbarui profil"))
+            }
+        }
+
+    override fun getPendingEnrollmentRequests(kelasId: String): Flow<Resource<List<Mahasiswa>>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                localDataSource
+                    .getPendingEnrollmentRequests(kelasId)
+                    .map { DataMapper.mapMahasiswaEntitiesToDomains(it) }
+                    .collect { emit(Resource.Success(it)) }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Gagal memuat permintaan pendaftaran"))
+            }
+        }
+
+    override fun getPendingEnrollmentRequestCount(kelasId: String): Flow<Resource<Int>> =
+        flow {
+            emit(Resource.Loading())
+            localDataSource.getPendingEnrollmentRequestCount(kelasId).collect {
+                emit(Resource.Success(it))
             }
         }
 }

@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.EnrollClassActivity">
+    tools:context=".presentation.enrollclass.EnrollClassActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -71,6 +71,7 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:indeterminateTint="@color/outline_color_theme"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/rv_classroom"
             app:layout_constraintEnd_toEndOf="@+id/rv_classroom"

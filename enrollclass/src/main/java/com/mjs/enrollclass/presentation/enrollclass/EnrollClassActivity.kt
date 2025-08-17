@@ -1,4 +1,4 @@
-package com.mjs.enrollclass.presentation
+package com.mjs.enrollclass.presentation.enrollclass
 
 import android.annotation.SuppressLint
 import android.content.Intent

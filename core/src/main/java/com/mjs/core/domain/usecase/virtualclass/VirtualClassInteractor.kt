@@ -146,4 +146,10 @@ class VirtualClassInteractor(
 
     override fun getMahasiswaCountByKelasId(kelasId: String): Flow<Resource<Int>> =
         virtualClassRepository.getMahasiswaCountByKelasId(kelasId)
+
+    override fun getPendingEnrollmentRequests(kelasId: String): Flow<Resource<List<Mahasiswa>>> =
+        virtualClassRepository.getPendingEnrollmentRequests(kelasId)
+
+    override fun getPendingEnrollmentRequestCount(kelasId: String): Flow<Resource<Int>> =
+        virtualClassRepository.getPendingEnrollmentRequestCount(kelasId)
 }

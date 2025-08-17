@@ -62,4 +62,10 @@ interface ClassroomDao {
 
     @Query("SELECT c.* FROM classes c INNER JOIN enrollments e ON c.kelas_id = e.kelas_id WHERE e.nim = :nim AND e.status = 'approved'")
     fun getAllSchedulesByNim(nim: Int): Flow<List<KelasEntity>>
+
+    @Query("SELECT m.* FROM mahasiswa m INNER JOIN enrollments e ON m.nim = e.nim WHERE e.kelas_id = :kelasId AND e.status = 'pending'")
+    fun getPendingEnrollmentRequests(kelasId: String): Flow<List<MahasiswaEntity>>
+
+    @Query("SELECT COUNT(e.nim) FROM enrollments e WHERE e.kelas_id = :kelasId AND e.status = 'pending'")
+    fun getPendingEnrollmentRequestCount(kelasId: String): Flow<Int>
 }

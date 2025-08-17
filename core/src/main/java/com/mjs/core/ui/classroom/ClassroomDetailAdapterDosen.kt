@@ -1,5 +1,6 @@
 package com.mjs.core.ui.classroom
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -37,12 +38,13 @@ class ClassroomDetailAdapterDosen : ListAdapter<Kelas, ClassroomDetailAdapterDos
     inner class ListViewHolder(
         private val binding: ItemClassroomDetailDosenBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(data: Kelas) {
             with(binding) {
                 tvSubject.text = data.namaKelas
                 tvCodeSubject.text = data.kelasId
                 tvClassroomLocation.text = data.ruang
-                tvCreditsSubject.text = data.credit.toString()
+                tvCreditsSubject.text = "${data.credit} SKS"
                 Glide
                     .with(itemView.context)
                     .load(data.classImage)

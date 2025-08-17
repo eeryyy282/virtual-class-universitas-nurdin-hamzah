@@ -23,21 +23,26 @@
         android:id="@+id/tv_count_invitation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/circle_button_background"
+        android:backgroundTint="@color/red_mahogany"
         android:fontFamily="@font/lato"
+        android:padding="2dp"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
         android:text="@string/_0"
-        android:textColor="@color/outline_color_theme"
+        android:textColor="@color/white"
         android:textStyle="bold"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_leave_classroom_or_invitation"
-        app:layout_constraintEnd_toStartOf="@+id/btn_leave_classroom_or_invitation"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_leave_classroom_or_request"
+        app:layout_constraintEnd_toStartOf="@+id/btn_leave_classroom_or_request"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/iv_classroom"
-        app:layout_constraintTop_toTopOf="@+id/btn_leave_classroom_or_invitation"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageButton
-        android:id="@+id/btn_leave_classroom_or_invitation"
+        android:id="@+id/btn_leave_classroom_or_request"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginEnd="28dp"
@@ -50,8 +55,8 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_photo_profile_classroom"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
         android:layout_marginTop="32dp"
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="@+id/iv_classroom"
@@ -105,16 +110,18 @@
         android:textColor="@color/classic_blue"
         android:textSize="12sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_photo_profile_classroom"
         app:layout_constraintEnd_toEndOf="@+id/tv_classroom_location"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tv_classroom_location"
-        app:layout_constraintTop_toBottomOf="@+id/tv_classroom_location" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_classroom_location"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/tv_major_subject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
         android:background="@drawable/bg_rounded_textview"
         android:fontFamily="@font/lato"
         android:padding="8dp"
@@ -123,16 +130,18 @@
         android:textColor="@color/classic_blue"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_photo_profile_classroom"
-        app:layout_constraintStart_toStartOf="@+id/tv_credits_subject"
-        app:layout_constraintTop_toBottomOf="@+id/tv_credits_subject"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_credits_subject"
+        app:layout_constraintEnd_toEndOf="@+id/tv_subject_name"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/tv_credits_subject"
+        app:layout_constraintTop_toTopOf="@+id/tv_credits_subject"
         app:layout_constraintVertical_bias="0.0" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="42dp"
         android:layout_marginEnd="28dp"
         android:backgroundTint="@color/background_color_card_view"
         app:layout_constraintEnd_toEndOf="parent"
@@ -425,11 +434,11 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:indeterminateTint="@color/outline_color_theme"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

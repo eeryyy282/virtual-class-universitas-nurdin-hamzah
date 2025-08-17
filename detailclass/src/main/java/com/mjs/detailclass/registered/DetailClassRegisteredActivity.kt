@@ -10,12 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.mjs.core.data.Resource
 import com.mjs.core.data.source.local.pref.AppPreference
 import com.mjs.core.domain.model.Kelas
+import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
 import com.mjs.detailclass.R
 import com.mjs.detailclass.databinding.ActivityDetailClassRegisteredBinding
 import com.mjs.detailclass.di.detailClassModule
@@ -53,13 +55,13 @@ class DetailClassRegisteredActivity : AppCompatActivity() {
         detailClassRegisteredViewModel.loggedInUserType.observe(this) { userType ->
             currentUserType = userType
             setupButtonVisibility()
-            setupActionListeners()
         }
 
         checkDarkMode()
         observeClassDetails()
         observeDosenDetails()
         observeLeaveClassStatus()
+        observePendingEnrollmentCount()
 
         if (kelasId != null) {
             detailClassRegisteredViewModel.fetchClassDetails(kelasId!!)
@@ -73,26 +75,28 @@ class DetailClassRegisteredActivity : AppCompatActivity() {
     }
 
     private fun setupButtonVisibility() {
-        if (currentUserType != AppPreference.USER_TYPE_MAHASISWA) {
-            binding.btnLeaveClassroomOrInvitation.setImageDrawable(
+        if (currentUserType == VirtualClassUseCase.USER_TYPE_DOSEN) {
+            binding.btnLeaveClassroomOrRequest.setImageDrawable(
                 AppCompatResources.getDrawable(this, R.drawable.invitation_icon),
             )
-            binding.btnLeaveClassroomOrInvitation.setColorFilter(
+            binding.btnLeaveClassroomOrRequest.setColorFilter(
                 ContextCompat.getColor(
                     this,
                     R.color.outline_color_theme,
                 ),
             )
+            binding.tvCountInvitation.visibility = View.GONE
         } else {
-            binding.btnLeaveClassroomOrInvitation.setImageDrawable(
+            binding.btnLeaveClassroomOrRequest.setImageDrawable(
                 AppCompatResources.getDrawable(this, R.drawable.exit_icon),
             )
-            binding.btnLeaveClassroomOrInvitation.setColorFilter(
+            binding.btnLeaveClassroomOrRequest.setColorFilter(
                 ContextCompat.getColor(
                     this,
                     R.color.red_mahogany,
                 ),
             )
+            binding.tvCountInvitation.visibility = View.GONE
         }
     }
 
@@ -104,16 +108,18 @@ class DetailClassRegisteredActivity : AppCompatActivity() {
                 }
 
                 is Resource.Success -> {
-                    resource.data?.let { setupView(it) }
-                        ?: run {
-                            binding.progressBarDetailClass.visibility = View.GONE
-                            Toast
-                                .makeText(
-                                    this,
-                                    getString(R.string.cannot_find_class_detail),
-                                    Toast.LENGTH_LONG,
-                                ).show()
-                        }
+                    resource.data?.let {
+                        setupView(it)
+                        setupActionListeners()
+                    } ?: run {
+                        binding.progressBarDetailClass.visibility = View.GONE
+                        Toast
+                            .makeText(
+                                this,
+                                getString(R.string.cannot_find_class_detail),
+                                Toast.LENGTH_LONG,
+                            ).show()
+                    }
                 }
 
                 is Resource.Error -> {
@@ -172,6 +178,31 @@ class DetailClassRegisteredActivity : AppCompatActivity() {
         }
     }
 
+    private fun observePendingEnrollmentCount() {
+        detailClassRegisteredViewModel.pendingEnrollmentCount.observe(this) { resource ->
+            if (currentUserType == VirtualClassUseCase.USER_TYPE_DOSEN) {
+                when (resource) {
+                    is Resource.Success -> {
+                        val count = resource.data
+                        if (count != null && count > 0) {
+                            binding.tvCountInvitation.text = count.toString()
+                            binding.tvCountInvitation.visibility = View.VISIBLE
+                        } else {
+                            binding.tvCountInvitation.visibility = View.GONE
+                        }
+                    }
+
+                    is Resource.Error -> {
+                        binding.tvCountInvitation.visibility = View.GONE
+                    }
+
+                    is Resource.Loading -> {
+                    }
+                }
+            }
+        }
+    }
+
     private fun setupView(kelas: Kelas) {
         binding.tvSubjectName.text = kelas.namaKelas
         binding.tvClassroomLocation.text = kelas.ruang
@@ -193,18 +224,17 @@ class DetailClassRegisteredActivity : AppCompatActivity() {
     }
 
     private fun setupActionListeners() {
+        val currentKelasId = this.kelasId ?: return
+
         if (currentUserType == AppPreference.USER_TYPE_MAHASISWA) {
-            binding.btnLeaveClassroomOrInvitation.setOnClickListener {
+            binding.btnLeaveClassroomOrRequest.setOnClickListener {
                 showLeaveClassConfirmationDialog()
             }
         } else {
-            binding.btnLeaveClassroomOrInvitation.setOnClickListener {
-                Toast
-                    .makeText(
-                        this,
-                        "Fitur undangan untuk dosen akan segera hadir",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+            binding.btnLeaveClassroomOrRequest.setOnClickListener {
+                val uri =
+                    "enroll_class://enroll_class_request_activity?kelasId=$currentKelasId".toUri()
+                startActivity(Intent(Intent.ACTION_VIEW, uri))
             }
         }
     }

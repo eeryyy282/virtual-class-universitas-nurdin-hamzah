@@ -31,6 +31,9 @@ class DetailClassRegisteredViewModel(
     private val _loggedInUserType = MutableLiveData<String?>()
     val loggedInUserType: LiveData<String?> = _loggedInUserType
 
+    private val _pendingEnrollmentCount = MutableLiveData<Resource<Int>>()
+    val pendingEnrollmentCount: LiveData<Resource<Int>> = _pendingEnrollmentCount
+
     init {
         fetchLoggedInUserDetails()
     }
@@ -58,6 +61,9 @@ class DetailClassRegisteredViewModel(
                         if (kelas != null) {
                             _kelasDetails.value = Resource.Success(kelas)
                             fetchDosenDetails(kelas.nidn)
+                            if (_loggedInUserType.value == VirtualClassUseCase.USER_TYPE_DOSEN) {
+                                fetchPendingEnrollmentCount(kelas.kelasId)
+                            }
                         } else {
                             _kelasDetails.value = Resource.Error("Kelas tidak ditemukan")
                         }
@@ -80,6 +86,14 @@ class DetailClassRegisteredViewModel(
             _dosenDetail.value = Resource.Loading()
             virtualClassUseCase.getDosenByNidn(nidn).collect { resource ->
                 _dosenDetail.value = resource
+            }
+        }
+    }
+
+    private fun fetchPendingEnrollmentCount(kelasId: String) {
+        viewModelScope.launch {
+            virtualClassUseCase.getPendingEnrollmentRequestCount(kelasId).collect {
+                _pendingEnrollmentCount.value = it
             }
         }
     }

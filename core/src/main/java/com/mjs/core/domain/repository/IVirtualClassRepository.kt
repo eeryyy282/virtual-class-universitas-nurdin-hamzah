@@ -126,4 +126,8 @@ interface IVirtualClassRepository {
     fun getMahasiswaByKelasId(kelasId: String): Flow<Resource<List<Mahasiswa>>>
 
     fun getMahasiswaCountByKelasId(kelasId: String): Flow<Resource<Int>>
+
+    fun getPendingEnrollmentRequests(kelasId: String): Flow<Resource<List<Mahasiswa>>>
+
+    fun getPendingEnrollmentRequestCount(kelasId: String): Flow<Resource<Int>>
 }

@@ -143,4 +143,8 @@ class LocalDataSource(
     fun getMahasiswaCountByKelasId(kelasId: String): Flow<Int> = classroomDao.getMahasiswaCountByKelasId(kelasId)
 
     fun getAllSchedulesByNim(nim: Int): Flow<List<KelasEntity>> = classroomDao.getAllSchedulesByNim(nim)
+
+    fun getPendingEnrollmentRequests(kelasId: String): Flow<List<MahasiswaEntity>> = classroomDao.getPendingEnrollmentRequests(kelasId)
+
+    fun getPendingEnrollmentRequestCount(kelasId: String): Flow<Int> = classroomDao.getPendingEnrollmentRequestCount(kelasId)
 }

@@ -267,7 +267,7 @@ class DetailClassUnregisteredActivity : AppCompatActivity() {
         binding.tvSubjectName.text = kelas.namaKelas
         binding.tvClassroomLocation.text = kelas.ruang
         binding.tvCreditsSubject.text = "${kelas.credit} SKS"
-        binding.tvCategorySubject.text = kelas.jurusan
+        binding.tvMajorSubject.text = kelas.jurusan
 
         val scheduleParts = kelas.jadwal.split(", ")
         if (scheduleParts.isNotEmpty()) {

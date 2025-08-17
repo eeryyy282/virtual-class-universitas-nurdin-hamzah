@@ -128,6 +128,10 @@ interface VirtualClassUseCase {
 
     fun getMahasiswaCountByKelasId(kelasId: String): Flow<Resource<Int>>
 
+    fun getPendingEnrollmentRequests(kelasId: String): Flow<Resource<List<Mahasiswa>>>
+
+    fun getPendingEnrollmentRequestCount(kelasId: String): Flow<Resource<Int>>
+
     companion object {
         const val USER_TYPE_MAHASISWA = AppPreference.USER_TYPE_MAHASISWA
         const val USER_TYPE_DOSEN = AppPreference.USER_TYPE_DOSEN

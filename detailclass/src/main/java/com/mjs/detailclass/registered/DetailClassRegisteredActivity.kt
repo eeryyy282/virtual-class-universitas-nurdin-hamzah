@@ -7,6 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
@@ -71,10 +73,25 @@ class DetailClassRegisteredActivity : AppCompatActivity() {
 
     private fun setupButtonVisibility() {
         if (currentUserType != AppPreference.USER_TYPE_MAHASISWA) {
-            binding.btnLeaveClassroom.visibility = View.GONE
+            binding.btnLeaveClassroomOrInvitation.setImageDrawable(
+                AppCompatResources.getDrawable(this, R.drawable.invitation_icon),
+            )
+            binding.btnLeaveClassroomOrInvitation.setColorFilter(
+                ContextCompat.getColor(
+                    this,
+                    R.color.outline_color_theme,
+                ),
+            )
         } else {
-            binding.btnLeaveClassroom.visibility =
-                View.VISIBLE
+            binding.btnLeaveClassroomOrInvitation.setImageDrawable(
+                AppCompatResources.getDrawable(this, R.drawable.exit_icon),
+            )
+            binding.btnLeaveClassroomOrInvitation.setColorFilter(
+                ContextCompat.getColor(
+                    this,
+                    R.color.red_mahogany,
+                ),
+            )
         }
     }
 
@@ -176,11 +193,18 @@ class DetailClassRegisteredActivity : AppCompatActivity() {
 
     private fun setupActionListeners() {
         if (currentUserType == AppPreference.USER_TYPE_MAHASISWA) {
-            binding.btnLeaveClassroom.setOnClickListener {
+            binding.btnLeaveClassroomOrInvitation.setOnClickListener {
                 showLeaveClassConfirmationDialog()
             }
         } else {
-            binding.btnLeaveClassroom.setOnClickListener(null)
+            binding.btnLeaveClassroomOrInvitation.setOnClickListener {
+                Toast
+                    .makeText(
+                        this,
+                        "Fitur undangan untuk dosen akan segera hadir",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+            }
         }
     }
 

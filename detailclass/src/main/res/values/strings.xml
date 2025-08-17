@@ -33,4 +33,5 @@
     <string name="major_subject">Jurusan</string>
     <string name="lecture_user_not_found">Dosen pengampu tidak ditemukan.</string>
     <string name="day_not_available">"Jadwal hari tidak ditemukan. "</string>
+    <string name="_0">0</string>
 </resources>

@@ -19,8 +19,25 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/outline_color_theme" />
 
+    <TextView
+        android:id="@+id/tv_count_invitation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/lato"
+        android:text="@string/_0"
+        android:textColor="@color/outline_color_theme"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_leave_classroom_or_invitation"
+        app:layout_constraintEnd_toStartOf="@+id/btn_leave_classroom_or_invitation"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/iv_classroom"
+        app:layout_constraintTop_toTopOf="@+id/btn_leave_classroom_or_invitation"
+        app:layout_constraintVertical_bias="0.5" />
+
     <ImageButton
-        android:id="@+id/btn_leave_classroom"
+        android:id="@+id/btn_leave_classroom_or_invitation"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginEnd="28dp"
@@ -35,7 +52,7 @@
         android:id="@+id/iv_photo_profile_classroom"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="@+id/iv_classroom"
         app:layout_constraintTop_toBottomOf="@+id/iv_classroom"

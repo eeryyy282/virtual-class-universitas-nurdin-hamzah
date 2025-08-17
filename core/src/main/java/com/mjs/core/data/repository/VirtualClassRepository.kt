@@ -268,6 +268,23 @@ class VirtualClassRepository(
             }
         }
 
+    override suspend fun updateEnrollmentStatus(
+        nim: Int,
+        kelasId: String,
+        newStatus: String,
+    ): Flow<Resource<String>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                localDataSource.updateEnrollmentStatus(nim, kelasId, newStatus)
+                val message =
+                    if (newStatus == "approved") "Mahasiswa berhasil diterima" else "Mahasiswa berhasil ditolak"
+                emit(Resource.Success(message))
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Gagal memperbarui status pendaftaran"))
+            }
+        }
+
     override fun getMaterialsByClass(kelasId: String): Flow<Resource<List<Materi>>> =
         flow {
             emit(Resource.Loading())

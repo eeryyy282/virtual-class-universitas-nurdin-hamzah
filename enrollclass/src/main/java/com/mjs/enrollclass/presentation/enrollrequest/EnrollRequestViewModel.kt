@@ -18,10 +18,38 @@ class EnrollRequestViewModel(
     private val _enrollmentRequests = MutableLiveData<Resource<List<Mahasiswa>>>()
     val enrollmentRequests: LiveData<Resource<List<Mahasiswa>>> = _enrollmentRequests
 
+    private val _enrollmentUpdateStatus = MutableLiveData<Resource<String>>()
+    val enrollmentUpdateStatus: LiveData<Resource<String>> = _enrollmentUpdateStatus
+
     fun fetchEnrollmentRequests(kelasId: String) {
         viewModelScope.launch {
+            _enrollmentRequests.value = Resource.Loading()
             virtualClassUseCase.getPendingEnrollmentRequests(kelasId).collect {
                 _enrollmentRequests.value = it
+            }
+        }
+    }
+
+    fun acceptEnrollmentRequest(
+        nim: Int,
+        kelasId: String,
+    ) {
+        viewModelScope.launch {
+            _enrollmentUpdateStatus.value = Resource.Loading()
+            virtualClassUseCase.acceptEnrollment(nim, kelasId).collect {
+                _enrollmentUpdateStatus.value = it
+            }
+        }
+    }
+
+    fun rejectEnrollmentRequest(
+        nim: Int,
+        kelasId: String,
+    ) {
+        viewModelScope.launch {
+            _enrollmentUpdateStatus.value = Resource.Loading()
+            virtualClassUseCase.rejectEnrollment(nim, kelasId).collect {
+                _enrollmentUpdateStatus.value = it
             }
         }
     }

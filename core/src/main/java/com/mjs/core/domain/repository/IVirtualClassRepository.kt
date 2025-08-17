@@ -75,6 +75,12 @@ interface IVirtualClassRepository {
         kelasId: String,
     ): Flow<Resource<String>>
 
+    suspend fun updateEnrollmentStatus(
+        nim: Int,
+        kelasId: String,
+        newStatus: String,
+    ): Flow<Resource<String>>
+
     fun getMaterialsByClass(kelasId: String): Flow<Resource<List<Materi>>>
 
     fun getAssignmentsByClass(kelasId: String): Flow<Resource<List<Tugas>>>

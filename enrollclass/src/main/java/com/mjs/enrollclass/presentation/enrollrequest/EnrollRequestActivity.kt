@@ -43,6 +43,7 @@ class EnrollRequestActivity : AppCompatActivity() {
 
         if (kelasId != null) {
             observeEnrollmentRequests()
+            observeEnrollmentUpdateStatus()
             enrollRequestViewModel.fetchEnrollmentRequests(kelasId!!)
         } else {
             Toast.makeText(this, "Error: Kelas ID tidak ditemukan", Toast.LENGTH_LONG).show()
@@ -88,6 +89,7 @@ class EnrollRequestActivity : AppCompatActivity() {
                         binding.ivNoMahasiswaRequest.visibility = View.GONE
                         binding.tvNoClassAvailable.visibility = View.GONE
                     } else {
+                        mahasiswaEnrollRequestAdapter.submitList(emptyList())
                         binding.rvListMahasiswaRequestEnroll.visibility = View.GONE
                         binding.ivNoMahasiswaRequest.visibility = View.VISIBLE
                         binding.tvNoClassAvailable.visibility = View.VISIBLE
@@ -110,12 +112,48 @@ class EnrollRequestActivity : AppCompatActivity() {
         }
     }
 
+    private fun observeEnrollmentUpdateStatus() {
+        enrollRequestViewModel.enrollmentUpdateStatus.observe(this) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    binding.progressBarEnrollRequest.visibility = View.VISIBLE
+                }
+
+                is Resource.Success -> {
+                    binding.progressBarEnrollRequest.visibility = View.GONE
+                    Toast.makeText(this, resource.data, Toast.LENGTH_SHORT).show()
+                    if (kelasId != null) {
+                        enrollRequestViewModel.fetchEnrollmentRequests(kelasId!!)
+                    }
+                }
+
+                is Resource.Error -> {
+                    binding.progressBarEnrollRequest.visibility = View.GONE
+                    Toast
+                        .makeText(
+                            this,
+                            resource.message ?: "Gagal memperbarui status",
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                }
+            }
+        }
+    }
+
     private fun handleAcceptRequest(mahasiswa: Mahasiswa) {
-        Toast.makeText(this, "Accept: ${mahasiswa.nama}", Toast.LENGTH_SHORT).show()
+        if (kelasId != null) {
+            enrollRequestViewModel.acceptEnrollmentRequest(mahasiswa.nim, kelasId!!)
+        } else {
+            Toast.makeText(this, "Error: Kelas ID tidak valid", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun handleRejectRequest(mahasiswa: Mahasiswa) {
-        Toast.makeText(this, "Reject: ${mahasiswa.nama}", Toast.LENGTH_SHORT).show()
+        if (kelasId != null) {
+            enrollRequestViewModel.rejectEnrollmentRequest(mahasiswa.nim, kelasId!!)
+        } else {
+            Toast.makeText(this, "Error: Kelas ID tidak valid", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun checkDarkMode() {

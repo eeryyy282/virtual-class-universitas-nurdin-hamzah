@@ -147,4 +147,10 @@ class LocalDataSource(
     fun getPendingEnrollmentRequests(kelasId: String): Flow<List<MahasiswaEntity>> = classroomDao.getPendingEnrollmentRequests(kelasId)
 
     fun getPendingEnrollmentRequestCount(kelasId: String): Flow<Int> = classroomDao.getPendingEnrollmentRequestCount(kelasId)
+
+    suspend fun updateEnrollmentStatus(
+        nim: Int,
+        kelasId: String,
+        newStatus: String,
+    ) = classroomDao.updateEnrollmentStatus(nim, kelasId, newStatus)
 }

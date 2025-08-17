@@ -82,6 +82,16 @@ class VirtualClassInteractor(
         kelasId: String,
     ): Flow<Resource<String>> = virtualClassRepository.leaveClass(nim, kelasId)
 
+    override suspend fun acceptEnrollment(
+        nim: Int,
+        kelasId: String,
+    ): Flow<Resource<String>> = virtualClassRepository.updateEnrollmentStatus(nim, kelasId, "approved")
+
+    override suspend fun rejectEnrollment(
+        nim: Int,
+        kelasId: String,
+    ): Flow<Resource<String>> = virtualClassRepository.updateEnrollmentStatus(nim, kelasId, "rejected")
+
     override fun getMaterialsByClass(kelasId: String): Flow<Resource<List<Materi>>> = virtualClassRepository.getMaterialsByClass(kelasId)
 
     override fun getAssignmentsByClass(kelasId: String): Flow<Resource<List<Tugas>>> = virtualClassRepository.getAssignmentsByClass(kelasId)

@@ -68,4 +68,11 @@ interface ClassroomDao {
 
     @Query("SELECT COUNT(e.nim) FROM enrollments e WHERE e.kelas_id = :kelasId AND e.status = 'pending'")
     fun getPendingEnrollmentRequestCount(kelasId: String): Flow<Int>
+
+    @Query("UPDATE enrollments SET status = :newStatus WHERE nim = :nim AND kelas_id = :kelasId")
+    suspend fun updateEnrollmentStatus(
+        nim: Int,
+        kelasId: String,
+        newStatus: String,
+    )
 }

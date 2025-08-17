@@ -20,6 +20,9 @@ interface AttendanceDao {
     ): Flow<List<AttendanceEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAttendanceStreak(streak: AttendanceStreakEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateAttendanceStreak(streak: AttendanceStreakEntity)
 
     @Query("SELECT * FROM attendance_streak WHERE nim = :nim AND kelas_id = :kelasId")

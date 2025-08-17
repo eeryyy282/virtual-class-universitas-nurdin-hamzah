@@ -58,6 +58,10 @@ interface VirtualClassUseCase {
 
     fun getAllKelas(): Flow<Resource<List<Kelas>>>
 
+    fun getAllKelasByJurusan(jurusan: String): Flow<Resource<List<Kelas>>>
+
+    fun getKelasById(kelasId: String): Flow<Resource<Kelas>>
+
     fun getEnrolledClasses(nim: Int): Flow<Resource<List<EnrollmentEntity>>>
 
     suspend fun enrollToClass(enrollment: EnrollmentEntity): Flow<Resource<String>>

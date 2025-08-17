@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_enroll_classroom">Temukan kelas yang ingin anda Enroll.</string>
+    <string name="search_class">Cari Kelas</string>
+    <string name="no_data_available">Tidak ada data ditemukan</string>
+    <string name="no_class_available">Sepertinya kami tidak dapat menemukan kelas untukmmu.</string>
+    <string name="failed_to_load_class">Gagal untuk memuat data kelas.</string>
+    <string name="error_throuble">Terjadi error.</string>
+</resources>

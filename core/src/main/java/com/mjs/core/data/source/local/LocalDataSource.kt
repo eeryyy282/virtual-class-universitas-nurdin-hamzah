@@ -62,6 +62,8 @@ class LocalDataSource(
 
     fun getAllKelas(): Flow<List<KelasEntity>> = classroomDao.getAllKelas()
 
+    fun getAllKelasByJurusan(jurusan: String): Flow<List<KelasEntity>> = classroomDao.getAllKelasByJurusan(jurusan)
+
     fun getKelasById(kelasId: String): Flow<KelasEntity?> = classroomDao.getKelasById(kelasId)
 
     suspend fun insertKelas(kelas: KelasEntity) = classroomDao.insertKelas(kelas)

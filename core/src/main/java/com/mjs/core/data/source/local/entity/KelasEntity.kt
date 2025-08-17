@@ -27,7 +27,7 @@ data class KelasEntity(
     val jadwal: String,
     val semester: String,
     val credit: Int,
-    val category: String,
+    val jurusan: String,
     val classImage: String? = null,
     val ruang: String,
 )

@@ -17,6 +17,7 @@ import com.mjs.core.domain.model.Postingan
 import com.mjs.core.domain.model.Tugas
 import com.mjs.core.domain.repository.IVirtualClassRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class VirtualClassInteractor(
     private val virtualClassRepository: IVirtualClassRepository,
@@ -61,6 +62,10 @@ class VirtualClassInteractor(
     override suspend fun updateDosenProfile(dosen: Dosen): Flow<Resource<String>> = virtualClassRepository.updateDosenProfile(dosen)
 
     override fun getAllKelas(): Flow<Resource<List<Kelas>>> = virtualClassRepository.getAllKelas()
+
+    override fun getAllKelasByJurusan(jurusan: String): Flow<Resource<List<Kelas>>> = virtualClassRepository.getAllKelasByJurusan(jurusan)
+
+    override fun getKelasById(kelasId: String): Flow<Resource<Kelas>> = virtualClassRepository.getKelasById(kelasId)
 
     override fun getEnrolledClasses(nim: Int): Flow<Resource<List<EnrollmentEntity>>> = virtualClassRepository.getEnrolledClasses(nim)
 
@@ -110,7 +115,13 @@ class VirtualClassInteractor(
     ): Flow<Resource<List<Kehadiran>>> = virtualClassRepository.getAttendanceHistory(nim, kelasId)
 
     override suspend fun insertAttendance(attendance: AttendanceEntity): Flow<Resource<String>> =
-        virtualClassRepository.insertAttendance(attendance)
+        virtualClassRepository.insertAttendance(attendance).map { resource ->
+            when (resource) {
+                is Resource.Success -> Resource.Success("Kehadiran berhasil dicatat dengan status: ${resource.data}")
+                is Resource.Error -> Resource.Error(resource.message ?: "Gagal mencatat kehadiran")
+                is Resource.Loading -> Resource.Loading()
+            }
+        }
 
     override fun getTodaySchedule(nim: Int): Flow<Resource<List<Kelas>>> = virtualClassRepository.getTodaySchedule(nim)
 

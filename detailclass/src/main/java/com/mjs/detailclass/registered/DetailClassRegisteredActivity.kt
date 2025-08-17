@@ -158,7 +158,7 @@ class DetailClassRegisteredActivity : AppCompatActivity() {
         binding.tvSubjectName.text = kelas.namaKelas
         binding.tvClassroomLocation.text = kelas.ruang
         binding.tvCreditsSubject.text = getString(R.string.sks, kelas.credit)
-        binding.tvCategorySubject.text = kelas.category
+        binding.tvMajorSubject.text = kelas.jurusan
         binding.tvScheduleClassroom.text = TimeFormat.formatSchedule(kelas.jadwal)
         binding.tvDaySchedule.text = kelas.jadwal.split(",")[0].trim()
 

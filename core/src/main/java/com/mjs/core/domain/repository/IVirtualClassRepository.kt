@@ -18,28 +18,33 @@ import com.mjs.core.domain.model.Tugas
 import kotlinx.coroutines.flow.Flow
 
 interface IVirtualClassRepository {
-    // Theme
     fun getThemeSetting(): Flow<Boolean>
 
     suspend fun saveThemeSetting(isDarkModeActive: Boolean)
 
-    // Session Management & User Info
-    fun getLoginStatus(): Flow<Boolean> // Baru
+    fun getLoginStatus(): Flow<Boolean>
 
-    suspend fun saveLoginSession(userId: Int, userType: String) // Baru
+    suspend fun saveLoginSession(
+        userId: Int,
+        userType: String,
+    )
 
-    suspend fun clearLoginSession() // Baru
+    suspend fun clearLoginSession()
 
     fun getLoggedInUserId(): Flow<Int?>
 
     fun getLoggedInUserType(): Flow<String?>
 
-    // Authentication
-    fun loginDosen(nidn: String, password: String): Flow<Resource<Dosen>> // Baru
+    fun loginDosen(
+        nidn: String,
+        password: String,
+    ): Flow<Resource<Dosen>>
 
-    fun loginMahasiswa(nim: String, password: String): Flow<Resource<Mahasiswa>> // Baru
+    fun loginMahasiswa(
+        nim: String,
+        password: String,
+    ): Flow<Resource<Mahasiswa>>
 
-    // User Profile
     fun getMahasiswaByNim(nim: Int): Flow<Resource<Mahasiswa>>
 
     fun getDosenByNidn(nidn: Int): Flow<Resource<Dosen>>
@@ -50,8 +55,11 @@ interface IVirtualClassRepository {
 
     suspend fun updateDosenProfile(dosen: Dosen): Flow<Resource<String>>
 
-    // Class Management
     fun getAllKelas(): Flow<Resource<List<Kelas>>>
+
+    fun getAllKelasByJurusan(jurusan: String): Flow<Resource<List<Kelas>>>
+
+    fun getKelasById(kelasId: String): Flow<Resource<Kelas>>
 
     fun getEnrolledClasses(nim: Int): Flow<Resource<List<EnrollmentEntity>>>
 
@@ -62,10 +70,8 @@ interface IVirtualClassRepository {
         kelasId: String,
     ): Flow<Resource<String>>
 
-    // Materials
     fun getMaterialsByClass(kelasId: String): Flow<Resource<List<Materi>>>
 
-    // Assignments & Submissions
     fun getAssignmentsByClass(kelasId: String): Flow<Resource<List<Tugas>>>
 
     suspend fun insertAssignment(assignment: AssignmentEntity): Flow<Resource<String>>
@@ -86,27 +92,24 @@ interface IVirtualClassRepository {
 
     fun getPastDeadlineAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>>
 
-    // Forum & Posts
     fun getForumsByClass(kelasId: String): Flow<Resource<List<Forum>>>
 
     fun getPostsByForum(forumId: Int): Flow<Resource<List<Postingan>>>
 
     suspend fun insertPost(post: PostEntity): Flow<Resource<String>>
 
-    // Attendance & Streak
     fun getAttendanceHistory(
         nim: Int,
         kelasId: String,
     ): Flow<Resource<List<Kehadiran>>>
 
-    suspend fun insertAttendance(attendance: AttendanceEntity): Flow<Resource<String>>
+    suspend fun insertAttendance(attendance: AttendanceEntity): Flow<Resource<Int>>
 
     fun getAttendanceStreak(
         nim: Int,
         kelasId: String,
     ): Flow<Resource<Int>>
 
-    // Schedules
     fun getTodaySchedule(nim: Int): Flow<Resource<List<Kelas>>>
 
     fun getTodayScheduleDosen(nidn: Int): Flow<Resource<List<Kelas>>>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.EnrollClassActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_classroom"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="18dp"
+            android:contentDescription="@string/icon_task_description"
+            android:src="@drawable/classroom_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/outline_color_theme" />
+
+        <TextView
+            android:id="@+id/tv_title_enroll_classroom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="28dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/title_enroll_classroom"
+            android:textColor="@color/text_color_themed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/iv_classroom"
+            app:layout_constraintTop_toBottomOf="@+id/iv_classroom" />
+
+        <EditText
+            android:id="@+id/et_search_class"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/search_bar_background"
+            android:drawableStart="@drawable/search_icon"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/lato"
+            android:hint="@string/search_class"
+            android:inputType="text"
+            android:padding="12dp"
+            app:drawableTint="@color/outline_color_theme"
+            app:layout_constraintEnd_toEndOf="@+id/tv_title_enroll_classroom"
+            app:layout_constraintStart_toStartOf="@+id/tv_title_enroll_classroom"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title_enroll_classroom" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_classroom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/et_search_class"
+            app:layout_constraintStart_toStartOf="@+id/et_search_class"
+            app:layout_constraintTop_toBottomOf="@+id/et_search_class"
+            app:layout_constraintVertical_bias="0.0"
+            tools:listitem="@layout/item_classroom" />
+
+        <ProgressBar
+            android:id="@+id/progressBar_enroll_class"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_classroom"
+            app:layout_constraintEnd_toEndOf="@+id/rv_classroom"
+            app:layout_constraintStart_toStartOf="@+id/rv_classroom"
+            app:layout_constraintTop_toTopOf="@+id/rv_classroom" />
+
+        <ImageView
+            android:id="@+id/iv_no_class_available"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="24dp"
+            android:contentDescription="@string/no_data_available"
+            android:src="@drawable/doesnt_have_an_content_icon"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_search_class"
+            app:layout_constraintVertical_bias="0.3" />
+
+        <TextView
+            android:id="@+id/tv_no_class_available"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/no_class_available"
+            android:textAlignment="center"
+            android:textColor="@color/text_color_themed"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/iv_no_class_available"
+            app:layout_constraintStart_toStartOf="@+id/iv_no_class_available"
+            app:layout_constraintTop_toBottomOf="@+id/iv_no_class_available"
+            app:layout_constraintVertical_bias="0.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

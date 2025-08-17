@@ -5,16 +5,20 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.mjs.core.data.source.local.entity.AssignmentEntity
+import com.mjs.core.data.source.local.entity.MaterialEntity
 import com.mjs.core.data.source.local.entity.SubmissionEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDao {
     @Query("SELECT * FROM assignments WHERE kelas_id = :kelasId")
-    fun getAssignmentsByClass(kelasId: String): Flow<List<AssignmentEntity>> // Changed kelasId to String
+    fun getAssignmentsByClass(kelasId: String): Flow<List<AssignmentEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAssignment(assignment: AssignmentEntity)
+    suspend fun insertAssignment(assignment: AssignmentEntity): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMaterial(material: MaterialEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSubmission(submission: SubmissionEntity)

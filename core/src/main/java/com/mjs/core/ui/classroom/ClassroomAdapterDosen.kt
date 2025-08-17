@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.mjs.core.databinding.ItemClassroomDosenBinding
+import com.mjs.core.databinding.ItemClassroomBinding
 import com.mjs.core.domain.model.Kelas
 
 class ClassroomAdapterDosen : RecyclerView.Adapter<ClassroomAdapterDosen.ListViewHolder>() {
@@ -25,7 +25,7 @@ class ClassroomAdapterDosen : RecyclerView.Adapter<ClassroomAdapterDosen.ListVie
         viewType: Int,
     ): ListViewHolder {
         val binding =
-            ItemClassroomDosenBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemClassroomBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ListViewHolder(binding)
     }
 
@@ -40,7 +40,7 @@ class ClassroomAdapterDosen : RecyclerView.Adapter<ClassroomAdapterDosen.ListVie
     }
 
     inner class ListViewHolder(
-        private val binding: ItemClassroomDosenBinding,
+        private val binding: ItemClassroomBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(
             semester: String,

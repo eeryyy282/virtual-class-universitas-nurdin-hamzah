@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mjs.core.R
-import com.mjs.core.databinding.ItemClassroomDetailMahasiswaBinding
+import com.mjs.core.databinding.ItemClassroomDetailBinding
 import com.mjs.core.domain.model.Kelas
 
 @Suppress("DEPRECATION")
@@ -21,7 +21,7 @@ class ClassroomAdapterMahasiswa : ListAdapter<Kelas, ClassroomAdapterMahasiswa.L
         viewType: Int,
     ): ListViewHolder {
         val binding =
-            ItemClassroomDetailMahasiswaBinding.inflate(
+            ItemClassroomDetailBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
@@ -38,7 +38,7 @@ class ClassroomAdapterMahasiswa : ListAdapter<Kelas, ClassroomAdapterMahasiswa.L
     }
 
     inner class ListViewHolder(
-        private val binding: ItemClassroomDetailMahasiswaBinding,
+        private val binding: ItemClassroomDetailBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(data: Kelas) {
@@ -46,10 +46,9 @@ class ClassroomAdapterMahasiswa : ListAdapter<Kelas, ClassroomAdapterMahasiswa.L
                 tvSubject.text = data.namaKelas
                 tvCodeSubject.text = data.kelasId
                 tvClassroomLocation.text = data.ruang
-                tvDosenClassroom.text =
+                tvLectureClassroom.text =
                     getDosenName?.invoke(data.nidn) ?: data.nidn.toString()
                 tvCreditsSubject.text = "${data.credit} SKS"
-                tvCategorySubject.text = data.category
 
                 if (!data.classImage.isNullOrEmpty()) {
                     Glide

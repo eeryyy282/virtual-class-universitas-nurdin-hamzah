@@ -43,9 +43,9 @@ class ClassroomFragment : Fragment() {
         observeDosenNames()
 
         binding.btnEnrollClassClassroom.setOnClickListener {
-            Toast
-                .makeText(requireContext(), "Fitur gabung kelas akan datang!", Toast.LENGTH_SHORT)
-                .show()
+            val uri = "enroll_class://enroll_class_activity".toUri()
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(intent)
         }
     }
 

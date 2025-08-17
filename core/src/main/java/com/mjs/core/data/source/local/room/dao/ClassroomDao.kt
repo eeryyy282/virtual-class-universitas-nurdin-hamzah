@@ -43,4 +43,7 @@ interface ClassroomDao {
         namaKelas: String,
         nidn: Int,
     ): String?
+
+    @Query("SELECT * FROM classes WHERE jurusan = :jurusan")
+    fun getAllKelasByJurusan(jurusan: String): Flow<List<KelasEntity>>
 }

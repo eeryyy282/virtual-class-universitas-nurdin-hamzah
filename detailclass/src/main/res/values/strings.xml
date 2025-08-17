@@ -30,4 +30,7 @@
     <string name="failed_to_leave_class">Gagal keluar dari kelas. Silakan coba lagi.</string>
     <string name="yes">Ya</string>
     <string name="no">Tidak</string>
+    <string name="major_subject">Jurusan</string>
+    <string name="lecture_user_not_found">Dosen pengampu tidak ditemukan.</string>
+    <string name="day_not_available">"Jadwal hari tidak ditemukan. "</string>
 </resources>

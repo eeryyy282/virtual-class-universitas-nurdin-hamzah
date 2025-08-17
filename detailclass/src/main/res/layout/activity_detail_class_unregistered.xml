@@ -9,7 +9,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp">
 
         <ImageView
             android:id="@+id/iv_classroom"
@@ -22,18 +23,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/outline_color_theme" />
-
-        <ImageButton
-            android:id="@+id/btn_leave_classroom"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="28dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/btn_leave_classroom_description"
-            android:src="@drawable/exit_icon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/iv_classroom"
-            app:tint="@color/red_mahogany" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_photo_profile_classroom"
@@ -51,12 +40,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
+            android:layout_marginEnd="28dp"
             android:fontFamily="@font/lato"
             android:text="@string/subject"
             android:textColor="@color/outline_color_theme"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/btn_leave_classroom"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_photo_profile_classroom"
             app:layout_constraintTop_toTopOf="@+id/iv_photo_profile_classroom" />
 
@@ -120,8 +110,10 @@
             android:id="@+id/cardView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:layout_constraintEnd_toEndOf="@+id/btn_leave_classroom"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="28dp"
+            android:backgroundTint="@color/background_color_card_view"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/iv_classroom"
             app:layout_constraintTop_toBottomOf="@+id/iv_photo_profile_classroom">
 
@@ -144,6 +136,7 @@
                         android:padding="12dp">
 
                         <TextView
+                            android:id="@+id/tv_day_schedule"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/lato"
@@ -213,6 +206,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:backgroundTint="@color/background_color_card_view"
             app:cardCornerRadius="12dp"
             app:layout_constraintEnd_toEndOf="@+id/tv_title_lecture_classroom"
             app:layout_constraintStart_toStartOf="@+id/tv_title_lecture_classroom"
@@ -308,6 +302,44 @@
             app:layout_constraintStart_toStartOf="@+id/tv_member_classroom_count_total"
             app:layout_constraintTop_toBottomOf="@+id/tv_member_classroom_count_total"
             app:layout_constraintVertical_bias="0.0" />
+
+        <ProgressBar
+            android:id="@+id/progressBar_detail_class"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/outline_color_theme"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_member_classroom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_error_detail_class"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:contentDescription="@string/doesnt_have_an_content_description"
+            android:src="@drawable/doesnt_have_an_content_icon"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_enroll" />
+
+        <TextView
+            android:id="@+id/tv_error_detail_class"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lato"
+            android:textAlignment="center"
+            android:textColor="@color/text_color_themed"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/iv_error_detail_class"
+            app:layout_constraintStart_toStartOf="@+id/iv_error_detail_class"
+            app:layout_constraintTop_toBottomOf="@+id/iv_error_detail_class" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

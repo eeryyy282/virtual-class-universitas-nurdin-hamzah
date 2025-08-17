@@ -182,6 +182,41 @@ class VirtualClassRepository(
                 }
         }
 
+    override fun getAllKelasByJurusan(jurusan: String): Flow<Resource<List<Kelas>>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                localDataSource
+                    .getAllKelas()
+                    .map { kelasEntities ->
+                        val domainKelasList = DataMapper.mapKelasEntitiesToDomains(kelasEntities)
+                        domainKelasList.filter { kelas ->
+                            kelas.jurusan.equals(jurusan, ignoreCase = true)
+                        }
+                    }.collect { filteredKelasList ->
+                        emit(Resource.Success(filteredKelasList))
+                    }
+            } catch (e: Exception) {
+                emit(
+                    Resource.Error(
+                        e.message ?: "Terjadi kesalahan saat mengambil kelas berdasarkan jurusan.",
+                    ),
+                )
+            }
+        }
+
+    override fun getKelasById(kelasId: String): Flow<Resource<Kelas>> =
+        flow {
+            emit(Resource.Loading())
+            localDataSource.getKelasById(kelasId).collect { entity ->
+                if (entity != null) {
+                    emit(Resource.Success(DataMapper.mapKelasEntityToDomain(entity)))
+                } else {
+                    emit(Resource.Error("Kelas dengan ID $kelasId tidak ditemukan"))
+                }
+            }
+        }
+
     override fun getEnrolledClasses(nim: Int): Flow<Resource<List<EnrollmentEntity>>> =
         flow {
             emit(Resource.Loading())
@@ -311,14 +346,14 @@ class VirtualClassRepository(
                 }
         }
 
-    override suspend fun insertAttendance(attendance: AttendanceEntity): Flow<Resource<String>> =
+    override suspend fun insertAttendance(attendance: AttendanceEntity): Flow<Resource<Int>> =
         flow {
             emit(Resource.Loading())
             try {
                 localDataSource.insertAttendance(attendance)
-                emit(Resource.Success("Kehadiran berhasil dicatat!"))
+                emit(Resource.Success(1))
             } catch (e: Exception) {
-                emit(Resource.Error(e.message ?: "Gagal mencatat kehadiran"))
+                emit(Resource.Error(e.message ?: "Gagal mencatat kehadiran", -1))
             }
         }
 
@@ -414,7 +449,13 @@ class VirtualClassRepository(
                                 allStudentSchedules.add(kelasEntity)
                             }
                     }
-                    emit(Resource.Success(DataMapper.mapKelasEntitiesToDomains(allStudentSchedules)))
+                    emit(
+                        Resource.Success(
+                            DataMapper.mapKelasEntitiesToDomains(
+                                allStudentSchedules,
+                            ),
+                        ),
+                    )
                 } else {
                     emit(Resource.Success(emptyList()))
                 }
@@ -443,9 +484,11 @@ class VirtualClassRepository(
             emit(Resource.Loading())
             try {
                 val currentDate = getCurrentFormattedDate()
-                localDataSource.getNotFinishedTasks(nim, kelasId, currentDate).collect { tasks ->
-                    emit(Resource.Success(DataMapper.mapTugasEntitiesToDomains(tasks)))
-                }
+                localDataSource
+                    .getNotFinishedTasks(nim, kelasId, currentDate)
+                    .collect { tasks ->
+                        emit(Resource.Success(DataMapper.mapTugasEntitiesToDomains(tasks)))
+                    }
             } catch (e: Exception) {
                 emit(Resource.Error(e.message ?: "Gagal mengambil tugas yang belum selesai."))
             }
@@ -482,7 +525,13 @@ class VirtualClassRepository(
                     localDataSource
                         .getAssignmentsByKelasIdsAndFutureDeadline(kelasIds, currentDate)
                         .collect { assignments ->
-                            emit(Resource.Success(DataMapper.mapTugasEntitiesToDomains(assignments)))
+                            emit(
+                                Resource.Success(
+                                    DataMapper.mapTugasEntitiesToDomains(
+                                        assignments,
+                                    ),
+                                ),
+                            )
                         }
                 } else {
                     emit(Resource.Success(emptyList()))
@@ -507,7 +556,13 @@ class VirtualClassRepository(
                     localDataSource
                         .getAssignmentsByKelasIdsAndPastDeadline(kelasIds, currentDate)
                         .collect { assignments ->
-                            emit(Resource.Success(DataMapper.mapTugasEntitiesToDomains(assignments)))
+                            emit(
+                                Resource.Success(
+                                    DataMapper.mapTugasEntitiesToDomains(
+                                        assignments,
+                                    ),
+                                ),
+                            )
                         }
                 } else {
                     emit(Resource.Success(emptyList()))
@@ -534,6 +589,7 @@ class VirtualClassRepository(
                             localDataSource.getMahasiswaByNim(mahasiswa.nim).first()?.password
                                 ?: "",
                         fotoProfil = mahasiswa.fotoProfil,
+                        jurusan = mahasiswa.jurusan,
                         dosenPembimbing = mahasiswa.dosenPembimbing,
                     )
                 localDataSource.updateMahasiswa(mahasiswaEntity)

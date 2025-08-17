@@ -25,6 +25,7 @@ object DataMapper {
             email = input.email,
             fotoProfil = input.fotoProfil,
             dosenPembimbing = input.dosenPembimbing,
+            jurusan = input.jurusan,
         )
 
     fun mapDosenEntityToDomain(input: DosenEntity): Dosen =
@@ -44,7 +45,7 @@ object DataMapper {
             jadwal = input.jadwal,
             semester = input.semester,
             credit = input.credit,
-            category = input.category,
+            jurusan = input.jurusan,
             classImage = input.classImage,
             ruang = input.ruang,
         )

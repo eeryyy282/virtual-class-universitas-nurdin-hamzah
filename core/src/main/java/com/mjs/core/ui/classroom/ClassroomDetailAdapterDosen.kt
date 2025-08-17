@@ -43,7 +43,6 @@ class ClassroomDetailAdapterDosen : ListAdapter<Kelas, ClassroomDetailAdapterDos
                 tvCodeSubject.text = data.kelasId
                 tvClassroomLocation.text = data.ruang
                 tvCreditsSubject.text = data.credit.toString()
-                tvCategorySubject.text = data.category
                 Glide
                     .with(itemView.context)
                     .load(data.classImage)

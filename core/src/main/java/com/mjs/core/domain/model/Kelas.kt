@@ -13,6 +13,6 @@ data class Kelas(
     val semester: String,
     val ruang: String,
     val credit: Int,
-    val category: String,
+    val jurusan: String,
     val classImage: String? = null,
 ) : Parcelable

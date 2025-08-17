@@ -10,4 +10,5 @@ data class Mahasiswa(
     val email: String,
     val fotoProfil: String?,
     val dosenPembimbing: String,
+    val jurusan: String,
 ) : Parcelable

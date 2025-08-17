@@ -14,7 +14,7 @@ interface ForumDao {
     fun getForumsByClass(kelasId: String): Flow<List<ForumEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertForum(forum: ForumEntity)
+    suspend fun insertForum(forum: ForumEntity): Long
 
     @Query("SELECT * FROM posts WHERE forum_id = :forumId ORDER BY tanggal_post ASC")
     fun getPostsByForum(forumId: Int): Flow<List<PostEntity>>

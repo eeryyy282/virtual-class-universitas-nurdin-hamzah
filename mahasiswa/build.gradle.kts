@@ -48,6 +48,7 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":detailclass"))
+    implementation(project(":detailtask"))
 
     debugImplementation(libs.leakcanary.android)
 

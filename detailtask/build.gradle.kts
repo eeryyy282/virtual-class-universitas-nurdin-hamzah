@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 plugins {
     alias(libs.plugins.android.dynamic.feature)
     alias(libs.plugins.kotlin.android)
@@ -6,7 +8,7 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint")
 }
 android {
-    namespace = "com.mjs.dosen"
+    namespace = "com.mjs.detailtask"
     compileSdk = 36
 
     defaultConfig {
@@ -27,7 +29,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        @Suppress("DEPRECATION")
         jvmTarget = "17"
     }
     buildFeatures {
@@ -38,18 +39,10 @@ android {
 dependencies {
     implementation(project(":app"))
     implementation(project(":core"))
-    implementation(project(":detailclass"))
-    implementation(project(":detailtask"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.material)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.androidx.legacy.support.v4)
-    implementation(libs.androidx.fragment.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

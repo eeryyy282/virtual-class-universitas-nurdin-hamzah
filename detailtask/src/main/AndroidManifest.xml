@@ -5,7 +5,7 @@
 
     <dist:module
         dist:instant="false"
-        dist:title="@string/title_enrollclass">
+        dist:title="@string/title_detailtask">
         <dist:delivery>
             <dist:on-demand />
         </dist:delivery>
@@ -15,7 +15,7 @@
 
     <application android:icon="@mipmap/ic_launcher">
         <activity
-            android:name=".presentation.enrollrequest.EnrollRequestActivity"
+            android:name=".presentation.DetailTaskActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             tools:ignore="DiscouragedApi,LockedOrientationActivity">
@@ -25,25 +25,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data
-                    android:host="enroll_class_request_activity"
-                    android:scheme="enroll_class" />
+                    android:host="detail_task_activity"
+                    android:scheme="detail_task" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.enrollclass.EnrollClassActivity"
-            android:exported="true"
+            android:name=".presentation.submittask.SubmitTaskActivity"
+            android:exported="false"
             android:screenOrientation="portrait"
-            tools:ignore="DiscouragedApi,LockedOrientationActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data
-                    android:host="enroll_class_activity"
-                    android:scheme="enroll_class" />
-            </intent-filter>
-        </activity>
+            tools:ignore="LockedOrientationActivity" />
     </application>
 
 </manifest>

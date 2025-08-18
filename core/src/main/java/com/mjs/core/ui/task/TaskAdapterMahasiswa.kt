@@ -14,6 +14,7 @@ class TaskAdapterMahasiswa : RecyclerView.Adapter<TaskAdapterMahasiswa.ListViewH
     private var lateTasks = ArrayList<Tugas>()
     var getClassName: ((String) -> String)? = null
     var getClassPhotoProfile: ((String) -> String?)? = null
+    var onItemClick: ((Tugas) -> Unit)? = null
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(
@@ -41,7 +42,7 @@ class TaskAdapterMahasiswa : RecyclerView.Adapter<TaskAdapterMahasiswa.ListViewH
         holder: ListViewHolder,
         position: Int,
     ) {
-        holder.bind(notFinishedTasks, lateTasks, getClassName, getClassPhotoProfile)
+        holder.bind(notFinishedTasks, lateTasks, getClassName, getClassPhotoProfile, onItemClick)
     }
 
     override fun getItemCount(): Int = 1
@@ -56,12 +57,14 @@ class TaskAdapterMahasiswa : RecyclerView.Adapter<TaskAdapterMahasiswa.ListViewH
             late: List<Tugas>,
             getClassNameFunc: ((String) -> String)?,
             getClassPhotoProfileFunc: ((String) -> String?)?,
+            onItemClickFunc: ((Tugas) -> Unit)?,
         ) {
             with(binding) {
                 rvNotFinishedTask.layoutManager = LinearLayoutManager(itemView.context)
                 val notFinishedAdapter = TaskDetailAdapter()
                 notFinishedAdapter.getClassName = getClassNameFunc
                 notFinishedAdapter.getClassPhotoProfile = getClassPhotoProfileFunc
+                notFinishedAdapter.onItemClick = onItemClickFunc
                 notFinishedAdapter.submitList(notFinished)
                 rvNotFinishedTask.adapter = notFinishedAdapter
 
@@ -79,6 +82,7 @@ class TaskAdapterMahasiswa : RecyclerView.Adapter<TaskAdapterMahasiswa.ListViewH
                 val lateAdapter = TaskDetailAdapter()
                 lateAdapter.getClassName = getClassNameFunc
                 lateAdapter.getClassPhotoProfile = getClassPhotoProfileFunc
+                lateAdapter.onItemClick = onItemClickFunc
                 lateAdapter.submitList(late)
                 rvLateTask.adapter = lateAdapter
 

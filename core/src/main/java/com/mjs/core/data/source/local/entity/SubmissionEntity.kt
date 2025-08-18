@@ -34,5 +34,5 @@ data class SubmissionEntity(
     @ColumnInfo(name = "submission_date")
     val submissionDate: String,
     val grade: Int? = null,
-    val feedback: String? = null,
+    val note: String? = null,
 )

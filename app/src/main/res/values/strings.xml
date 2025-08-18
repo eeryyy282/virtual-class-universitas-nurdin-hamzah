@@ -45,4 +45,5 @@
     <string name="title_profilesettings">Profile Settings</string>
     <string name="title_detailclass">Detail Class</string>
     <string name="title_enrollclass">Enroll Class</string>
+    <string name="title_detailtask">Detail Task</string>
 </resources>

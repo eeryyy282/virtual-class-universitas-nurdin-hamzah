@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="back_button">Tombol Kembali</string>
+    <string name="submit_task">Kumpulkan Tugas</string>
+    <string name="no_attachment">Tidak ada lampiran</string>
+    <string name="task_detail">Detail Tugas</string>
+    <string name="description">Deskripsi:</string>
+    <string name="date_start">Tanggal Mulai:</string>
+    <string name="deadline_date">Batas Waktu Pengumpulan:</string>
+    <string name="attachment">Lampiran:</string>
+    <string name="attachment_icon">Attachment icon</string>
+    <string name="edit_task">Edit Tugas</string>
+    <string name="unknown_class_name">Nama kelas tidak diketahui</string>
+    <string name="back">Kembali</string>
+    <string name="note_optional">Catatan (Opsional)</string>
+    <string name="select_attachment">Pilih File Lampiran</string>
+    <string name="send_task">Kirim Tugas</string>
+</resources>

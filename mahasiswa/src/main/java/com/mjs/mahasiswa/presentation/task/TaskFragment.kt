@@ -1,5 +1,6 @@
 package com.mjs.mahasiswa.presentation.task
 
+import android.content.Intent // Ditambahkan
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mjs.core.data.Resource
 import com.mjs.core.ui.task.TaskAdapterMahasiswa
+import com.mjs.detailtask.presentation.DetailTaskActivity // Ditambahkan
 import com.mjs.mahasiswa.R
 import com.mjs.mahasiswa.databinding.FragmentTaskBinding
 import kotlinx.coroutines.launch
@@ -50,6 +52,12 @@ class TaskFragment : Fragment() {
         }
         taskAdapter.getClassPhotoProfile = {
             viewModel.getClassPhotoProfileById(it)
+        }
+        taskAdapter.onItemClick = { tugas ->
+            // Ditambahkan
+            val intent = Intent(activity, DetailTaskActivity::class.java)
+            intent.putExtra(DetailTaskActivity.EXTRA_TASK, tugas)
+            startActivity(intent)
         }
         binding.rvTaskTask.apply {
             layoutManager = LinearLayoutManager(context)

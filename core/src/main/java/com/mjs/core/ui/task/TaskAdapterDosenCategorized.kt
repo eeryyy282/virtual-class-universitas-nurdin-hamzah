@@ -14,6 +14,7 @@ class TaskAdapterDosenCategorized : RecyclerView.Adapter<TaskAdapterDosenCategor
     private var pastDeadlineTasks = ArrayList<Tugas>()
     var getClassName: ((String) -> String)? = null
     var getClassPhotoProfile: ((String) -> String?)? = null
+    var onItemClick: ((Tugas) -> Unit)? = null
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(
@@ -46,7 +47,7 @@ class TaskAdapterDosenCategorized : RecyclerView.Adapter<TaskAdapterDosenCategor
         holder: ListViewHolder,
         position: Int,
     ) {
-        holder.bind(activeTasks, pastDeadlineTasks, getClassName, getClassPhotoProfile)
+        holder.bind(activeTasks, pastDeadlineTasks, getClassName, getClassPhotoProfile, onItemClick)
     }
 
     override fun getItemCount(): Int = 1
@@ -61,11 +62,13 @@ class TaskAdapterDosenCategorized : RecyclerView.Adapter<TaskAdapterDosenCategor
             currentPastDeadlineTasks: List<Tugas>,
             getClassNameFunc: ((String) -> String)?,
             getClassPhotoProfileFunc: ((String) -> String?)?,
+            onItemClickFunc: ((Tugas) -> Unit)?,
         ) {
             with(binding) {
                 val activeAdapter = TaskAdapterDosen()
                 activeAdapter.getClassName = getClassNameFunc
                 activeAdapter.getClassPhotoProfile = getClassPhotoProfileFunc
+                activeAdapter.onItemClick = onItemClickFunc
                 activeAdapter.submitList(currentActiveTasks)
                 rvActiveTasks.apply {
                     layoutManager = LinearLayoutManager(itemView.context)
@@ -86,6 +89,7 @@ class TaskAdapterDosenCategorized : RecyclerView.Adapter<TaskAdapterDosenCategor
                 val pastDeadlineAdapter = TaskAdapterDosen()
                 pastDeadlineAdapter.getClassName = getClassNameFunc
                 pastDeadlineAdapter.getClassPhotoProfile = getClassPhotoProfileFunc
+                pastDeadlineAdapter.onItemClick = onItemClickFunc
                 pastDeadlineAdapter.submitList(currentPastDeadlineTasks)
                 rvPastDeadlineTasks.apply {
                     layoutManager = LinearLayoutManager(itemView.context)

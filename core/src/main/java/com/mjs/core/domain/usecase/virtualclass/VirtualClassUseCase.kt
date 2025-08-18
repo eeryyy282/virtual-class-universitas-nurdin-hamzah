@@ -132,6 +132,8 @@ interface VirtualClassUseCase {
 
     fun getPendingEnrollmentRequestCount(kelasId: String): Flow<Resource<Int>>
 
+    fun getPendingEnrollmentRequestCountForDosen(nidn: Int): Flow<Resource<Int>>
+
     suspend fun acceptEnrollment(
         nim: Int,
         kelasId: String,
@@ -141,6 +143,10 @@ interface VirtualClassUseCase {
         nim: Int,
         kelasId: String,
     ): Flow<Resource<String>>
+
+    fun getLastNotifiedPendingCount(): Flow<Int>
+
+    suspend fun saveLastNotifiedPendingCount(count: Int)
 
     companion object {
         const val USER_TYPE_MAHASISWA = AppPreference.USER_TYPE_MAHASISWA

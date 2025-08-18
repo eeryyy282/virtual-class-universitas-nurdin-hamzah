@@ -162,4 +162,11 @@ class VirtualClassInteractor(
 
     override fun getPendingEnrollmentRequestCount(kelasId: String): Flow<Resource<Int>> =
         virtualClassRepository.getPendingEnrollmentRequestCount(kelasId)
+
+    override fun getPendingEnrollmentRequestCountForDosen(nidn: Int): Flow<Resource<Int>> =
+        virtualClassRepository.getPendingEnrollmentRequestCountForDosen(nidn)
+
+    override fun getLastNotifiedPendingCount(): Flow<Int> = virtualClassRepository.getLastNotifiedPendingCount()
+
+    override suspend fun saveLastNotifiedPendingCount(count: Int) = virtualClassRepository.saveLastNotifiedPendingCount(count)
 }

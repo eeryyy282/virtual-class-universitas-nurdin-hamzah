@@ -1,12 +1,17 @@
 package com.mjs.mahasiswa.presentation.home
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
@@ -31,6 +36,29 @@ class HomeFragment : Fragment() {
     private val homeViewModel: HomeViewModel by viewModel()
     private lateinit var taskHomeAdapter: TaskHomeAdapter
 
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requestPermissionLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.RequestPermission(),
+            ) { isGranted: Boolean ->
+                if (isGranted) {
+                    Toast
+                        .makeText(
+                            requireContext(),
+                            "Izin notifikasi diberikan.",
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                } else {
+                    Toast
+                        .makeText(requireContext(), "Izin notifikasi ditolak.", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,12 +73,33 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        requestNotificationPermission()
         setupProfileUser()
         setupRecyclerViewTugas()
         observeTugasList()
         observeAttendanceStreak()
         observeTodaySchedule()
         setupTaskNavigation()
+    }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            when {
+                ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.POST_NOTIFICATIONS,
+                ) == PackageManager.PERMISSION_GRANTED -> {
+                }
+
+                shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+
+                else -> {
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            }
+        }
     }
 
     private fun setupTaskNavigation() {
@@ -267,12 +316,8 @@ class HomeFragment : Fragment() {
 
                     is Resource.Error -> {
                         binding.progressBarSchedule.visibility = View.GONE
-                        binding.ivDoesntHaveAnSchedule.visibility = View.VISIBLE
-                        binding.tvDoesntHaveAnSchedule.visibility = View.VISIBLE
-                        binding.tvScheduleClassroom.visibility = View.GONE
-                        binding.tvTimeScheduleHome.visibility = View.GONE
-                        binding.tvSubjectScheduleHome.visibility = View.GONE
-                        binding.btnScheduleDetailHome.visibility = View.GONE
+                        binding.tvDoesntHaveAnSchedule.visibility =
+                            View.VISIBLE
                     }
 
                     null -> {
@@ -291,7 +336,6 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
         if (_binding != null && ::taskHomeAdapter.isInitialized) {
             binding.rvTaskHome.adapter = null
         }

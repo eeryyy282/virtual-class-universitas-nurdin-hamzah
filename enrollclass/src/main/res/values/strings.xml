@@ -9,4 +9,8 @@
     <string name="enroll_request">Permintaan Bergabung</string>
     <string name="request_description">Semua permintaan bergabung oleh mahasiswa akan dikumpulkan di sini.</string>
     <string name="no_mahasiswa_request">Sepertinya tidak ada permintaan bergabung untuk saat ini.</string>
+    <string name="total_pending_requests_dosen">Total permintaan tertunda di semua kelas Anda: %d</string>
+    <string name="failed_to_load_total_pending_requests">Gagal memuat total permintaan tertunda</string>
+    <string name="enroll_request_channel_name">Permintaan Enroll (Pendaftaran)</string>
+    <string name="enroll_request_channel_description">Terdapat permintaan pendaftaran mahasiswa baru di kelas anda.</string>
 </resources>

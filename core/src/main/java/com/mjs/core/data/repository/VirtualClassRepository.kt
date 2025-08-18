@@ -185,12 +185,9 @@ class VirtualClassRepository(
             emit(Resource.Loading())
             try {
                 localDataSource
-                    .getAllKelas()
+                    .getAllKelasByJurusan(jurusan)
                     .map { kelasEntities ->
-                        val domainKelasList = DataMapper.mapKelasEntitiesToDomains(kelasEntities)
-                        domainKelasList.filter { kelas ->
-                            kelas.jurusan.equals(jurusan, ignoreCase = true)
-                        }
+                        DataMapper.mapKelasEntitiesToDomains(kelasEntities)
                     }.collect { filteredKelasList ->
                         emit(Resource.Success(filteredKelasList))
                     }
@@ -241,7 +238,7 @@ class VirtualClassRepository(
                         "approved" -> emit(Resource.Error("Anda sudah terdaftar di kelas ini."))
                         "pending" -> emit(Resource.Error("Permintaan pendaftaran untuk kelas ini masih pending."))
                         else -> {
-                            localDataSource.insertEnrollment(enrollment)
+                            localDataSource.insertEnrollment(enrollment.copy(enrollId = existingEnrollment.enrollId))
                             emit(Resource.Success("Permintaan pendaftaran terkirim!"))
                         }
                     }
@@ -325,9 +322,9 @@ class VirtualClassRepository(
             emit(Resource.Loading())
             try {
                 localDataSource.insertSubmission(submission)
-                emit(Resource.Success("Jawaban berhasil dikirim"))
+                emit(Resource.Success("Tugas berhasil dikumpulkan"))
             } catch (e: Exception) {
-                emit(Resource.Error(e.message ?: "Gagal mengirim jawaban"))
+                emit(Resource.Error(e.message ?: "Gagal mengumpulkan tugas"))
             }
         }
 
@@ -337,15 +334,14 @@ class VirtualClassRepository(
     ): Flow<Resource<List<Tugas>>> =
         flow {
             emit(Resource.Loading())
-            try {
-                val currentDate = getCurrentFormattedDate()
-                localDataSource
-                    .getNotFinishedTasks(nim, kelasId, currentDate)
-                    .map { DataMapper.mapTugasEntitiesToDomains(it) }
-                    .collect { emit(Resource.Success(it)) }
-            } catch (e: Exception) {
-                emit(Resource.Error(e.message ?: "Gagal memuat tugas belum selesai"))
-            }
+            val currentDate = getCurrentFormattedDate()
+            localDataSource
+                .getNotFinishedTasks(nim, kelasId, currentDate)
+                .map {
+                    DataMapper.mapTugasEntitiesToDomains(it)
+                }.collect {
+                    emit(Resource.Success(it))
+                }
         }
 
     override fun getLateTasks(
@@ -354,77 +350,62 @@ class VirtualClassRepository(
     ): Flow<Resource<List<Tugas>>> =
         flow {
             emit(Resource.Loading())
-            try {
-                val currentDate = getCurrentFormattedDate()
-                localDataSource
-                    .getLateTasks(nim, kelasId, currentDate)
-                    .map { DataMapper.mapTugasEntitiesToDomains(it) }
-                    .collect { emit(Resource.Success(it)) }
-            } catch (e: Exception) {
-                emit(Resource.Error(e.message ?: "Gagal memuat tugas terlambat"))
-            }
+            val currentDate = getCurrentFormattedDate()
+            localDataSource
+                .getLateTasks(nim, kelasId, currentDate)
+                .map {
+                    DataMapper.mapTugasEntitiesToDomains(it)
+                }.collect {
+                    emit(Resource.Success(it))
+                }
         }
 
     override fun getActiveAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>> =
         flow {
             emit(Resource.Loading())
-            try {
-                val dosen = localDataSource.getDosenByNidn(nidn).first()
-                if (dosen == null) {
-                    emit(Resource.Error("Dosen tidak ditemukan"))
-                    return@flow
-                }
-                val kelasIds =
+            val currentDate = getCurrentFormattedDate()
+            localDataSource
+                .getAllKelas()
+                .first()
+                .filter { it.nidn == nidn }
+                .map { it.kelasId }
+                .let { kelasIds ->
+                    if (kelasIds.isEmpty()) {
+                        emit(Resource.Success(emptyList()))
+                        return@flow
+                    }
                     localDataSource
-                        .getAllKelas()
-                        .first()
-                        .filter { it.nidn == nidn }
-                        .map { it.kelasId }
-
-                if (kelasIds.isEmpty()) {
-                    emit(Resource.Success(emptyList()))
-                    return@flow
+                        .getAssignmentsByKelasIdsAndFutureDeadline(kelasIds, currentDate)
+                        .map {
+                            DataMapper.mapTugasEntitiesToDomains(it)
+                        }.collect {
+                            emit(Resource.Success(it))
+                        }
                 }
-
-                val currentDate = getCurrentFormattedDate()
-                localDataSource
-                    .getAssignmentsByKelasIdsAndFutureDeadline(kelasIds, currentDate)
-                    .map { DataMapper.mapTugasEntitiesToDomains(it) }
-                    .collect { emit(Resource.Success(it)) }
-            } catch (e: Exception) {
-                emit(Resource.Error(e.message ?: "Gagal memuat tugas aktif"))
-            }
         }
 
     override fun getPastDeadlineAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>> =
         flow {
             emit(Resource.Loading())
-            try {
-                val dosen = localDataSource.getDosenByNidn(nidn).first()
-                if (dosen == null) {
-                    emit(Resource.Error("Dosen tidak ditemukan"))
-                    return@flow
-                }
-                val kelasIds =
+            val currentDate = getCurrentFormattedDate()
+            localDataSource
+                .getAllKelas()
+                .first()
+                .filter { it.nidn == nidn }
+                .map { it.kelasId }
+                .let { kelasIds ->
+                    if (kelasIds.isEmpty()) {
+                        emit(Resource.Success(emptyList()))
+                        return@flow
+                    }
                     localDataSource
-                        .getAllKelas()
-                        .first()
-                        .filter { it.nidn == nidn }
-                        .map { it.kelasId }
-
-                if (kelasIds.isEmpty()) {
-                    emit(Resource.Success(emptyList()))
-                    return@flow
+                        .getAssignmentsByKelasIdsAndPastDeadline(kelasIds, currentDate)
+                        .map {
+                            DataMapper.mapTugasEntitiesToDomains(it)
+                        }.collect {
+                            emit(Resource.Success(it))
+                        }
                 }
-
-                val currentDate = getCurrentFormattedDate()
-                localDataSource
-                    .getAssignmentsByKelasIdsAndPastDeadline(kelasIds, currentDate)
-                    .map { DataMapper.mapTugasEntitiesToDomains(it) }
-                    .collect { emit(Resource.Success(it)) }
-            } catch (e: Exception) {
-                emit(Resource.Error(e.message ?: "Gagal memuat tugas lewat tenggat"))
-            }
         }
 
     override fun getForumsByClass(kelasId: String): Flow<Resource<List<Forum>>> =
@@ -432,8 +413,11 @@ class VirtualClassRepository(
             emit(Resource.Loading())
             localDataSource
                 .getForumsByClass(kelasId)
-                .map { DataMapper.mapForumEntitiesToDomains(it) }
-                .collect { emit(Resource.Success(it)) }
+                .map {
+                    DataMapper.mapForumEntitiesToDomains(it)
+                }.collect {
+                    emit(Resource.Success(it))
+                }
         }
 
     override fun getPostsByForum(forumId: Int): Flow<Resource<List<Postingan>>> =
@@ -441,8 +425,11 @@ class VirtualClassRepository(
             emit(Resource.Loading())
             localDataSource
                 .getPostsByForum(forumId)
-                .map { DataMapper.mapPostinganEntitiesToDomains(it) }
-                .collect { emit(Resource.Success(it)) }
+                .map {
+                    DataMapper.mapPostinganEntitiesToDomains(it)
+                }.collect {
+                    emit(Resource.Success(it))
+                }
         }
 
     override suspend fun insertPost(post: PostEntity): Flow<Resource<String>> =
@@ -450,9 +437,9 @@ class VirtualClassRepository(
             emit(Resource.Loading())
             try {
                 localDataSource.insertPost(post)
-                emit(Resource.Success("Postingan berhasil dikirim"))
+                emit(Resource.Success("Postingan berhasil ditambahkan"))
             } catch (e: Exception) {
-                emit(Resource.Error(e.message ?: "Gagal mengirim postingan"))
+                emit(Resource.Error(e.message ?: "Gagal menambahkan post"))
             }
         }
 
@@ -464,8 +451,11 @@ class VirtualClassRepository(
             emit(Resource.Loading())
             localDataSource
                 .getAttendanceHistory(nim, kelasId)
-                .map { DataMapper.mapKehadiranEntitiesToDomains(it) }
-                .collect { emit(Resource.Success(it)) }
+                .map {
+                    DataMapper.mapKehadiranEntitiesToDomains(it)
+                }.collect {
+                    emit(Resource.Success(it))
+                }
         }
 
     override suspend fun insertAttendance(attendance: AttendanceEntity): Flow<Resource<Int>> =
@@ -473,90 +463,79 @@ class VirtualClassRepository(
             emit(Resource.Loading())
             try {
                 localDataSource.insertAttendance(attendance)
-
-                var streakEntity: com.mjs.core.data.source.local.entity.AttendanceStreakEntity? =
-                    localDataSource.getAttendanceStreak(attendance.nim, attendance.kelasId).first()
-
-                val currentAttendanceCal =
-                    Calendar.getInstance().apply {
-                        time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(
-                            attendance.tanggalHadir,
-                        ) ?: Date()
-                    }
-
-                if (streakEntity == null) {
-                    streakEntity =
-                        com.mjs.core.data.source.local.entity.AttendanceStreakEntity(
-                            streakId = 0,
-                            nim = attendance.nim,
-                            kelasId = attendance.kelasId,
-                            currentStreak = 1,
-                            longestStreak = 1,
-                            lastAttendedDate = attendance.tanggalHadir,
-                        )
-                } else {
-                    val lastRecordedStreakCal =
-                        Calendar.getInstance().apply {
-                            time =
-                                SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(
-                                    streakEntity.lastAttendedDate,
-                                ) ?: Date()
-                        }
-
-                    val dayAfterLastStreakCal =
-                        Calendar.getInstance().apply {
-                            time = lastRecordedStreakCal.time
-                            add(Calendar.DAY_OF_YEAR, 1)
-                        }
-
-                    if (currentAttendanceCal.get(Calendar.YEAR) ==
-                        dayAfterLastStreakCal.get(
-                            Calendar.YEAR,
-                        ) &&
-                        currentAttendanceCal.get(Calendar.DAY_OF_YEAR) ==
-                        dayAfterLastStreakCal.get(
-                            Calendar.DAY_OF_YEAR,
-                        )
-                    ) {
-                        val newCurrentStreak = streakEntity.currentStreak + 1
-                        val newLongestStreak =
-                            if (newCurrentStreak > streakEntity.longestStreak) newCurrentStreak else streakEntity.longestStreak
-                        streakEntity =
-                            streakEntity.copy(
-                                currentStreak = newCurrentStreak,
-                                longestStreak = newLongestStreak,
-                                lastAttendedDate = attendance.tanggalHadir,
-                            )
-                    } else if (!(
-                            currentAttendanceCal.get(Calendar.YEAR) ==
-                                lastRecordedStreakCal.get(
-                                    Calendar.YEAR,
-                                ) &&
-                                currentAttendanceCal.get(Calendar.DAY_OF_YEAR) ==
-                                lastRecordedStreakCal.get(
-                                    Calendar.DAY_OF_YEAR,
-                                ) &&
-                                streakEntity.lastAttendedDate == attendance.tanggalHadir
-                        )
-                    ) {
-                        streakEntity =
-                            streakEntity.copy(
-                                currentStreak = 1,
-                                lastAttendedDate = attendance.tanggalHadir,
-                            )
-                    }
-                }
-
-                localDataSource.updateAttendanceStreak(streakEntity)
-                emit(Resource.Success(streakEntity.currentStreak))
+                emit(Resource.Success(attendance.absensiId))
             } catch (e: Exception) {
-                emit(
-                    Resource.Error(
-                        e.message ?: "Gagal mencatat kehadiran atau memperbarui streak",
-                        -1,
-                    ),
-                )
+                emit(Resource.Error(e.message ?: "Gagal mencatat kehadiran"))
             }
+        }
+
+    override fun getTodaySchedule(nim: Int): Flow<Resource<List<Kelas>>> =
+        flow {
+            emit(Resource.Loading())
+            val calendar = Calendar.getInstance()
+            val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+            val currentDayName = DataMapper.mapDayOfWeekToDayName(dayOfWeek)
+
+            localDataSource
+                .getAllSchedulesByNim(nim)
+                .map { kelasEntities ->
+                    DataMapper
+                        .mapKelasEntitiesToDomains(kelasEntities)
+                        .filter { kelas ->
+                            kelas.jadwal
+                                .split(',')
+                                .any { it.trim().equals(currentDayName, ignoreCase = true) }
+                        }
+                }.collect {
+                    emit(Resource.Success(it))
+                }
+        }
+
+    override fun getTodayScheduleDosen(nidn: Int): Flow<Resource<List<Kelas>>> =
+        flow {
+            emit(Resource.Loading())
+            val calendar = Calendar.getInstance()
+            val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+            val currentDayName = DataMapper.mapDayOfWeekToDayName(dayOfWeek)
+
+            localDataSource
+                .getAllKelas()
+                .map { kelasEntities ->
+                    kelasEntities
+                        .filter { it.nidn == nidn }
+                        .map { DataMapper.mapKelasEntityToDomain(it) }
+                        .filter { kelas ->
+                            kelas.jadwal
+                                .split(',')
+                                .any { it.trim().equals(currentDayName, ignoreCase = true) }
+                        }
+                }.collect {
+                    emit(Resource.Success(it))
+                }
+        }
+
+    override fun getAllSchedulesByNim(nim: Int): Flow<Resource<List<Kelas>>> =
+        flow {
+            emit(Resource.Loading())
+            localDataSource
+                .getAllSchedulesByNim(nim)
+                .map {
+                    DataMapper.mapKelasEntitiesToDomains(it)
+                }.collect {
+                    emit(Resource.Success(it))
+                }
+        }
+
+    override fun getAllSchedulesByNidn(nidn: Int): Flow<Resource<List<Kelas>>> =
+        flow {
+            emit(Resource.Loading())
+            localDataSource
+                .getAllKelas()
+                .map { kelasEntities ->
+                    DataMapper.mapKelasEntitiesToDomains(kelasEntities.filter { it.nidn == nidn })
+                }.collect {
+                    emit(Resource.Success(it))
+                }
         }
 
     override fun getAttendanceStreak(
@@ -565,124 +544,29 @@ class VirtualClassRepository(
     ): Flow<Resource<Int>> =
         flow {
             emit(Resource.Loading())
-            localDataSource.getAttendanceStreak(nim, kelasId).collect { streak ->
-                if (streak != null) {
-                    emit(Resource.Success(streak.currentStreak))
-                } else {
-                    emit(Resource.Success(0))
+            localDataSource
+                .getAttendanceStreak(nim, kelasId)
+                .map { streakEntity ->
+                    Resource.Success(streakEntity?.currentStreak ?: 0)
+                }.catch { e ->
+                    emit(Resource.Error(e.message ?: "Gagal mendapatkan streak kehadiran"))
+                }.collect {
+                    emit(it)
                 }
-            }
-        }
-
-    override fun getTodaySchedule(nim: Int): Flow<Resource<List<Kelas>>> =
-        flow {
-            emit(Resource.Loading())
-            localDataSource
-                .getAllSchedulesByNim(nim)
-                .map { enrolledClasses ->
-                    val today = Calendar.getInstance()
-                    val dayOfWeekToday =
-                        when (today.get(Calendar.DAY_OF_WEEK)) {
-                            Calendar.MONDAY -> "Senin"
-                            Calendar.TUESDAY -> "Selasa"
-                            Calendar.WEDNESDAY -> "Rabu"
-                            Calendar.THURSDAY -> "Kamis"
-                            Calendar.FRIDAY -> "Jumat"
-                            Calendar.SATURDAY -> "Sabtu"
-                            Calendar.SUNDAY -> "Minggu"
-                            else -> ""
-                        }
-                    DataMapper.mapKelasEntitiesToDomains(
-                        enrolledClasses.filter {
-                            it.jadwal.startsWith(
-                                dayOfWeekToday,
-                            )
-                        },
-                    )
-                }.collect { emit(Resource.Success(it)) }
-        }
-
-    override fun getTodayScheduleDosen(nidn: Int): Flow<Resource<List<Kelas>>> =
-        flow {
-            emit(Resource.Loading())
-            localDataSource
-                .getAllKelas()
-                .map { allClasses ->
-                    val today = Calendar.getInstance()
-                    val dayOfWeekToday =
-                        when (today.get(Calendar.DAY_OF_WEEK)) {
-                            Calendar.MONDAY -> "Senin"
-                            Calendar.TUESDAY -> "Selasa"
-                            Calendar.WEDNESDAY -> "Rabu"
-                            Calendar.THURSDAY -> "Kamis"
-                            Calendar.FRIDAY -> "Jumat"
-                            Calendar.SATURDAY -> "Sabtu"
-                            Calendar.SUNDAY -> "Minggu"
-                            else -> ""
-                        }
-                    DataMapper.mapKelasEntitiesToDomains(
-                        allClasses.filter {
-                            it.nidn == nidn &&
-                                it.jadwal.startsWith(
-                                    dayOfWeekToday,
-                                )
-                        },
-                    )
-                }.collect { emit(Resource.Success(it)) }
-        }
-
-    override fun getAllSchedulesByNim(nim: Int): Flow<Resource<List<Kelas>>> =
-        flow {
-            emit(Resource.Loading())
-            localDataSource
-                .getAllSchedulesByNim(nim)
-                .map { DataMapper.mapKelasEntitiesToDomains(it) }
-                .collect { emit(Resource.Success(it)) }
-        }
-
-    override fun getAllSchedulesByNidn(nidn: Int): Flow<Resource<List<Kelas>>> =
-        flow {
-            emit(Resource.Loading())
-            localDataSource
-                .getAllKelas()
-                .map { allClasses ->
-                    DataMapper.mapKelasEntitiesToDomains(allClasses.filter { it.nidn == nidn })
-                }.collect { emit(Resource.Success(it)) }
-        }
-
-    override fun getMahasiswaByKelasId(kelasId: String): Flow<Resource<List<Mahasiswa>>> =
-        flow {
-            emit(Resource.Loading())
-            localDataSource
-                .getMahasiswaByKelasId(kelasId)
-                .map { DataMapper.mapMahasiswaEntitiesToDomains(it) }
-                .collect { emit(Resource.Success(it)) }
-        }
-
-    override fun getMahasiswaCountByKelasId(kelasId: String): Flow<Resource<Int>> =
-        flow {
-            emit(Resource.Loading())
-            localDataSource.getMahasiswaCountByKelasId(kelasId).collect {
-                emit(Resource.Success(it))
-            }
         }
 
     override suspend fun updateMahasiswaProfile(mahasiswa: Mahasiswa): Flow<Resource<String>> =
         flow {
             emit(Resource.Loading())
             try {
-                val mahasiswaEntity = localDataSource.getMahasiswaByNim(mahasiswa.nim).first()
-                if (mahasiswaEntity != null) {
-                    val updatedEntity =
-                        mahasiswaEntity.copy(
-                            nama = mahasiswa.nama,
-                            email = mahasiswa.email,
-                            fotoProfil = mahasiswa.fotoProfil,
-                        )
+                val mahasiswaEntity = DataMapper.mapMahasiswaDomainToEntity(mahasiswa)
+                val currentEntity = localDataSource.getMahasiswaByNim(mahasiswa.nim).first()
+                if (currentEntity != null) {
+                    val updatedEntity = mahasiswaEntity.copy(password = currentEntity.password)
                     localDataSource.updateMahasiswa(updatedEntity)
                     emit(Resource.Success("Profil berhasil diperbarui"))
                 } else {
-                    emit(Resource.Error("Mahasiswa tidak ditemukan"))
+                    emit(Resource.Error("Mahasiswa tidak ditemukan untuk pembaruan"))
                 }
             } catch (e: Exception) {
                 emit(Resource.Error(e.message ?: "Gagal memperbarui profil"))
@@ -693,35 +577,50 @@ class VirtualClassRepository(
         flow {
             emit(Resource.Loading())
             try {
-                val dosenEntity = localDataSource.getDosenByNidn(dosen.nidn).first()
-                if (dosenEntity != null) {
-                    val updatedEntity =
-                        dosenEntity.copy(
-                            nama = dosen.nama,
-                            email = dosen.email,
-                            fotoProfil = dosen.fotoProfil,
-                        )
+                val dosenEntity = DataMapper.mapDosenDomainToEntity(dosen)
+                val currentEntity = localDataSource.getDosenByNidn(dosen.nidn).first()
+                if (currentEntity != null) {
+                    val updatedEntity = dosenEntity.copy(password = currentEntity.password)
                     localDataSource.updateDosen(updatedEntity)
                     emit(Resource.Success("Profil berhasil diperbarui"))
                 } else {
-                    emit(Resource.Error("Dosen tidak ditemukan"))
+                    emit(Resource.Error("Dosen tidak ditemukan untuk pembaruan"))
                 }
             } catch (e: Exception) {
                 emit(Resource.Error(e.message ?: "Gagal memperbarui profil"))
             }
         }
 
+    override fun getMahasiswaByKelasId(kelasId: String): Flow<Resource<List<Mahasiswa>>> =
+        flow {
+            emit(Resource.Loading())
+            localDataSource
+                .getMahasiswaByKelasId(kelasId)
+                .map {
+                    DataMapper.mapMahasiswaEntitiesToDomains(it)
+                }.collect {
+                    emit(Resource.Success(it))
+                }
+        }
+
+    override fun getMahasiswaCountByKelasId(kelasId: String): Flow<Resource<Int>> =
+        flow {
+            emit(Resource.Loading())
+            localDataSource.getMahasiswaCountByKelasId(kelasId).collect {
+                emit(Resource.Success(it))
+            }
+        }
+
     override fun getPendingEnrollmentRequests(kelasId: String): Flow<Resource<List<Mahasiswa>>> =
         flow {
             emit(Resource.Loading())
-            try {
-                localDataSource
-                    .getPendingEnrollmentRequests(kelasId)
-                    .map { DataMapper.mapMahasiswaEntitiesToDomains(it) }
-                    .collect { emit(Resource.Success(it)) }
-            } catch (e: Exception) {
-                emit(Resource.Error(e.message ?: "Gagal memuat permintaan pendaftaran"))
-            }
+            localDataSource
+                .getPendingEnrollmentRequests(kelasId)
+                .map {
+                    DataMapper.mapMahasiswaEntitiesToDomains(it)
+                }.collect {
+                    emit(Resource.Success(it))
+                }
         }
 
     override fun getPendingEnrollmentRequestCount(kelasId: String): Flow<Resource<Int>> =
@@ -731,4 +630,31 @@ class VirtualClassRepository(
                 emit(Resource.Success(it))
             }
         }
+
+    override fun getPendingEnrollmentRequestCountForDosen(nidn: Int): Flow<Resource<Int>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                var totalPendingRequests = 0
+                val allClasses = localDataSource.getAllKelas().first()
+                val dosenClasses = allClasses.filter { it.nidn == nidn }
+
+                for (kelas in dosenClasses) {
+                    val pendingCountForClass =
+                        localDataSource.getPendingEnrollmentRequestCount(kelas.kelasId).first()
+                    totalPendingRequests += pendingCountForClass
+                }
+                emit(Resource.Success(totalPendingRequests))
+            } catch (e: Exception) {
+                emit(
+                    Resource.Error(
+                        e.message ?: "Gagal mengambil jumlah permintaan pendaftaran untuk dosen",
+                    ),
+                )
+            }
+        }
+
+    override fun getLastNotifiedPendingCount(): Flow<Int> = localDataSource.getLastNotifiedPendingCount()
+
+    override suspend fun saveLastNotifiedPendingCount(count: Int) = localDataSource.saveLastNotifiedPendingCount(count)
 }

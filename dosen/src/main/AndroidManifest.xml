@@ -12,6 +12,8 @@
         <dist:fusing dist:include="true" />
     </dist:module>
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".presentation.MainActivity"

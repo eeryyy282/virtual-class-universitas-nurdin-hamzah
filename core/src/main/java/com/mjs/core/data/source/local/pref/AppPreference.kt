@@ -21,6 +21,7 @@ class AppPreference(
     private val loggedInUserTypeKey = stringPreferencesKey("logged_in_user_type")
 
     private val themeKey = booleanPreferencesKey("theme_setting")
+    private val lastNotifiedPendingCountKey = intPreferencesKey("last_notified_pending_count")
 
     fun getThemeSetting(): Flow<Boolean> =
         dataStore.data.map { preferences ->
@@ -64,6 +65,17 @@ class AppPreference(
             preferences[isLoggedInKey] = false
             preferences.remove(loggedInUserIdKey)
             preferences.remove(loggedInUserTypeKey)
+        }
+    }
+
+    fun getLastNotifiedPendingCount(): Flow<Int> =
+        dataStore.data.map { preferences ->
+            preferences[lastNotifiedPendingCountKey] ?: 0
+        }
+
+    suspend fun saveLastNotifiedPendingCount(count: Int) {
+        dataStore.edit { preferences ->
+            preferences[lastNotifiedPendingCountKey] = count
         }
     }
 

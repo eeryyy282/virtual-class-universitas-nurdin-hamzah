@@ -16,6 +16,7 @@ import com.mjs.core.domain.model.Mahasiswa
 import com.mjs.core.domain.model.Materi
 import com.mjs.core.domain.model.Postingan
 import com.mjs.core.domain.model.Tugas
+import java.util.Calendar
 
 object DataMapper {
     fun mapMahasiswaEntityToDomain(input: MahasiswaEntity): Mahasiswa =
@@ -30,12 +31,32 @@ object DataMapper {
 
     fun mapMahasiswaEntitiesToDomains(input: List<MahasiswaEntity>): List<Mahasiswa> = input.map { mapMahasiswaEntityToDomain(it) }
 
+    fun mapMahasiswaDomainToEntity(input: Mahasiswa): MahasiswaEntity =
+        MahasiswaEntity(
+            nim = input.nim,
+            nama = input.nama,
+            email = input.email,
+            fotoProfil = input.fotoProfil,
+            dosenPembimbing = input.dosenPembimbing,
+            jurusan = input.jurusan,
+            password = "",
+        )
+
     fun mapDosenEntityToDomain(input: DosenEntity): Dosen =
         Dosen(
             nidn = input.nidn,
             nama = input.nama,
             email = input.email,
             fotoProfil = input.fotoProfil,
+        )
+
+    fun mapDosenDomainToEntity(input: Dosen): DosenEntity =
+        DosenEntity(
+            nidn = input.nidn,
+            nama = input.nama,
+            email = input.email,
+            fotoProfil = input.fotoProfil,
+            password = "",
         )
 
     fun mapKelasEntityToDomain(input: KelasEntity): Kelas =
@@ -113,4 +134,16 @@ object DataMapper {
         )
 
     fun mapKehadiranEntitiesToDomains(input: List<AttendanceEntity>): List<Kehadiran> = input.map { mapKehadiranEntityToDomain(it) }
+
+    fun mapDayOfWeekToDayName(dayOfWeek: Int): String =
+        when (dayOfWeek) {
+            Calendar.SUNDAY -> "Minggu"
+            Calendar.MONDAY -> "Senin"
+            Calendar.TUESDAY -> "Selasa"
+            Calendar.WEDNESDAY -> "Rabu"
+            Calendar.THURSDAY -> "Kamis"
+            Calendar.FRIDAY -> "Jumat"
+            Calendar.SATURDAY -> "Sabtu"
+            else -> ""
+        }
 }

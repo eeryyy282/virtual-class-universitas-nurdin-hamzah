@@ -1,5 +1,8 @@
 package com.mjs.enrollclass.presentation.enrollrequest
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -37,6 +40,7 @@ class EnrollRequestActivity : AppCompatActivity() {
             insets
         }
 
+        createNotificationChannel()
         setupRecyclerView()
 
         kelasId = intent.data?.getQueryParameter("kelasId")
@@ -52,6 +56,25 @@ class EnrollRequestActivity : AppCompatActivity() {
         }
 
         checkDarkMode()
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Permintaan Pendaftaran"
+            val descriptionText = "Notifikasi untuk permintaan pendaftaran mahasiswa baru"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel =
+                NotificationChannel(
+                    EnrollRequestViewModel.ENROLL_REQUEST_CHANNEL_ID,
+                    name,
+                    importance,
+                ).apply {
+                    description = descriptionText
+                }
+            val notificationManager: NotificationManager =
+                getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 
     private fun setupRecyclerView() {
@@ -116,11 +139,9 @@ class EnrollRequestActivity : AppCompatActivity() {
         enrollRequestViewModel.enrollmentUpdateStatus.observe(this) { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    binding.progressBarEnrollRequest.visibility = View.VISIBLE
                 }
 
                 is Resource.Success -> {
-                    binding.progressBarEnrollRequest.visibility = View.GONE
                     Toast.makeText(this, resource.data, Toast.LENGTH_SHORT).show()
                     if (kelasId != null) {
                         enrollRequestViewModel.fetchEnrollmentRequests(kelasId!!)
@@ -128,7 +149,6 @@ class EnrollRequestActivity : AppCompatActivity() {
                 }
 
                 is Resource.Error -> {
-                    binding.progressBarEnrollRequest.visibility = View.GONE
                     Toast
                         .makeText(
                             this,

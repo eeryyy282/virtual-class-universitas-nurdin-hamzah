@@ -136,4 +136,10 @@ interface IVirtualClassRepository {
     fun getPendingEnrollmentRequests(kelasId: String): Flow<Resource<List<Mahasiswa>>>
 
     fun getPendingEnrollmentRequestCount(kelasId: String): Flow<Resource<Int>>
+
+    fun getPendingEnrollmentRequestCountForDosen(nidn: Int): Flow<Resource<Int>>
+
+    fun getLastNotifiedPendingCount(): Flow<Int>
+
+    suspend fun saveLastNotifiedPendingCount(count: Int)
 }

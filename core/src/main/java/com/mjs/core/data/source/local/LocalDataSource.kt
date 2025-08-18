@@ -153,4 +153,8 @@ class LocalDataSource(
         kelasId: String,
         newStatus: String,
     ) = classroomDao.updateEnrollmentStatus(nim, kelasId, newStatus)
+
+    fun getLastNotifiedPendingCount(): Flow<Int> = appPreference.getLastNotifiedPendingCount()
+
+    suspend fun saveLastNotifiedPendingCount(count: Int) = appPreference.saveLastNotifiedPendingCount(count)
 }

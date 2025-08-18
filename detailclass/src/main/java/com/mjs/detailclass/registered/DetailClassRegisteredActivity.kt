@@ -1,5 +1,6 @@
 package com.mjs.detailclass.registered
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -135,6 +136,7 @@ class DetailClassRegisteredActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun observeDosenDetails() {
         detailClassRegisteredViewModel.dosenDetail.observe(this) { resource ->
             when (resource) {
@@ -148,7 +150,7 @@ class DetailClassRegisteredActivity : AppCompatActivity() {
                     binding.progressBarDetailClass.visibility = View.GONE
                     resource.data?.let {
                         binding.tvLectureClassroom.text = it.nama
-                        binding.tvLectureId.text = it.nidn.toString()
+                        binding.tvLectureId.text = "NIDN: ${it.nidn}"
                         Glide
                             .with(this)
                             .load(it.fotoProfil)

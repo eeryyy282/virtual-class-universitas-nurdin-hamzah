@@ -231,6 +231,7 @@ class DetailClassUnregisteredActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun observeDosenDetails() {
         detailClassViewModel.dosenDetails.observe(this) { resource ->
             when (resource) {
@@ -240,7 +241,7 @@ class DetailClassUnregisteredActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     resource.data?.let {
                         binding.tvLectureClassroom.text = it.nama
-                        binding.tvLectureId.text = it.nidn.toString()
+                        binding.tvLectureId.text = "NIDN: ${it.nidn}"
                         Glide
                             .with(this)
                             .load(it.fotoProfil)

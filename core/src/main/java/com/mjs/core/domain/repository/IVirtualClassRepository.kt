@@ -15,6 +15,7 @@ import com.mjs.core.domain.model.Mahasiswa
 import com.mjs.core.domain.model.Materi
 import com.mjs.core.domain.model.Postingan
 import com.mjs.core.domain.model.Tugas
+import com.mjs.core.ui.task.SubmissionListItem
 import kotlinx.coroutines.flow.Flow
 
 interface IVirtualClassRepository {
@@ -88,6 +89,8 @@ interface IVirtualClassRepository {
     suspend fun insertAssignment(assignment: AssignmentEntity): Flow<Resource<String>>
 
     suspend fun insertSubmission(submission: SubmissionEntity): Flow<Resource<String>>
+
+    fun getSubmissionListItemsByAssignment(assignmentId: Int): Flow<Resource<List<SubmissionListItem>>>
 
     fun getNotFinishedTasks(
         nim: Int,

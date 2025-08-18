@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="8dp"
+    android:backgroundTint="@color/background_color_card_view"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_student_profile"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CircleImageView"
+            tools:srcCompat="@drawable/profile_photo" />
+
+        <TextView
+            android:id="@+id/tv_student_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/lato"
+            android:textColor="@color/outline_color_theme"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_student_profile"
+            app:layout_constraintTop_toTopOf="@+id/iv_student_profile"
+            tools:text="Nama Mahasiswa" />
+
+        <TextView
+            android:id="@+id/tv_student_nim"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:textColor="@color/text_color_themed"
+            app:layout_constraintEnd_toEndOf="@+id/tv_student_name"
+            app:layout_constraintStart_toStartOf="@+id/tv_student_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_student_name"
+            tools:text="NIM: 123456789" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="iv_student_profile,tv_student_nim" />
+
+        <TextView
+            android:id="@+id/tv_submission_date_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/submission_date_is"
+            android:textColor="@color/outline_color_theme"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/barrier_profile" />
+
+        <TextView
+            android:id="@+id/tv_submission_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/lato"
+            android:textColor="@color/text_color_themed"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_submission_date_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_submission_date_label"
+            tools:text="2024-07-28 10:00" />
+
+        <TextView
+            android:id="@+id/tv_attachment_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/attachment_is"
+            android:textColor="@color/outline_color_theme"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_submission_date" />
+
+        <TextView
+            android:id="@+id/tv_attachment_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/lato"
+            android:textColor="@color/text_color_themed"
+            android:visibility="gone"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_attachment_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_attachment_label"
+            tools:text="tugas_akhir.pdf"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_no_attachment_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/no_attachment"
+            android:visibility="gone"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_attachment_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_attachment_label"
+            tools:visibility="gone" />
+
+
+        <TextView
+            android:id="@+id/tv_grade_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/grade_is"
+            android:textColor="@color/outline_color_theme"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_attachment_name" />
+
+        <TextView
+            android:id="@+id/tv_grade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_rounded_textview"
+            android:fontFamily="@font/lato"
+            android:paddingStart="8dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="2dp"
+            android:textColor="@color/classic_blue"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_grade_label"
+            app:layout_constraintStart_toEndOf="@+id/tv_grade_label"
+            tools:text="100"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_no_grade_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/no_grade"
+            android:textColor="@color/text_color_themed"
+            android:visibility="gone"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_grade_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_grade_label"
+            tools:visibility="gone" />
+
+
+        <TextView
+            android:id="@+id/tv_note_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/note_lecture"
+            android:textColor="@color/outline_color_theme"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_grade_label" />
+
+        <TextView
+            android:id="@+id/tv_submission_note"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/lato"
+            android:textColor="@color/text_color_themed"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_note_label"
+            tools:text="Kerja bagus! Pertahankan prestasimu dan terus belajar lebih giat lagi."
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_no_note_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/no_note"
+            android:textColor="@color/text_color_themed"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_note_label"
+            tools:visibility="gone" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

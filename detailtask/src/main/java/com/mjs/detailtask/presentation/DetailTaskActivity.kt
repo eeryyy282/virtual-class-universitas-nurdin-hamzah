@@ -18,17 +18,20 @@ import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
 import com.mjs.detailtask.R
 import com.mjs.detailtask.databinding.ActivityDetailTaskBinding
 import com.mjs.detailtask.di.detailTaskModule
+import com.mjs.detailtask.presentation.submitedtask.SubmittedTaskActivity
+import com.mjs.detailtask.presentation.submittask.SubmitTaskActivity
 import com.mjs.detailtask.utils.DateUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
-import com.mjs.core.R as coreR
 
 class DetailTaskActivity : AppCompatActivity() {
     lateinit var binding: ActivityDetailTaskBinding
     private val detailTaskViewModel: DetailTaskViewModel by viewModel()
+    private var currentTugas: Tugas? = null
 
     companion object {
         const val EXTRA_TASK = "extra_task"
+        const val EXTRA_TASK_ID_FOR_SUBMIT = "extra_task_id_for_submit"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +46,7 @@ class DetailTaskActivity : AppCompatActivity() {
             insets
         }
 
-        val tugas =
+        currentTugas =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 intent.getParcelableExtra(EXTRA_TASK, Tugas::class.java)
             } else {
@@ -51,8 +54,8 @@ class DetailTaskActivity : AppCompatActivity() {
                 intent.getParcelableExtra(EXTRA_TASK)
             }
 
-        if (tugas != null) {
-            detailTaskViewModel.loadTaskDetails(tugas)
+        if (currentTugas != null) {
+            detailTaskViewModel.loadTaskDetails(currentTugas!!)
             observeTaskDetails()
             observeUserRole()
         } else {
@@ -71,11 +74,23 @@ class DetailTaskActivity : AppCompatActivity() {
 
         binding.btnActionTask.setOnClickListener {
             val role = detailTaskViewModel.userRole.value
-            if (role == VirtualClassUseCase.USER_TYPE_DOSEN) {
-                Toast.makeText(this, "Fitur edit tugas belum tersedia", Toast.LENGTH_SHORT).show()
-            } else if (role == VirtualClassUseCase.USER_TYPE_MAHASISWA) {
-                Toast.makeText(this, "Fitur submit tugas belum tersedia", Toast.LENGTH_SHORT).show()
-            }
+            currentTugas?.let { tugas ->
+                if (role == VirtualClassUseCase.USER_TYPE_DOSEN) {
+                    val intent =
+                        Intent(this, SubmittedTaskActivity::class.java).apply {
+                            putExtra(SubmittedTaskActivity.EXTRA_ASSIGNMENT_ID, tugas.assignmentId)
+                        }
+                    startActivity(intent)
+                } else if (role == VirtualClassUseCase.USER_TYPE_MAHASISWA) {
+                    val intent =
+                        Intent(this, SubmitTaskActivity::class.java).apply {
+                            putExtra(EXTRA_TASK_ID_FOR_SUBMIT, tugas.assignmentId)
+                        }
+                    startActivity(intent)
+                }
+            } ?: Toast
+                .makeText(this, "Error: Data tugas tidak ditemukan", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 
@@ -83,12 +98,13 @@ class DetailTaskActivity : AppCompatActivity() {
         detailTaskViewModel.userRole.observe(this) { role ->
             when (role) {
                 VirtualClassUseCase.USER_TYPE_DOSEN -> {
-                    binding.btnActionTask.text = getString(R.string.edit_task)
+                    binding.btnActionTask.text = getString(R.string.view_submissions)
                     binding.btnActionTask.visibility = View.VISIBLE
                 }
 
                 VirtualClassUseCase.USER_TYPE_MAHASISWA -> {
-                    binding.btnActionTask.text = getString(R.string.submit_task)
+                    binding.btnActionTask.text =
+                        getString(R.string.submit_task_button)
                     binding.btnActionTask.visibility = View.VISIBLE
                 }
 
@@ -102,6 +118,7 @@ class DetailTaskActivity : AppCompatActivity() {
     private fun observeTaskDetails() {
         detailTaskViewModel.tugasDetail.observe(this) { tugas ->
             if (tugas != null) {
+                currentTugas = tugas
                 binding.tvTaskTitle.text = tugas.judulTugas
                 binding.tvTaskDescription.text = tugas.deskripsi
                 binding.tvStartDate.text = DateUtils.formatDeadline(tugas.tanggalMulai)
@@ -149,14 +166,14 @@ class DetailTaskActivity : AppCompatActivity() {
                         Glide
                             .with(this)
                             .load(kelas.classImage)
-                            .placeholder(coreR.drawable.classroom_photo)
-                            .error(coreR.drawable.classroom_photo)
+                            .placeholder(R.drawable.subject_photo_profile)
+                            .error(R.drawable.subject_photo_profile)
                             .into(binding.ivClassPhoto)
                     } else {
                         binding.tvClassName.text = getString(R.string.unknown_class_name)
                         Glide
                             .with(this)
-                            .load(coreR.drawable.classroom_photo)
+                            .load(R.drawable.subject_photo_profile)
                             .into(binding.ivClassPhoto)
                     }
                 }
@@ -167,7 +184,7 @@ class DetailTaskActivity : AppCompatActivity() {
                     binding.ivClassPhoto.visibility = View.VISIBLE
                     Glide
                         .with(this)
-                        .load(coreR.drawable.classroom_photo)
+                        .load(R.drawable.subject_photo_profile)
                         .into(binding.ivClassPhoto)
                     Toast
                         .makeText(

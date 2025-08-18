@@ -1,12 +1,14 @@
+@file:Suppress("DEPRECATION")
+
 package com.mjs.detailtask.di
 
 import com.mjs.detailtask.presentation.DetailTaskViewModel
-import com.mjs.detailtask.presentation.submittask.SubmitTaskViewModel
-import org.koin.core.module.dsl.viewModel
+import com.mjs.detailtask.presentation.submitedtask.SubmittedTaskViewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val detailTaskModule =
     module {
         viewModel { DetailTaskViewModel(get()) }
-        viewModel { SubmitTaskViewModel(get()) }
+        viewModel { SubmittedTaskViewModel(get()) }
     }

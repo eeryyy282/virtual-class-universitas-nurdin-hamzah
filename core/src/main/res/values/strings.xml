@@ -104,4 +104,11 @@
     <string name="student">Mahasiswa</string>
     <string name="reject">Tolak</string>
     <string name="acc">Terima</string>
+    <string name="no_note">Tidak ada catatan.</string>
+    <string name="note_lecture">Catatan Dosen:</string>
+    <string name="no_grade">Belum dinilai</string>
+    <string name="grade_is">Nilai:</string>
+    <string name="no_attachment">Tidak ada lampiran</string>
+    <string name="attachment_is">Lampiran:</string>
+    <string name="submission_date_is">Tanggal Kirim:</string>
 </resources>

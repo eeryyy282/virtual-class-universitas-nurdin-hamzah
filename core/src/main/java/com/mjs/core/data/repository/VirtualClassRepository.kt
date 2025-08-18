@@ -18,6 +18,7 @@ import com.mjs.core.domain.model.Materi
 import com.mjs.core.domain.model.Postingan
 import com.mjs.core.domain.model.Tugas
 import com.mjs.core.domain.repository.IVirtualClassRepository
+import com.mjs.core.ui.task.SubmissionListItem
 import com.mjs.core.utils.DataMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -325,6 +326,28 @@ class VirtualClassRepository(
                 emit(Resource.Success("Tugas berhasil dikumpulkan"))
             } catch (e: Exception) {
                 emit(Resource.Error(e.message ?: "Gagal mengumpulkan tugas"))
+            }
+        }
+
+    override fun getSubmissionListItemsByAssignment(assignmentId: Int): Flow<Resource<List<SubmissionListItem>>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                localDataSource.getSubmissionsByAssignment(assignmentId).collect { submissions ->
+                    val submissionListItems =
+                        submissions.map { submissionEntity ->
+                            val mahasiswa =
+                                localDataSource.getMahasiswaByNim(submissionEntity.nim).first()
+                            SubmissionListItem(
+                                submissionEntity = submissionEntity,
+                                studentName = mahasiswa?.nama,
+                                studentPhotoUrl = mahasiswa?.fotoProfil,
+                            )
+                        }
+                    emit(Resource.Success(submissionListItems))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Gagal mengambil daftar submission"))
             }
         }
 

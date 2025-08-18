@@ -16,6 +16,7 @@ import com.mjs.core.domain.model.Materi
 import com.mjs.core.domain.model.Postingan
 import com.mjs.core.domain.model.Tugas
 import com.mjs.core.domain.repository.IVirtualClassRepository
+import com.mjs.core.ui.task.SubmissionListItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -101,6 +102,9 @@ class VirtualClassInteractor(
 
     override suspend fun insertSubmission(submission: SubmissionEntity): Flow<Resource<String>> =
         virtualClassRepository.insertSubmission(submission)
+
+    override fun getSubmissionListItemsByAssignment(assignmentId: Int): Flow<Resource<List<SubmissionListItem>>> =
+        virtualClassRepository.getSubmissionListItemsByAssignment(assignmentId)
 
     override fun getNotFinishedTasks(
         nim: Int,

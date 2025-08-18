@@ -15,6 +15,9 @@
 
     <application android:icon="@mipmap/ic_launcher">
         <activity
+            android:name=".presentation.submitedtask.SubmittedTaskActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.DetailTaskActivity"
             android:exported="true"
             android:screenOrientation="portrait"

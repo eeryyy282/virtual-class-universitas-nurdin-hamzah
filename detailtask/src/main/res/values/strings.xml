@@ -15,4 +15,11 @@
     <string name="note_optional">Catatan (Opsional)</string>
     <string name="select_attachment">Pilih File Lampiran</string>
     <string name="send_task">Kirim Tugas</string>
+    <string name="submitted_tasks">Tugas Terkumpul</string>
+    <string name="no_submissions_found">Belum ada mahasiswa yang mengumpulkan tugas ini.</string>
+    <string name="error_loading_submissions">Gagal memuat data submission.</string>
+    <string name="view_submissions">Lihat Pengumpulan</string>
+    <string name="submit_task_button">Kumpulkan Tugas</string>
+    <string name="no_submissions_image_description">Gambar yang menandakan tidak ada submission</string>
 </resources>
+

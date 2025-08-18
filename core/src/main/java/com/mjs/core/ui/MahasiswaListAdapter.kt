@@ -1,5 +1,6 @@
 package com.mjs.core.ui
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -36,10 +37,11 @@ class MahasiswaListAdapter(
     inner class UserViewHolder(
         private val binding: ItemMahasiswaListBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(mahasiswa: Mahasiswa) {
             binding.tvUsername.text = mahasiswa.nama
             binding.tvUserId.text =
-                mahasiswa.nim.toString()
+                "NIM: ${mahasiswa.nim}"
             Glide
                 .with(itemView.context)
                 .load(mahasiswa.fotoProfil)

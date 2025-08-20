@@ -56,7 +56,7 @@ class TaskFragment : Fragment() {
         taskAdapter.onItemClick = { tugas ->
             val uri = "detail_task://detail_task_activity".toUri()
             val intent = Intent(Intent.ACTION_VIEW, uri)
-            intent.putExtra(DetailTaskActivity.EXTRA_TASK, tugas)
+            intent.putExtra(DetailTaskActivity.EXTRA_TASK_ID, tugas.assignmentId)
             startActivity(intent)
         }
         binding.rvTaskDosen.apply {

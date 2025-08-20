@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.mjs.core.data.source.local.entity.AssignmentEntity
 import com.mjs.core.data.source.local.entity.MaterialEntity
 import com.mjs.core.data.source.local.entity.SubmissionEntity
@@ -16,6 +17,9 @@ interface TaskDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAssignment(assignment: AssignmentEntity): Long
+
+    @Update
+    suspend fun updateTask(assignment: AssignmentEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMaterial(material: MaterialEntity)
@@ -79,4 +83,7 @@ interface TaskDao {
         kelasIds: List<String>,
         currentDate: String,
     ): Flow<List<AssignmentEntity>>
+
+    @Query("SELECT * FROM assignments WHERE assignment_id = :assignmentId")
+    fun getAssignmentById(assignmentId: Int): Flow<AssignmentEntity?>
 }

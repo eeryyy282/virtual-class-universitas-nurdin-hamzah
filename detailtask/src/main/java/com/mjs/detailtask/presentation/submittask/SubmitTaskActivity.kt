@@ -1,5 +1,6 @@
 package com.mjs.detailtask.presentation.submittask
 
+//noinspection SuspiciousImport
 import android.R
 import android.content.Intent
 import android.net.Uri
@@ -32,7 +33,8 @@ class SubmitTaskActivity : AppCompatActivity() {
             if (result.resultCode == RESULT_OK) {
                 result.data?.data?.let { uri ->
                     selectedFileUri = uri
-                    binding.tvSelectedFileName.text = uri.lastPathSegment ?: "File Terpilih"
+                    binding.tvSelectedFileName.text =
+                        uri.lastPathSegment ?: getString(com.mjs.detailtask.R.string.file_selected)
                     binding.tvSelectedFileName.visibility = View.VISIBLE
                 }
             }
@@ -47,7 +49,12 @@ class SubmitTaskActivity : AppCompatActivity() {
         assignmentId = intent.getIntExtra(EXTRA_ASSIGNMENT_ID, -1)
 
         if (assignmentId == -1) {
-            Toast.makeText(this, "Error: Assignment ID tidak ditemukan", Toast.LENGTH_LONG).show()
+            Toast
+                .makeText(
+                    this,
+                    getString(com.mjs.detailtask.R.string.error_assignment_id_not_founded),
+                    Toast.LENGTH_LONG,
+                ).show()
             finish()
             return
         }
@@ -90,16 +97,19 @@ class SubmitTaskActivity : AppCompatActivity() {
             when (resource) {
                 is Resource.Loading -> {
                     binding.btnSubmitTaskFinal.isEnabled = false
-                    binding.btnSubmitTaskFinal.text = "Mengirim..."
+                    binding.btnSubmitTaskFinal.text =
+                        getString(com.mjs.detailtask.R.string.sending_)
                 }
 
                 is Resource.Success -> {
                     binding.btnSubmitTaskFinal.isEnabled = true
-                    binding.btnSubmitTaskFinal.text = "Kirim Tugas"
+                    binding.btnSubmitTaskFinal.text =
+                        getString(com.mjs.detailtask.R.string.send_task)
                     Toast
                         .makeText(
                             this,
-                            resource.data ?: "Tugas berhasil dikirim",
+                            resource.data
+                                ?: getString(com.mjs.detailtask.R.string.task_succesfull_sending),
                             Toast.LENGTH_LONG,
                         ).show()
                     finish()
@@ -107,11 +117,13 @@ class SubmitTaskActivity : AppCompatActivity() {
 
                 is Resource.Error -> {
                     binding.btnSubmitTaskFinal.isEnabled = true
-                    binding.btnSubmitTaskFinal.text = "Kirim Tugas"
+                    binding.btnSubmitTaskFinal.text =
+                        getString(com.mjs.detailtask.R.string.send_task)
                     Toast
                         .makeText(
                             this,
-                            resource.message ?: "Gagal mengirim tugas",
+                            resource.message
+                                ?: getString(com.mjs.detailtask.R.string.failed_send_task),
                             Toast.LENGTH_LONG,
                         ).show()
                 }

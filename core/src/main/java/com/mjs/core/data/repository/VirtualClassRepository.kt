@@ -307,6 +307,20 @@ class VirtualClassRepository(
                 }
         }
 
+    override fun getAssignmentById(assignmentId: Int): Flow<Resource<Tugas?>> =
+        flow<Resource<Tugas?>> {
+            emit(Resource.Loading())
+            localDataSource.getAssignmentById(assignmentId).collect { entity ->
+                if (entity != null) {
+                    emit(Resource.Success(DataMapper.mapTugasEntityToDomain(entity)))
+                } else {
+                    emit(Resource.Success(null))
+                }
+            }
+        }.catch { e ->
+            emit(Resource.Error(e.message ?: "Gagal mengambil tugas berdasarkan ID"))
+        }
+
     override suspend fun insertAssignment(assignment: AssignmentEntity): Flow<Resource<String>> =
         flow {
             emit(Resource.Loading())
@@ -315,6 +329,18 @@ class VirtualClassRepository(
                 emit(Resource.Success("Tugas berhasil ditambahkan"))
             } catch (e: Exception) {
                 emit(Resource.Error(e.message ?: "Gagal menambahkan tugas"))
+            }
+        }
+
+    override suspend fun updateTask(tugas: Tugas): Flow<Resource<String>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                val assignmentEntity = DataMapper.mapTugasDomainToEntity(tugas)
+                localDataSource.updateTask(assignmentEntity)
+                emit(Resource.Success("Tugas berhasil diperbarui"))
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Gagal memperbarui tugas"))
             }
         }
 

@@ -58,4 +58,5 @@
     <string name="error_throuble">Terjadi kesalahan</string>
     <string name="error">Terjadi kesalahan</string>
     <string name="failed_to_load_lecture_data">Gagal memuat data dosen</string>
+    <string name="id_lecture">NIDN</string>
 </resources>

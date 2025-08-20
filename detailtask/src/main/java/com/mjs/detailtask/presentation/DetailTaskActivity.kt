@@ -1,11 +1,11 @@
 package com.mjs.detailtask.presentation
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.net.toUri
@@ -18,6 +18,7 @@ import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
 import com.mjs.detailtask.R
 import com.mjs.detailtask.databinding.ActivityDetailTaskBinding
 import com.mjs.detailtask.di.detailTaskModule
+import com.mjs.detailtask.presentation.edittask.EditTaskActivity
 import com.mjs.detailtask.presentation.submitedtask.SubmittedTaskActivity
 import com.mjs.detailtask.presentation.submittask.SubmitTaskActivity
 import com.mjs.detailtask.utils.DateUtils
@@ -27,12 +28,23 @@ import org.koin.core.context.loadKoinModules
 class DetailTaskActivity : AppCompatActivity() {
     lateinit var binding: ActivityDetailTaskBinding
     private val detailTaskViewModel: DetailTaskViewModel by viewModel()
-    private var currentTugas: Tugas? = null
+    private var currentTaskForEdit: Tugas? = null
+    private var currentTaskId: Int = -1
 
     companion object {
         const val EXTRA_TASK = "extra_task"
+        const val EXTRA_TASK_ID = "extra_task_id"
         const val EXTRA_TASK_ID_FOR_SUBMIT = "extra_task_id_for_submit"
     }
+
+    private val editTaskLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                if (currentTaskId != -1) {
+                    detailTaskViewModel.loadTaskAndClassDetailsById(currentTaskId)
+                }
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,20 +58,15 @@ class DetailTaskActivity : AppCompatActivity() {
             insets
         }
 
-        currentTugas =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                intent.getParcelableExtra(EXTRA_TASK, Tugas::class.java)
-            } else {
-                @Suppress("DEPRECATION")
-                intent.getParcelableExtra(EXTRA_TASK)
-            }
+        currentTaskId = intent.getIntExtra(EXTRA_TASK_ID, -1)
 
-        if (currentTugas != null) {
-            detailTaskViewModel.loadTaskDetails(currentTugas!!)
+        if (currentTaskId != -1) {
+            detailTaskViewModel.loadTaskAndClassDetailsById(currentTaskId)
             observeTaskDetails()
             observeUserRole()
+            observeErrorState()
         } else {
-            Toast.makeText(this, "Error: Data tugas tidak ditemukan", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Error: ID Tugas tidak ditemukan", Toast.LENGTH_LONG).show()
             finish()
         }
 
@@ -72,9 +79,21 @@ class DetailTaskActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
+        binding.btnEditTask.setOnClickListener {
+            currentTaskForEdit?.let { taskToEdit ->
+                val intent =
+                    Intent(this, EditTaskActivity::class.java).apply {
+                        putExtra(EXTRA_TASK, taskToEdit)
+                    }
+                editTaskLauncher.launch(intent)
+            } ?: Toast
+                .makeText(this, "Data tugas untuk diedit tidak ditemukan", Toast.LENGTH_SHORT)
+                .show()
+        }
+
         binding.btnActionTask.setOnClickListener {
             val role = detailTaskViewModel.userRole.value
-            currentTugas?.let { tugas ->
+            detailTaskViewModel.tugasDetail.value?.let { tugas ->
                 if (role == VirtualClassUseCase.USER_TYPE_DOSEN) {
                     val intent =
                         Intent(this, SubmittedTaskActivity::class.java).apply {
@@ -89,8 +108,11 @@ class DetailTaskActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             } ?: Toast
-                .makeText(this, "Error: Data tugas tidak ditemukan", Toast.LENGTH_SHORT)
-                .show()
+                .makeText(
+                    this,
+                    "Error: Data tugas tidak ditemukan untuk aksi ini",
+                    Toast.LENGTH_SHORT,
+                ).show()
         }
     }
 
@@ -98,17 +120,20 @@ class DetailTaskActivity : AppCompatActivity() {
         detailTaskViewModel.userRole.observe(this) { role ->
             when (role) {
                 VirtualClassUseCase.USER_TYPE_DOSEN -> {
+                    binding.btnEditTask.visibility = View.VISIBLE
                     binding.btnActionTask.text = getString(R.string.view_submissions)
                     binding.btnActionTask.visibility = View.VISIBLE
                 }
 
                 VirtualClassUseCase.USER_TYPE_MAHASISWA -> {
+                    binding.btnEditTask.visibility = View.GONE
                     binding.btnActionTask.text =
                         getString(R.string.submit_task_button)
                     binding.btnActionTask.visibility = View.VISIBLE
                 }
 
                 else -> {
+                    binding.btnEditTask.visibility = View.GONE
                     binding.btnActionTask.visibility = View.GONE
                 }
             }
@@ -118,7 +143,7 @@ class DetailTaskActivity : AppCompatActivity() {
     private fun observeTaskDetails() {
         detailTaskViewModel.tugasDetail.observe(this) { tugas ->
             if (tugas != null) {
-                currentTugas = tugas
+                currentTaskForEdit = tugas
                 binding.tvTaskTitle.text = tugas.judulTugas
                 binding.tvTaskDescription.text = tugas.deskripsi
                 binding.tvStartDate.text = DateUtils.formatDeadline(tugas.tanggalMulai)
@@ -192,6 +217,18 @@ class DetailTaskActivity : AppCompatActivity() {
                             resource.message ?: "Gagal memuat data kelas",
                             Toast.LENGTH_SHORT,
                         ).show()
+                }
+            }
+        }
+    }
+
+    private fun observeErrorState() {
+        detailTaskViewModel.errorState.observe(this) { errorMessage ->
+            errorMessage?.let {
+                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+                detailTaskViewModel.clearErrorState()
+                if (detailTaskViewModel.tugasDetail.value == null) {
+                    finish()
                 }
             }
         }

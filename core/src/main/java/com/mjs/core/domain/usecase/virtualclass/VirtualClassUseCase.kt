@@ -81,7 +81,11 @@ interface VirtualClassUseCase {
 
     fun getAssignmentsByClass(kelasId: String): Flow<Resource<List<Tugas>>>
 
+    fun getAssignmentById(assignmentId: Int): Flow<Resource<Tugas?>>
+
     suspend fun insertAssignment(assignment: AssignmentEntity): Flow<Resource<String>>
+
+    suspend fun updateTask(tugas: Tugas): Flow<Resource<String>>
 
     suspend fun insertSubmission(submission: SubmissionEntity): Flow<Resource<String>>
 

@@ -21,5 +21,19 @@
     <string name="view_submissions">Lihat Pengumpulan</string>
     <string name="submit_task_button">Kumpulkan Tugas</string>
     <string name="no_submissions_image_description">Gambar yang menandakan tidak ada submission</string>
+    <string name="title_task">Judul Tugas</string>
+    <string name="task_description">Deskripsi Tugas</string>
+    <string name="select_date_and_time_start"><![CDATA[Pilih Tanggal & Waktu Mulai]]></string>
+    <string name="date_deadline">Tanggal Selesai (Deadline)</string>
+    <string name="select_date_and_deadline"><![CDATA[Pilih Tanggal & Waktu Selesai]]></string>
+    <string name="attacment_optional">Lampiran (Opsional)</string>
+    <string name="select_or_change_attachment">Pilih atau Ganti Lampiran</string>
+    <string name="no_attachment_yet">Belum ada lampiran.</string>
+    <string name="save_change">Simpan Perubahan</string>
+    <string name="sending_">Mengirim...</string>
+    <string name="task_succesfull_sending">Tugas berhasil dikirim</string>
+    <string name="failed_send_task">Gagal mengirim tugas</string>
+    <string name="error_assignment_id_not_founded">Error: Assignment ID tidak ditemukan</string>
+    <string name="file_selected">File Terpilih</string>
 </resources>
 

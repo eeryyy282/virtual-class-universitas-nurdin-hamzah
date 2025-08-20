@@ -97,8 +97,12 @@ class VirtualClassInteractor(
 
     override fun getAssignmentsByClass(kelasId: String): Flow<Resource<List<Tugas>>> = virtualClassRepository.getAssignmentsByClass(kelasId)
 
+    override fun getAssignmentById(assignmentId: Int): Flow<Resource<Tugas?>> = virtualClassRepository.getAssignmentById(assignmentId)
+
     override suspend fun insertAssignment(assignment: AssignmentEntity): Flow<Resource<String>> =
         virtualClassRepository.insertAssignment(assignment)
+
+    override suspend fun updateTask(tugas: Tugas): Flow<Resource<String>> = virtualClassRepository.updateTask(tugas)
 
     override suspend fun insertSubmission(submission: SubmissionEntity): Flow<Resource<String>> =
         virtualClassRepository.insertSubmission(submission)

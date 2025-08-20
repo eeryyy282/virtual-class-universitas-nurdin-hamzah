@@ -103,7 +103,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="24dp"
             android:fontFamily="@font/lato"
-            android:text="@string/id_text_title"
+            android:text="@string/id_lecture"
             android:textColor="@color/outline_color_theme"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"

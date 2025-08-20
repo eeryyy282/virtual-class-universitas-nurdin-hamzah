@@ -88,6 +88,17 @@ object DataMapper {
 
     fun mapTugasEntitiesToDomains(input: List<AssignmentEntity>): List<Tugas> = input.map { mapTugasEntityToDomain(it) }
 
+    fun mapTugasDomainToEntity(input: Tugas): AssignmentEntity =
+        AssignmentEntity(
+            assignmentId = input.assignmentId,
+            kelasId = input.kelasId,
+            judulTugas = input.judulTugas,
+            deskripsi = input.deskripsi,
+            tanggalMulai = input.tanggalMulai,
+            tanggalSelesai = input.tanggalSelesai,
+            attachment = input.attachment,
+        )
+
     fun mapMateriEntityToDomain(input: MaterialEntity): Materi =
         Materi(
             materiId = input.materiId,

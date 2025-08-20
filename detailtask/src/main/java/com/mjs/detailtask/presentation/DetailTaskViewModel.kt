@@ -16,14 +16,17 @@ class DetailTaskViewModel(
 ) : ViewModel() {
     val getThemeSetting = virtualClassUseCase.getThemeSetting().asLiveData()
 
-    private val _tugasDetail = MutableLiveData<Tugas>()
-    val tugasDetail: LiveData<Tugas> = _tugasDetail
+    private val _tugasDetail = MutableLiveData<Tugas?>()
+    val tugasDetail: LiveData<Tugas?> = _tugasDetail
 
     private val _kelasDetail = MutableLiveData<Resource<Kelas>>()
     val kelasDetail: LiveData<Resource<Kelas>> = _kelasDetail
 
     private val _userRole = MutableLiveData<String?>()
     val userRole: LiveData<String?> = _userRole
+
+    private val _errorState = MutableLiveData<String?>()
+    val errorState: LiveData<String?> = _errorState
 
     init {
         viewModelScope.launch {
@@ -33,12 +36,37 @@ class DetailTaskViewModel(
         }
     }
 
-    fun loadTaskDetails(tugas: Tugas) {
-        _tugasDetail.value = tugas
+    fun loadTaskAndClassDetailsById(assignmentId: Int) {
         viewModelScope.launch {
-            virtualClassUseCase.getKelasById(tugas.kelasId).collect { resource ->
-                _kelasDetail.value = resource
+            virtualClassUseCase.getAssignmentById(assignmentId).collect { tugasResource ->
+                when (tugasResource) {
+                    is Resource.Loading -> {
+                    }
+
+                    is Resource.Success -> {
+                        val taskData = tugasResource.data
+                        _tugasDetail.value = taskData
+                        if (taskData != null) {
+                            virtualClassUseCase
+                                .getKelasById(taskData.kelasId)
+                                .collect { kelasResource ->
+                                    _kelasDetail.value = kelasResource
+                                }
+                        } else {
+                            _errorState.value = "Data tugas tidak ditemukan setelah refresh."
+                        }
+                    }
+
+                    is Resource.Error -> {
+                        _tugasDetail.value = null
+                        _errorState.value = tugasResource.message ?: "Gagal memuat detail tugas."
+                    }
+                }
             }
         }
+    }
+
+    fun clearErrorState() {
+        _errorState.value = null
     }
 }

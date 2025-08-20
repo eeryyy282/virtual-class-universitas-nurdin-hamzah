@@ -54,9 +54,8 @@ class TaskFragment : Fragment() {
             viewModel.getClassPhotoProfileById(it)
         }
         taskAdapter.onItemClick = { tugas ->
-            // Ditambahkan
             val intent = Intent(activity, DetailTaskActivity::class.java)
-            intent.putExtra(DetailTaskActivity.EXTRA_TASK, tugas)
+            intent.putExtra(DetailTaskActivity.EXTRA_TASK_ID, tugas.assignmentId)
             startActivity(intent)
         }
         binding.rvTaskTask.apply {

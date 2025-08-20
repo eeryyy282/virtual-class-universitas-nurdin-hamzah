@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".presentation.edittask.EditTaskActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="24dp">
+
+        <ImageButton
+            android:id="@+id/btn_back_edit_task"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/back_button"
+            android:src="@drawable/back_arrow_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/outline_color_theme" />
+
+        <TextView
+            android:id="@+id/tv_header_title_edit_task"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="28dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/edit_task"
+            android:textColor="@color/outline_color_theme"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/btn_back_edit_task"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_back_edit_task"
+            app:layout_constraintTop_toTopOf="@id/btn_back_edit_task" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_task_title"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="28dp"
+            android:hint="@string/title_task"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_back_edit_task">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_task_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:inputType="textCapSentences"
+                android:textColor="@color/text_color_themed" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_task_description"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/task_description"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:layout_constraintEnd_toEndOf="@id/til_task_title"
+            app:layout_constraintStart_toStartOf="@id/til_task_title"
+            app:layout_constraintTop_toBottomOf="@id/til_task_title">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_task_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:gravity="top"
+                android:inputType="textMultiLine|textCapSentences"
+                android:minLines="5"
+                android:textColor="@color/text_color_themed" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_start_date_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/date_start"
+            android:textColor="@color/outline_color_theme"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/til_task_description"
+            app:layout_constraintTop_toBottomOf="@id/til_task_description" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_start_date"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:layout_constraintEnd_toEndOf="@id/til_task_description"
+            app:layout_constraintStart_toStartOf="@id/til_task_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_start_date_label">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_start_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/calendar_icon"
+                android:drawableTint="@color/outline_color_theme"
+                android:focusable="false"
+                android:fontFamily="@font/lato"
+                android:hint="@string/select_date_and_time_start"
+                android:textColor="@color/text_color_themed" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <TextView
+            android:id="@+id/tv_deadline_date_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/date_deadline"
+            android:textColor="@color/outline_color_theme"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/til_start_date"
+            app:layout_constraintTop_toBottomOf="@id/til_start_date" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_deadline_date"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:layout_constraintEnd_toEndOf="@id/til_start_date"
+            app:layout_constraintStart_toStartOf="@id/til_start_date"
+            app:layout_constraintTop_toBottomOf="@id/tv_deadline_date_label">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_deadline_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/calendar_icon"
+                android:drawableTint="@color/outline_color_theme"
+                android:focusable="false"
+                android:fontFamily="@font/lato"
+                android:hint="@string/select_date_and_deadline"
+                android:textColor="@color/text_color_themed" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_attachment_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/attacment_optional"
+            android:textColor="@color/outline_color_theme"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/til_deadline_date"
+            app:layout_constraintTop_toBottomOf="@id/til_deadline_date" />
+
+        <TextView
+            android:id="@+id/tv_current_attachment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lato"
+            android:textColor="@color/text_color_themed"
+            android:textSize="14sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/til_deadline_date"
+            app:layout_constraintStart_toStartOf="@id/tv_attachment_label"
+            app:layout_constraintTop_toBottomOf="@id/tv_attachment_label"
+            tools:text="nama_file_lampiran.pdf"
+            tools:visibility="visible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_change_attachment"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/select_or_change_attachment"
+            android:textAllCaps="false"
+            android:textColor="@color/outline_color_theme"
+            app:cornerRadius="8dp"
+            app:layout_constraintEnd_toEndOf="@id/til_deadline_date"
+            app:layout_constraintStart_toStartOf="@id/til_deadline_date"
+            app:layout_constraintTop_toBottomOf="@id/tv_current_attachment" />
+
+        <TextView
+            android:id="@+id/tv_no_attachment_edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/no_attachment_yet"
+            android:textColor="@color/text_color_themed"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/btn_change_attachment"
+            app:layout_constraintStart_toStartOf="@id/btn_change_attachment"
+            app:layout_constraintTop_toBottomOf="@id/btn_change_attachment" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_save_task_changes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/lato"
+            android:padding="14dp"
+            android:text="@string/save_change"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:backgroundTint="@color/air_force_blue"
+            app:cornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="@id/btn_change_attachment"
+            app:layout_constraintStart_toStartOf="@id/btn_change_attachment"
+            app:layout_constraintTop_toBottomOf="@id/tv_no_attachment_edit" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

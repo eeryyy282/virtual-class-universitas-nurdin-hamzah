@@ -15,7 +15,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -110,39 +112,44 @@ class HomeFragment : Fragment() {
 
     private fun setupProfileDosen() {
         viewLifecycleOwner.lifecycleScope.launch {
-            homeViewModel.dosenData.collectLatest {
-                when (it) {
-                    is Resource.Loading -> {
-                    }
-
-                    is Resource.Success -> {
-                        val dosen = it.data
-                        if (dosen != null) {
-                            binding.tvNameHome.text = dosen.nama
-                            binding.tvIdUserHome.text = dosen.nidn.toString()
-                            Glide
-                                .with(requireContext())
-                                .load(dosen.fotoProfil)
-                                .placeholder(R.drawable.profile_photo)
-                                .error(R.drawable.profile_photo)
-                                .into(binding.ivProfileUser)
-                        } else {
-                            Toast
-                                .makeText(context, "Gagal memuat data dosen", Toast.LENGTH_SHORT)
-                                .show()
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                homeViewModel.dosenData.collectLatest {
+                    when (it) {
+                        is Resource.Loading -> {
                         }
-                    }
 
-                    is Resource.Error -> {
-                        Toast
-                            .makeText(
-                                context,
-                                it.message ?: "Terjadi kesalahan",
-                                Toast.LENGTH_SHORT,
-                            ).show()
-                    }
+                        is Resource.Success -> {
+                            val dosen = it.data
+                            if (dosen != null) {
+                                binding.tvNameHome.text = dosen.nama
+                                binding.tvIdUserHome.text = dosen.nidn.toString()
+                                Glide
+                                    .with(requireContext())
+                                    .load(dosen.fotoProfil)
+                                    .placeholder(R.drawable.profile_photo)
+                                    .error(R.drawable.profile_photo)
+                                    .into(binding.ivProfileUser)
+                            } else {
+                                Toast
+                                    .makeText(
+                                        context,
+                                        "Gagal memuat data dosen",
+                                        Toast.LENGTH_SHORT,
+                                    ).show()
+                            }
+                        }
 
-                    null -> {
+                        is Resource.Error -> {
+                            Toast
+                                .makeText(
+                                    context,
+                                    it.message ?: "Terjadi kesalahan",
+                                    Toast.LENGTH_SHORT,
+                                ).show()
+                        }
+
+                        null -> {
+                        }
                     }
                 }
             }
@@ -173,54 +180,58 @@ class HomeFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     private fun observeTugasDosen() {
         viewLifecycleOwner.lifecycleScope.launch {
-            homeViewModel.tugasListDosenState.collectLatest { resource ->
-                when (resource) {
-                    is Resource.Loading -> {
-                        binding.progressBarTaskHome.visibility =
-                            View.VISIBLE
-                        binding.tvDoesntHaveAnTask.visibility =
-                            View.GONE
-                        binding.ivDoesntHaveAnTask.visibility =
-                            View.GONE
-                        binding.rvTaskHome.visibility = View.GONE
-                    }
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                homeViewModel.tugasListDosenState.collectLatest { resource ->
+                    when (resource) {
+                        is Resource.Loading -> {
+                            binding.progressBarTaskHome.visibility =
+                                View.VISIBLE
+                            binding.tvDoesntHaveAnTask.visibility =
+                                View.GONE
+                            binding.ivDoesntHaveAnTask.visibility =
+                                View.GONE
+                            binding.rvTaskHome.visibility = View.GONE
+                        }
 
-                    is Resource.Success -> {
-                        binding.progressBarTaskHome.visibility = View.GONE
-                        val tugasList = resource.data
-                        if (tugasList.isNullOrEmpty()) {
+                        is Resource.Success -> {
+                            binding.progressBarTaskHome.visibility = View.GONE
+                            val tugasList = resource.data
+                            if (tugasList.isNullOrEmpty()) {
+                                binding.tvDoesntHaveAnTask.visibility = View.VISIBLE
+                                binding.ivDoesntHaveAnTask.visibility = View.VISIBLE
+                                binding.rvTaskHome.visibility = View.GONE
+                            } else {
+                                binding.tvDoesntHaveAnTask.visibility = View.GONE
+                                binding.ivDoesntHaveAnTask.visibility = View.GONE
+                                binding.rvTaskHome.visibility = View.VISIBLE
+                                taskHomeAdapter.submitList(tugasList)
+                            }
+                        }
+
+                        is Resource.Error -> {
+                            binding.progressBarTaskHome.visibility = View.GONE
                             binding.tvDoesntHaveAnTask.visibility = View.VISIBLE
                             binding.ivDoesntHaveAnTask.visibility = View.VISIBLE
                             binding.rvTaskHome.visibility = View.GONE
-                        } else {
-                            binding.tvDoesntHaveAnTask.visibility = View.GONE
-                            binding.ivDoesntHaveAnTask.visibility = View.GONE
-                            binding.rvTaskHome.visibility = View.VISIBLE
-                            taskHomeAdapter.submitList(tugasList)
                         }
-                    }
 
-                    is Resource.Error -> {
-                        binding.progressBarTaskHome.visibility = View.GONE
-                        binding.tvDoesntHaveAnTask.visibility = View.VISIBLE
-                        binding.ivDoesntHaveAnTask.visibility = View.VISIBLE
-                        binding.rvTaskHome.visibility = View.GONE
-                    }
-
-                    null -> {
-                        binding.progressBarTaskHome.visibility = View.GONE
-                        binding.tvDoesntHaveAnTask.visibility = View.VISIBLE
-                        binding.ivDoesntHaveAnTask.visibility = View.VISIBLE
-                        binding.rvTaskHome.visibility = View.GONE
+                        null -> {
+                            binding.progressBarTaskHome.visibility = View.GONE
+                            binding.tvDoesntHaveAnTask.visibility = View.VISIBLE
+                            binding.ivDoesntHaveAnTask.visibility = View.VISIBLE
+                            binding.rvTaskHome.visibility = View.GONE
+                        }
                     }
                 }
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            homeViewModel.kelasDosenMapState.collectLatest {
-                if (::taskHomeAdapter.isInitialized) {
-                    taskHomeAdapter.notifyDataSetChanged()
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                homeViewModel.kelasDosenMapState.collectLatest {
+                    if (::taskHomeAdapter.isInitialized) {
+                        taskHomeAdapter.notifyDataSetChanged()
+                    }
                 }
             }
         }
@@ -228,74 +239,77 @@ class HomeFragment : Fragment() {
 
     private fun observeTodaySchedule() {
         viewLifecycleOwner.lifecycleScope.launch {
-            homeViewModel.todayScheduleState.collectLatest { resource ->
-                when (resource) {
-                    is Resource.Loading -> {
-                        binding.progressBarSchedule.visibility = View.VISIBLE
-                        binding.ivDoesntHaveAnSchedule.visibility = View.GONE
-                        binding.tvDoesntHaveAnSchedule.visibility = View.GONE
-                        binding.tvScheduleClassroom.visibility = View.GONE
-                        binding.tvTimeScheduleHome.visibility = View.GONE
-                        binding.tvSubjectScheduleHome.visibility = View.GONE
-                        binding.btnScheduleDetailHome.visibility = View.GONE
-                    }
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                homeViewModel.todayScheduleState.collectLatest { resource ->
+                    when (resource) {
+                        is Resource.Loading -> {
+                            binding.progressBarSchedule.visibility = View.VISIBLE
+                            binding.ivDoesntHaveAnSchedule.visibility = View.GONE
+                            binding.tvDoesntHaveAnSchedule.visibility = View.GONE
+                            binding.tvScheduleClassroom.visibility = View.GONE
+                            binding.tvTimeScheduleHome.visibility = View.GONE
+                            binding.tvSubjectScheduleHome.visibility = View.GONE
+                            binding.btnScheduleDetailHome.visibility = View.GONE
+                        }
 
-                    is Resource.Success -> {
-                        binding.progressBarSchedule.visibility = View.GONE
-                        val scheduleList = resource.data
-                        if (scheduleList.isNullOrEmpty()) {
+                        is Resource.Success -> {
+                            binding.progressBarSchedule.visibility = View.GONE
+                            val scheduleList = resource.data
+                            if (scheduleList.isNullOrEmpty()) {
+                                binding.ivDoesntHaveAnSchedule.visibility = View.VISIBLE
+                                binding.tvDoesntHaveAnSchedule.visibility = View.VISIBLE
+                                binding.tvScheduleClassroom.visibility = View.GONE
+                                binding.tvTimeScheduleHome.visibility = View.GONE
+                                binding.tvSubjectScheduleHome.visibility = View.GONE
+                                binding.btnScheduleDetailHome.visibility = View.GONE
+                            } else {
+                                val todaySchedule = scheduleList[0]
+                                binding.ivDoesntHaveAnSchedule.visibility = View.GONE
+                                binding.tvDoesntHaveAnSchedule.visibility = View.GONE
+                                binding.tvScheduleClassroom.visibility = View.VISIBLE
+                                binding.tvTimeScheduleHome.visibility = View.VISIBLE
+                                binding.tvSubjectScheduleHome.visibility = View.VISIBLE
+                                binding.btnScheduleDetailHome.visibility = View.VISIBLE
+                                binding.tvScheduleClassroom.text = todaySchedule.ruang
+                                binding.tvTimeScheduleHome.text =
+                                    todaySchedule
+                                        .jadwal
+                                        .split(",")
+                                        .getOrNull(1)
+                                        ?.trim()
+                                binding.tvSubjectScheduleHome.text = todaySchedule.namaKelas
+                                binding.btnScheduleDetailHome.setOnClickListener {
+                                    val uri =
+                                        "detail_class://detail_class_registered_activity".toUri()
+                                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                                    intent.putExtra(
+                                        DetailClassRegisteredActivity.EXTRA_KELAS_ID,
+                                        todaySchedule.kelasId,
+                                    )
+                                    startActivity(intent)
+                                }
+                            }
+                        }
+
+                        is Resource.Error -> {
+                            binding.progressBarSchedule.visibility = View.GONE
                             binding.ivDoesntHaveAnSchedule.visibility = View.VISIBLE
                             binding.tvDoesntHaveAnSchedule.visibility = View.VISIBLE
                             binding.tvScheduleClassroom.visibility = View.GONE
                             binding.tvTimeScheduleHome.visibility = View.GONE
                             binding.tvSubjectScheduleHome.visibility = View.GONE
                             binding.btnScheduleDetailHome.visibility = View.GONE
-                        } else {
-                            val todaySchedule = scheduleList[0]
-                            binding.ivDoesntHaveAnSchedule.visibility = View.GONE
-                            binding.tvDoesntHaveAnSchedule.visibility = View.GONE
-                            binding.tvScheduleClassroom.visibility = View.VISIBLE
-                            binding.tvTimeScheduleHome.visibility = View.VISIBLE
-                            binding.tvSubjectScheduleHome.visibility = View.VISIBLE
-                            binding.btnScheduleDetailHome.visibility = View.VISIBLE
-                            binding.tvScheduleClassroom.text = todaySchedule.ruang
-                            binding.tvTimeScheduleHome.text =
-                                todaySchedule
-                                    .jadwal
-                                    .split(",")
-                                    .getOrNull(1)
-                                    ?.trim()
-                            binding.tvSubjectScheduleHome.text = todaySchedule.namaKelas
-                            binding.btnScheduleDetailHome.setOnClickListener {
-                                val uri = "detail_class://detail_class_registered_activity".toUri()
-                                val intent = Intent(Intent.ACTION_VIEW, uri)
-                                intent.putExtra(
-                                    DetailClassRegisteredActivity.EXTRA_KELAS_ID,
-                                    todaySchedule.kelasId,
-                                )
-                                startActivity(intent)
-                            }
                         }
-                    }
 
-                    is Resource.Error -> {
-                        binding.progressBarSchedule.visibility = View.GONE
-                        binding.ivDoesntHaveAnSchedule.visibility = View.VISIBLE
-                        binding.tvDoesntHaveAnSchedule.visibility = View.VISIBLE
-                        binding.tvScheduleClassroom.visibility = View.GONE
-                        binding.tvTimeScheduleHome.visibility = View.GONE
-                        binding.tvSubjectScheduleHome.visibility = View.GONE
-                        binding.btnScheduleDetailHome.visibility = View.GONE
-                    }
-
-                    null -> {
-                        binding.progressBarSchedule.visibility = View.GONE
-                        binding.ivDoesntHaveAnSchedule.visibility = View.VISIBLE
-                        binding.tvDoesntHaveAnSchedule.visibility = View.VISIBLE
-                        binding.tvScheduleClassroom.visibility = View.GONE
-                        binding.tvTimeScheduleHome.visibility = View.GONE
-                        binding.tvSubjectScheduleHome.visibility = View.GONE
-                        binding.btnScheduleDetailHome.visibility = View.GONE
+                        null -> {
+                            binding.progressBarSchedule.visibility = View.GONE
+                            binding.ivDoesntHaveAnSchedule.visibility = View.VISIBLE
+                            binding.tvDoesntHaveAnSchedule.visibility = View.VISIBLE
+                            binding.tvScheduleClassroom.visibility = View.GONE
+                            binding.tvTimeScheduleHome.visibility = View.GONE
+                            binding.tvSubjectScheduleHome.visibility = View.GONE
+                            binding.btnScheduleDetailHome.visibility = View.GONE
+                        }
                     }
                 }
             }

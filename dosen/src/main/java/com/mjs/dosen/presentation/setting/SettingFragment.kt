@@ -11,7 +11,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
 import com.mjs.core.data.Resource
 import com.mjs.dosen.R
@@ -42,42 +44,44 @@ class SettingFragment : Fragment() {
 
     private fun setupProfileDosen() {
         viewLifecycleOwner.lifecycleScope.launch {
-            settingViewModel.dosenData.collectLatest {
-                when (it) {
-                    is Resource.Error -> {
-                        Toast
-                            .makeText(
-                                context,
-                                it.message ?: getString(R.string.error),
-                                Toast.LENGTH_SHORT,
-                            ).show()
-                    }
-
-                    is Resource.Loading -> {
-                    }
-
-                    is Resource.Success -> {
-                        val dosen = it.data
-                        if (dosen != null) {
-                            binding.tvName.text = dosen.nama
-                            binding.tvIdUser.text = dosen.nidn.toString()
-                            Glide
-                                .with(requireContext())
-                                .load(dosen.fotoProfil)
-                                .placeholder(R.drawable.profile_photo)
-                                .error(R.drawable.profile_photo)
-                                .into(binding.photoProfileSetting)
-                        } else {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                settingViewModel.dosenData.collectLatest {
+                    when (it) {
+                        is Resource.Error -> {
                             Toast
                                 .makeText(
                                     context,
-                                    getString(R.string.failed_to_load_lecture_data),
+                                    it.message ?: getString(R.string.error),
                                     Toast.LENGTH_SHORT,
                                 ).show()
                         }
-                    }
 
-                    null -> {
+                        is Resource.Loading -> {
+                        }
+
+                        is Resource.Success -> {
+                            val dosen = it.data
+                            if (dosen != null) {
+                                binding.tvName.text = dosen.nama
+                                binding.tvIdUser.text = dosen.nidn.toString()
+                                Glide
+                                    .with(requireContext())
+                                    .load(dosen.fotoProfil)
+                                    .placeholder(R.drawable.profile_photo)
+                                    .error(R.drawable.profile_photo)
+                                    .into(binding.photoProfileSetting)
+                            } else {
+                                Toast
+                                    .makeText(
+                                        context,
+                                        getString(R.string.failed_to_load_lecture_data),
+                                        Toast.LENGTH_SHORT,
+                                    ).show()
+                            }
+                        }
+
+                        null -> {
+                        }
                     }
                 }
             }

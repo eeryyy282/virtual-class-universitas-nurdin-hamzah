@@ -14,7 +14,7 @@ internal suspend fun populateDosen(
     authDao.registerDosen(
         DosenEntity(
             dosen1Nidn,
-            "Sri Mulyati M.Kom.",
+            "Sri Mulyati, M.Kom.",
             "sri.mulyati@example.ac.id",
             "pass1122",
             "https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?w=400",

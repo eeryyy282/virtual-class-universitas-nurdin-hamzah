@@ -11,7 +11,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
 import com.mjs.core.data.Resource
 import com.mjs.mahasiswa.R
@@ -40,42 +42,44 @@ class SettingFragment : Fragment() {
 
     private fun setupProfileUser() {
         viewLifecycleOwner.lifecycleScope.launch {
-            settingViewModel.mahasiswaData.collectLatest {
-                when (it) {
-                    is Resource.Error -> {
-                        Toast
-                            .makeText(
-                                context,
-                                it.message ?: "Terjadi kesalahan",
-                                Toast.LENGTH_SHORT,
-                            ).show()
-                    }
-
-                    is Resource.Loading -> {
-                    }
-
-                    is Resource.Success -> {
-                        val mahasiswa = it.data
-                        if (mahasiswa != null) {
-                            binding.tvName.text = mahasiswa.nama
-                            binding.tvIdUser.text = mahasiswa.nim.toString()
-                            Glide
-                                .with(requireContext())
-                                .load(mahasiswa.fotoProfil)
-                                .placeholder(R.drawable.profile_photo)
-                                .error(R.drawable.profile_photo)
-                                .into(binding.photoProfileSetting)
-                        } else {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                settingViewModel.mahasiswaData.collectLatest {
+                    when (it) {
+                        is Resource.Error -> {
                             Toast
                                 .makeText(
                                     context,
-                                    "Gagal memuat data mahasiswa",
+                                    it.message ?: "Terjadi kesalahan",
                                     Toast.LENGTH_SHORT,
                                 ).show()
                         }
-                    }
 
-                    null -> {
+                        is Resource.Loading -> {
+                        }
+
+                        is Resource.Success -> {
+                            val mahasiswa = it.data
+                            if (mahasiswa != null) {
+                                binding.tvName.text = mahasiswa.nama
+                                binding.tvIdUser.text = mahasiswa.nim.toString()
+                                Glide
+                                    .with(requireContext())
+                                    .load(mahasiswa.fotoProfil)
+                                    .placeholder(R.drawable.profile_photo)
+                                    .error(R.drawable.profile_photo)
+                                    .into(binding.photoProfileSetting)
+                            } else {
+                                Toast
+                                    .makeText(
+                                        context,
+                                        "Gagal memuat data mahasiswa",
+                                        Toast.LENGTH_SHORT,
+                                    ).show()
+                            }
+                        }
+
+                        null -> {
+                        }
                     }
                 }
             }

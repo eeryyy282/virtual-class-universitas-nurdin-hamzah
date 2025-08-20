@@ -30,6 +30,16 @@ interface TaskDao {
     @Query("SELECT * FROM submissions WHERE assignment_id = :assignmentId")
     fun getSubmissionsByAssignment(assignmentId: Int): Flow<List<SubmissionEntity>>
 
+    @Query("SELECT * FROM submissions WHERE submission_id = :submissionId") // Added this line
+    fun getSubmissionById(submissionId: Int): Flow<SubmissionEntity?> // Added this line
+
+    @Query("UPDATE submissions SET grade = :grade, note = :note WHERE submission_id = :submissionId") // Added this line
+    suspend fun updateSubmissionGradeAndNote(
+        submissionId: Int,
+        grade: Int?,
+        note: String?,
+    )
+
     @Query("SELECT assignment_id FROM assignments WHERE judul_tugas = :judul AND kelas_id = :kelasId ORDER BY assignment_id DESC LIMIT 1")
     suspend fun getAssignmentIdByTitleAndClassId(
         judul: String,

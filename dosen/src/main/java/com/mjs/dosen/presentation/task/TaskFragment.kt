@@ -13,7 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mjs.core.data.Resource
 import com.mjs.core.ui.task.TaskAdapterDosenCategorized
-import com.mjs.detailtask.presentation.DetailTaskActivity // Ditambahkan
+import com.mjs.detailtask.presentation.detailtask.DetailTaskActivity // Ditambahkan
 import com.mjs.dosen.databinding.FragmentTaskBinding
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -54,7 +54,7 @@ class TaskFragment : Fragment() {
             viewModel.getClassPhotoProfileById(kelasId)
         }
         taskAdapter.onItemClick = { tugas ->
-            val uri = "detail_task://detail_task_activity".toUri()
+            val uri = "task://detail_task_activity".toUri()
             val intent = Intent(Intent.ACTION_VIEW, uri)
             intent.putExtra(DetailTaskActivity.EXTRA_TASK_ID, tugas.assignmentId)
             startActivity(intent)

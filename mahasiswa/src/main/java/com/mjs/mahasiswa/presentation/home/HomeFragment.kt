@@ -22,7 +22,7 @@ import com.bumptech.glide.Glide
 import com.mjs.core.data.Resource
 import com.mjs.core.ui.task.TaskHomeAdapter
 import com.mjs.detailclass.registered.DetailClassRegisteredActivity
-import com.mjs.detailtask.presentation.DetailTaskActivity
+import com.mjs.detailtask.presentation.detailtask.DetailTaskActivity
 import com.mjs.mahasiswa.R
 import com.mjs.mahasiswa.databinding.FragmentHomeBinding
 import kotlinx.coroutines.flow.collectLatest
@@ -168,7 +168,7 @@ class HomeFragment : Fragment() {
             homeViewModel.getClassPhotoProfileById(it)
         }
         taskHomeAdapter.onItemClick = { tugas ->
-            val uri = "detail_task://detail_task_activity".toUri()
+            val uri = "task://detail_task_activity".toUri()
             val intent = Intent(Intent.ACTION_VIEW, uri)
             intent.putExtra(DetailTaskActivity.EXTRA_TASK_ID, tugas.assignmentId)
             startActivity(intent)

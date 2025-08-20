@@ -113,6 +113,15 @@ class VirtualClassInteractor(
     override fun getSubmissionListItemsByAssignment(assignmentId: Int): Flow<Resource<List<SubmissionListItem>>> =
         virtualClassRepository.getSubmissionListItemsByAssignment(assignmentId)
 
+    override fun getSubmissionDetailById(submissionId: Int): Flow<Resource<SubmissionListItem?>> =
+        virtualClassRepository.getSubmissionDetailById(submissionId)
+
+    override suspend fun updateSubmissionGradeAndNote(
+        submissionId: Int,
+        grade: Int?,
+        note: String?,
+    ): Flow<Resource<String>> = virtualClassRepository.updateSubmissionGradeAndNote(submissionId, grade, note)
+
     override fun getNotFinishedTasks(
         nim: Int,
         kelasId: String,

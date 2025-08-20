@@ -93,6 +93,14 @@ interface VirtualClassUseCase {
 
     fun getSubmissionListItemsByAssignment(assignmentId: Int): Flow<Resource<List<SubmissionListItem>>>
 
+    fun getSubmissionDetailById(submissionId: Int): Flow<Resource<SubmissionListItem?>>
+
+    suspend fun updateSubmissionGradeAndNote(
+        submissionId: Int,
+        grade: Int?,
+        note: String?,
+    ): Flow<Resource<String>>
+
     fun getNotFinishedTasks(
         nim: Int,
         kelasId: String,

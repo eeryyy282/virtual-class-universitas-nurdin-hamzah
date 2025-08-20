@@ -39,7 +39,7 @@ dependencies {
     implementation(project(":app"))
     implementation(project(":core"))
     implementation(project(":detailclass"))
-    implementation(project(":detailtask"))
+    implementation(project(":task"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)

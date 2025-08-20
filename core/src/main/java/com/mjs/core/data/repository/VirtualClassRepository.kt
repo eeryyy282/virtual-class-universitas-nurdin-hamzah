@@ -388,6 +388,43 @@ class VirtualClassRepository(
             }
         }
 
+    override fun getSubmissionDetailById(submissionId: Int): Flow<Resource<SubmissionListItem?>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                val submissionEntity = localDataSource.getSubmissionById(submissionId).first()
+                if (submissionEntity != null) {
+                    val mahasiswa = localDataSource.getMahasiswaByNim(submissionEntity.nim).first()
+                    val submissionListItem =
+                        SubmissionListItem(
+                            submissionEntity = submissionEntity,
+                            studentName = mahasiswa?.nama,
+                            studentPhotoUrl = mahasiswa?.fotoProfil,
+                        )
+                    emit(Resource.Success(submissionListItem))
+                } else {
+                    emit(Resource.Success(null))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Gagal mengambil detail submission"))
+            }
+        }
+
+    override suspend fun updateSubmissionGradeAndNote(
+        submissionId: Int,
+        grade: Int?,
+        note: String?,
+    ): Flow<Resource<String>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                localDataSource.updateSubmissionGradeAndNote(submissionId, grade, note)
+                emit(Resource.Success("Nilai dan catatan berhasil disimpan"))
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Gagal menyimpan nilai dan catatan"))
+            }
+        }
+
     override fun getNotFinishedTasks(
         nim: Int,
         kelasId: String,

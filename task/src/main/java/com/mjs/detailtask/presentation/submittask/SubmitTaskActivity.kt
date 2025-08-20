@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.mjs.core.data.Resource
 import com.mjs.detailtask.databinding.ActivitySubmitTaskBinding
-import com.mjs.detailtask.di.detailTaskModule
+import com.mjs.detailtask.di.taskModule
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
 
@@ -45,7 +45,7 @@ class SubmitTaskActivity : AppCompatActivity() {
         binding = ActivitySubmitTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        loadKoinModules(detailTaskModule)
+        loadKoinModules(taskModule)
         assignmentId = intent.getIntExtra(EXTRA_ASSIGNMENT_ID, -1)
 
         if (assignmentId == -1) {

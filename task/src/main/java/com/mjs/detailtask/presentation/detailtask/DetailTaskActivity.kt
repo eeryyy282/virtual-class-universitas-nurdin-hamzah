@@ -1,4 +1,4 @@
-package com.mjs.detailtask.presentation
+package com.mjs.detailtask.presentation.detailtask
 
 import android.content.Intent
 import android.os.Bundle
@@ -19,7 +19,7 @@ import com.mjs.core.domain.model.Tugas
 import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
 import com.mjs.detailtask.R
 import com.mjs.detailtask.databinding.ActivityDetailTaskBinding
-import com.mjs.detailtask.di.detailTaskModule
+import com.mjs.detailtask.di.taskModule
 import com.mjs.detailtask.presentation.edittask.EditTaskActivity
 import com.mjs.detailtask.presentation.submitedtask.SubmittedTaskActivity
 import com.mjs.detailtask.presentation.submittask.SubmitTaskActivity
@@ -51,7 +51,7 @@ class DetailTaskActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        loadKoinModules(detailTaskModule)
+        loadKoinModules(taskModule)
         binding = ActivityDetailTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

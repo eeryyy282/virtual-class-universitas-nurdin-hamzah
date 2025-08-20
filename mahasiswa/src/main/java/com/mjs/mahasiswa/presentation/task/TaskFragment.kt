@@ -1,10 +1,11 @@
 package com.mjs.mahasiswa.presentation.task
 
-import android.content.Intent // Ditambahkan
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -12,7 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mjs.core.data.Resource
 import com.mjs.core.ui.task.TaskAdapterMahasiswa
-import com.mjs.detailtask.presentation.DetailTaskActivity // Ditambahkan
+import com.mjs.detailtask.presentation.detailtask.DetailTaskActivity
 import com.mjs.mahasiswa.R
 import com.mjs.mahasiswa.databinding.FragmentTaskBinding
 import kotlinx.coroutines.launch
@@ -54,7 +55,8 @@ class TaskFragment : Fragment() {
             viewModel.getClassPhotoProfileById(it)
         }
         taskAdapter.onItemClick = { tugas ->
-            val intent = Intent(activity, DetailTaskActivity::class.java)
+            val uri = "task://detail_task_activity".toUri()
+            val intent = Intent(Intent.ACTION_VIEW, uri)
             intent.putExtra(DetailTaskActivity.EXTRA_TASK_ID, tugas.assignmentId)
             startActivity(intent)
         }

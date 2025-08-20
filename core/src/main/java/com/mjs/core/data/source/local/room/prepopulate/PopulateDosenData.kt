@@ -14,8 +14,8 @@ internal suspend fun populateDosen(
     authDao.registerDosen(
         DosenEntity(
             dosen1Nidn,
-            "Dr. Arini Larasati, S.Kom., M.Cs.",
-            "arini.larasati@example.ac.id",
+            "Sri Mulyati M.Kom.",
+            "sri.mulyati@example.ac.id",
             "pass1122",
             "https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?w=400",
         ),
@@ -23,8 +23,8 @@ internal suspend fun populateDosen(
     authDao.registerDosen(
         DosenEntity(
             dosen2Nidn,
-            "Prof. Bambang Wijaya, Ph.D.",
-            "bambang.wijaya@example.ac.id",
+            "Ahmad Louis, M. Kom.",
+            "ahmad.louis@example.ac.id",
             "pass2233",
             "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
         ),

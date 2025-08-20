@@ -100,6 +100,14 @@ class LocalDataSource(
 
     fun getSubmissionsByAssignment(assignmentId: Int): Flow<List<SubmissionEntity>> = taskDao.getSubmissionsByAssignment(assignmentId)
 
+    fun getSubmissionById(submissionId: Int): Flow<SubmissionEntity?> = taskDao.getSubmissionById(submissionId)
+
+    suspend fun updateSubmissionGradeAndNote(
+        submissionId: Int,
+        grade: Int?,
+        note: String?,
+    ) = taskDao.updateSubmissionGradeAndNote(submissionId, grade, note)
+
     fun getForumsByClass(kelasId: String): Flow<List<ForumEntity>> = forumDao.getForumsByClass(kelasId)
 
     suspend fun insertForum(forum: ForumEntity) = forumDao.insertForum(forum)

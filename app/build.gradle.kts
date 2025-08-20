@@ -13,6 +13,7 @@ android {
     defaultConfig {
         applicationId = "com.mjs.virtual_class_universitas_nurdin_hamzah"
         minSdk = 24
+        //noinspection OldTargetApi
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -50,7 +51,7 @@ android {
                 ":profilesettings",
             )
     }
-    dynamicFeatures += setOf(":detailclass", ":enrollclass", ":detailtask")
+    dynamicFeatures += setOf(":detailclass", ":enrollclass", ":task")
 
     dependencies {
 

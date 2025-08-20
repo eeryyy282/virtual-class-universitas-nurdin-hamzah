@@ -38,5 +38,26 @@
     <string name="delete_task">Hapus Tugas</string>
     <string name="delete_button_text">Hapus</string>
     <string name="cancel_button_text">Batal</string>
+    <string name="detail_submission">Detail Tugas Mahasiswa</string>
+    <string name="submission_date">Tanggal Pengumpulan</string>
+    <string name="grade">Nilai</string>
+    <string name="save_grade_and_note">Simpan Nilai dan Catatan</string>
+    <string name="error_loading_submission_detail">Error saat memuat detail pengumpulan tugas mahasiswa.</string>
+    <string name="name_not_available">Nama tidak ditemukan</string>
+    <string name="nim_format">NIM: %1$s</string>
+    <string name="error_updating_grade">Error saat memperbarui nilai</string>
+    <string name="invalid_grade_format">Format nilai tidak valid</string>
+    <string name="error_submission_id_not_found">ID pengumpulan tugas tidak ditemukan</string>
+    <string name="error_submission_data_not_found">"Error, data tugas tidak ditemukan "</string>
+    <string name="failed_load_submission_detail">Gagal untuk memuat detail tugas</string>
+    <string name="not_available">Tidak ditemukan</string>
+    <string name="failed_update_grade">Gagal memperbarui nilai</string>
+    <string name="unsaved_changes_title">Perubahan Belum Disimpan</string>
+    <string name="unsaved_changes_message">Anda memiliki perubahan yang belum disimpan. Apakah Anda ingin menyimpannya?</string>
+    <string name="save">Simpan</string>
+    <string name="discard">Abaikan</string>
+    <string name="cancel_dialog">Batal</string>
+    <string name="invalid_grade_range">Nilai harus antara 0 dan 100.</string>
+    <string name="confirm_save_title">Konfirmasi Penyimpanan</string>
+    <string name="confirm_save_message">Apakah Anda yakin ingin menyimpan perubahan ini?</string>
 </resources>
-

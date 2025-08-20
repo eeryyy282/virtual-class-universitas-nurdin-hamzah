@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="24dp"
-        tools:context=".presentation.DetailTaskActivity">
+        tools:context=".presentation.detailtask.DetailTaskActivity">
 
         <ProgressBar
             android:id="@+id/pb_class_details"

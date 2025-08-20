@@ -1,5 +1,6 @@
 package com.mjs.core.ui.task
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,12 @@ import com.mjs.core.R
 import com.mjs.core.databinding.ItemSubmittedListBinding
 
 class SubmittedTaskAdapter : ListAdapter<SubmissionListItem, SubmittedTaskAdapter.ViewHolder>(DIFF_CALLBACK) {
+    private var onItemClickCallback: OnItemClickCallback? = null
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -31,6 +38,7 @@ class SubmittedTaskAdapter : ListAdapter<SubmissionListItem, SubmittedTaskAdapte
     inner class ViewHolder(
         private val binding: ItemSubmittedListBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(item: SubmissionListItem) {
             val submission = item.submissionEntity
 
@@ -55,7 +63,6 @@ class SubmittedTaskAdapter : ListAdapter<SubmissionListItem, SubmittedTaskAdapte
                 binding.tvNoAttachmentMessage.visibility = View.VISIBLE
             }
 
-            // Grade
             if (submission.grade != null) {
                 binding.tvGrade.text = submission.grade.toString()
                 binding.tvGrade.visibility = View.VISIBLE
@@ -65,7 +72,6 @@ class SubmittedTaskAdapter : ListAdapter<SubmissionListItem, SubmittedTaskAdapte
                 binding.tvNoGradeMessage.visibility = View.VISIBLE
             }
 
-            // Note
             if (submission.note != null && submission.note.isNotBlank()) {
                 binding.tvSubmissionNote.text = submission.note
                 binding.tvSubmissionNote.visibility = View.VISIBLE
@@ -74,7 +80,15 @@ class SubmittedTaskAdapter : ListAdapter<SubmissionListItem, SubmittedTaskAdapte
                 binding.tvSubmissionNote.visibility = View.GONE
                 binding.tvNoNoteMessage.visibility = View.VISIBLE
             }
+
+            itemView.setOnClickListener {
+                onItemClickCallback?.onItemClicked(item.submissionEntity.submissionId)
+            }
         }
+    }
+
+    interface OnItemClickCallback {
+        fun onItemClicked(submissionId: Int)
     }
 
     companion object {

@@ -21,8 +21,8 @@ import com.mjs.core.data.Resource
 import com.mjs.core.domain.model.Tugas
 import com.mjs.detailtask.R
 import com.mjs.detailtask.databinding.ActivityEditTaskBinding
-import com.mjs.detailtask.di.detailTaskModule
-import com.mjs.detailtask.presentation.DetailTaskActivity
+import com.mjs.detailtask.di.taskModule
+import com.mjs.detailtask.presentation.detailtask.DetailTaskActivity
 import com.mjs.detailtask.utils.DateUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
@@ -53,7 +53,7 @@ class EditTaskActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        loadKoinModules(detailTaskModule)
+        loadKoinModules(taskModule)
         binding = ActivityEditTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

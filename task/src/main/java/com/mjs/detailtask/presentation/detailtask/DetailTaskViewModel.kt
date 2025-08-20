@@ -1,4 +1,4 @@
-package com.mjs.detailtask.presentation
+package com.mjs.detailtask.presentation.detailtask
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

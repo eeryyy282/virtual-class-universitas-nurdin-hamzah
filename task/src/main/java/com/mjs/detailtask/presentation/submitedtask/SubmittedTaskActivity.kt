@@ -1,5 +1,6 @@
 package com.mjs.detailtask.presentation.submitedtask
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -13,11 +14,14 @@ import com.mjs.core.data.Resource
 import com.mjs.core.ui.task.SubmittedTaskAdapter
 import com.mjs.detailtask.R
 import com.mjs.detailtask.databinding.ActivitySubmittedTaskBinding
-import com.mjs.detailtask.di.detailTaskModule
+import com.mjs.detailtask.di.taskModule
+import com.mjs.detailtask.presentation.submitedtask.detailsubmitedtask.DetailSubmittedTaskActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
 
-class SubmittedTaskActivity : AppCompatActivity() {
+class SubmittedTaskActivity :
+    AppCompatActivity(),
+    SubmittedTaskAdapter.OnItemClickCallback {
     private lateinit var binding: ActivitySubmittedTaskBinding
     private val submittedTaskViewModel: SubmittedTaskViewModel by viewModel()
     private lateinit var submittedTaskAdapter: SubmittedTaskAdapter
@@ -26,7 +30,7 @@ class SubmittedTaskActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        loadKoinModules(detailTaskModule)
+        loadKoinModules(taskModule)
         binding = ActivitySubmittedTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -56,10 +60,17 @@ class SubmittedTaskActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         submittedTaskAdapter = SubmittedTaskAdapter()
+        submittedTaskAdapter.setOnItemClickCallback(this)
         binding.rvSubmittedTasks.apply {
             layoutManager = LinearLayoutManager(this@SubmittedTaskActivity)
             adapter = submittedTaskAdapter
         }
+    }
+
+    override fun onItemClicked(submissionId: Int) {
+        val intent = Intent(this, DetailSubmittedTaskActivity::class.java)
+        intent.putExtra(DetailSubmittedTaskActivity.EXTRA_SUBMISSION_ID, submissionId)
+        startActivity(intent)
     }
 
     private fun observeSubmittedTasks() {

@@ -59,4 +59,5 @@
     <string name="error">Terjadi kesalahan</string>
     <string name="failed_to_load_lecture_data">Gagal memuat data dosen</string>
     <string name="id_lecture">NIDN</string>
+    <string name="lecture_id_title">NIDN</string>
 </resources>

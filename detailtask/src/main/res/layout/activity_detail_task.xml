@@ -38,19 +38,31 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/outline_color_theme" />
 
+        <ImageButton
+            android:id="@+id/btn_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/delete_task"
+            android:src="@drawable/delete_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_back"
+            app:layout_constraintEnd_toEndOf="@+id/mcv_class_header"
+            app:layout_constraintTop_toTopOf="@+id/btn_back"
+            app:tint="@color/red_mahogany" />
+
         <TextView
             android:id="@+id/tv_header_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="28dp"
+            android:layout_marginEnd="24dp"
             android:fontFamily="@font/lato"
             android:text="@string/task_detail"
             android:textColor="@color/outline_color_theme"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/btn_back"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_delete"
             app:layout_constraintStart_toEndOf="@id/btn_back"
             app:layout_constraintTop_toTopOf="@id/btn_back" />
 

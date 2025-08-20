@@ -6,8 +6,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -65,6 +67,7 @@ class DetailTaskActivity : AppCompatActivity() {
             observeTaskDetails()
             observeUserRole()
             observeErrorState()
+            observeDeleteTaskResult()
         } else {
             Toast.makeText(this, "Error: ID Tugas tidak ditemukan", Toast.LENGTH_LONG).show()
             finish()
@@ -114,6 +117,39 @@ class DetailTaskActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT,
                 ).show()
         }
+
+        binding.btnDelete.setOnClickListener {
+            val dialog =
+                AlertDialog
+                    .Builder(this)
+                    .setTitle("Hapus Tugas")
+                    .setMessage("Apakah Anda yakin ingin menghapus tugas ini?")
+                    .setPositiveButton(getString(R.string.delete_button_text)) { _, _ ->
+                        if (currentTaskId != -1) {
+                            detailTaskViewModel.deleteTask(currentTaskId)
+                        } else {
+                            Toast
+                                .makeText(
+                                    this,
+                                    "Error: ID Tugas tidak ditemukan",
+                                    Toast.LENGTH_SHORT,
+                                ).show()
+                        }
+                    }.setNegativeButton(getString(R.string.cancel_button_text), null)
+                    .show()
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                ContextCompat.getColor(
+                    this,
+                    com.mjs.core.R.color.outline_color_theme,
+                ),
+            )
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                ContextCompat.getColor(
+                    this,
+                    com.mjs.core.R.color.outline_color_theme,
+                ),
+            )
+        }
     }
 
     private fun observeUserRole() {
@@ -121,12 +157,14 @@ class DetailTaskActivity : AppCompatActivity() {
             when (role) {
                 VirtualClassUseCase.USER_TYPE_DOSEN -> {
                     binding.btnEditTask.visibility = View.VISIBLE
+                    binding.btnDelete.visibility = View.VISIBLE
                     binding.btnActionTask.text = getString(R.string.view_submissions)
                     binding.btnActionTask.visibility = View.VISIBLE
                 }
 
                 VirtualClassUseCase.USER_TYPE_MAHASISWA -> {
                     binding.btnEditTask.visibility = View.GONE
+                    binding.btnDelete.visibility = View.GONE
                     binding.btnActionTask.text =
                         getString(R.string.submit_task_button)
                     binding.btnActionTask.visibility = View.VISIBLE
@@ -134,6 +172,7 @@ class DetailTaskActivity : AppCompatActivity() {
 
                 else -> {
                     binding.btnEditTask.visibility = View.GONE
+                    binding.btnDelete.visibility = View.GONE
                     binding.btnActionTask.visibility = View.GONE
                 }
             }
@@ -229,6 +268,33 @@ class DetailTaskActivity : AppCompatActivity() {
                 detailTaskViewModel.clearErrorState()
                 if (detailTaskViewModel.tugasDetail.value == null) {
                     finish()
+                }
+            }
+        }
+    }
+
+    private fun observeDeleteTaskResult() {
+        detailTaskViewModel.deleteTaskResult.observe(this) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    // Optionally, show a progress bar or loading indicator
+                    binding.pbClassDetails.visibility = View.VISIBLE
+                }
+
+                is Resource.Success -> {
+                    binding.pbClassDetails.visibility = View.GONE
+                    Toast.makeText(this, resource.data, Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+
+                is Resource.Error -> {
+                    binding.pbClassDetails.visibility = View.GONE
+                    Toast
+                        .makeText(
+                            this,
+                            resource.message ?: "Gagal menghapus tugas",
+                            Toast.LENGTH_SHORT,
+                        ).show()
                 }
             }
         }

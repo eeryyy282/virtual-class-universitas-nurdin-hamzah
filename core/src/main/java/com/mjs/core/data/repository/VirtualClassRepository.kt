@@ -344,6 +344,17 @@ class VirtualClassRepository(
             }
         }
 
+    override suspend fun deleteAssignmentById(assignmentId: Int): Flow<Resource<String>> =
+        flow {
+            emit(Resource.Loading())
+            try {
+                localDataSource.deleteAssignmentById(assignmentId)
+                emit(Resource.Success("Tugas berhasil dihapus"))
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: "Gagal menghapus tugas"))
+            }
+        }
+
     override suspend fun insertSubmission(submission: SubmissionEntity): Flow<Resource<String>> =
         flow {
             emit(Resource.Loading())

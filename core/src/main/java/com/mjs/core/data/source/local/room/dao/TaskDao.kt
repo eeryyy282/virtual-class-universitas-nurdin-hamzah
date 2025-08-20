@@ -86,4 +86,7 @@ interface TaskDao {
 
     @Query("SELECT * FROM assignments WHERE assignment_id = :assignmentId")
     fun getAssignmentById(assignmentId: Int): Flow<AssignmentEntity?>
+
+    @Query("DELETE FROM assignments WHERE assignment_id = :assignmentId")
+    suspend fun deleteAssignmentById(assignmentId: Int)
 }

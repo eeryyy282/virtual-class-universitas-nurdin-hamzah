@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -125,20 +126,28 @@ class SettingFragment : Fragment() {
         }
 
         binding.btnLogout.setOnClickListener {
-            AlertDialog
-                .Builder(requireContext())
-                .setTitle(getString(R.string.confirm_logout_title))
-                .setMessage(getString(R.string.confirm_logout_message))
-                .setPositiveButton(getString(R.string.yes)) { _, _ ->
-                    settingViewModel.logoutUser()
-                    val uri = "virtualclassuniversitasnurdinhamzah://onboarding".toUri()
-                    val intent = Intent(Intent.ACTION_VIEW, uri)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    startActivity(intent)
-                    requireActivity().finish()
-                }.setNegativeButton(getString(R.string.no)) { dialog, _ ->
-                    dialog.dismiss()
-                }.show()
+            val dialog =
+                AlertDialog
+                    .Builder(requireContext())
+                    .setTitle(getString(R.string.confirm_logout_title))
+                    .setMessage(getString(R.string.confirm_logout_message))
+                    .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                        settingViewModel.logoutUser()
+                        val uri = "virtualclassuniversitasnurdinhamzah://onboarding".toUri()
+                        val logoutIntent = Intent(Intent.ACTION_VIEW, uri)
+                        logoutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        startActivity(logoutIntent)
+                        requireActivity().finish()
+                    }.setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                        dialog.dismiss()
+                    }.show()
+
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(
+                ContextCompat.getColor(requireContext(), R.color.outline_color_theme),
+            )
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE)?.setTextColor(
+                ContextCompat.getColor(requireContext(), R.color.outline_color_theme),
+            )
         }
     }
 

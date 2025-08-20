@@ -35,5 +35,8 @@
     <string name="failed_send_task">Gagal mengirim tugas</string>
     <string name="error_assignment_id_not_founded">Error: Assignment ID tidak ditemukan</string>
     <string name="file_selected">File Terpilih</string>
+    <string name="delete_task">Hapus Tugas</string>
+    <string name="delete_button_text">Hapus</string>
+    <string name="cancel_button_text">Batal</string>
 </resources>
 

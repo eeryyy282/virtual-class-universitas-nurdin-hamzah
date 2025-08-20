@@ -68,6 +68,7 @@ class SubmittedTaskActivity : AppCompatActivity() {
                 is Resource.Loading -> {
                     binding.pbSubmittedTasks.visibility = View.VISIBLE
                     binding.tvNoSubmissions.visibility = View.GONE
+                    binding.ivNoSubmission.visibility = View.GONE
                     binding.rvSubmittedTasks.visibility = View.GONE
                 }
 
@@ -76,9 +77,11 @@ class SubmittedTaskActivity : AppCompatActivity() {
                     val submissions = resource.data
                     if (submissions.isNullOrEmpty()) {
                         binding.tvNoSubmissions.visibility = View.VISIBLE
+                        binding.ivNoSubmission.visibility = View.VISIBLE
                         binding.rvSubmittedTasks.visibility = View.GONE
                     } else {
                         binding.tvNoSubmissions.visibility = View.GONE
+                        binding.ivNoSubmission.visibility = View.GONE
                         binding.rvSubmittedTasks.visibility = View.VISIBLE
                         submittedTaskAdapter.submitList(submissions)
                     }
@@ -87,6 +90,7 @@ class SubmittedTaskActivity : AppCompatActivity() {
                 is Resource.Error -> {
                     binding.pbSubmittedTasks.visibility = View.GONE
                     binding.tvNoSubmissions.visibility = View.VISIBLE
+                    binding.ivNoSubmission.visibility = View.VISIBLE
                     binding.rvSubmittedTasks.visibility = View.GONE
                     binding.tvNoSubmissions.text =
                         resource.message ?: getString(R.string.error_loading_submissions)

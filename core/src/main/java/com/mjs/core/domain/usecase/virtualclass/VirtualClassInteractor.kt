@@ -104,6 +104,9 @@ class VirtualClassInteractor(
 
     override suspend fun updateTask(tugas: Tugas): Flow<Resource<String>> = virtualClassRepository.updateTask(tugas)
 
+    override suspend fun deleteAssignmentById(assignmentId: Int): Flow<Resource<String>> =
+        virtualClassRepository.deleteAssignmentById(assignmentId)
+
     override suspend fun insertSubmission(submission: SubmissionEntity): Flow<Resource<String>> =
         virtualClassRepository.insertSubmission(submission)
 

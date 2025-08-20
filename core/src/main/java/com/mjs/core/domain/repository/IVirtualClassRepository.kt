@@ -92,6 +92,8 @@ interface IVirtualClassRepository {
 
     suspend fun updateTask(tugas: Tugas): Flow<Resource<String>>
 
+    suspend fun deleteAssignmentById(assignmentId: Int): Flow<Resource<String>>
+
     suspend fun insertSubmission(submission: SubmissionEntity): Flow<Resource<String>>
 
     fun getSubmissionListItemsByAssignment(assignmentId: Int): Flow<Resource<List<SubmissionListItem>>>

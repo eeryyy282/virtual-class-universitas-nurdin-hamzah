@@ -28,6 +28,9 @@ class DetailTaskViewModel(
     private val _errorState = MutableLiveData<String?>()
     val errorState: LiveData<String?> = _errorState
 
+    private val _deleteTaskResult = MutableLiveData<Resource<String>>()
+    val deleteTaskResult: LiveData<Resource<String>> = _deleteTaskResult
+
     init {
         viewModelScope.launch {
             virtualClassUseCase.getLoggedInUserType().collect {
@@ -62,6 +65,14 @@ class DetailTaskViewModel(
                         _errorState.value = tugasResource.message ?: "Gagal memuat detail tugas."
                     }
                 }
+            }
+        }
+    }
+
+    fun deleteTask(assignmentId: Int) {
+        viewModelScope.launch {
+            virtualClassUseCase.deleteAssignmentById(assignmentId).collect { result ->
+                _deleteTaskResult.value = result
             }
         }
     }

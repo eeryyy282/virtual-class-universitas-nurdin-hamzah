@@ -161,6 +161,13 @@ class SettingFragment : Fragment() {
                     R.color.outline_color_theme,
                 ),
             )
+            val negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+            negativeButton.setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.outline_color_theme,
+                ),
+            )
         }
     }
 

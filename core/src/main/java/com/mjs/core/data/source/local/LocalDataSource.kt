@@ -94,6 +94,8 @@ class LocalDataSource(
 
     fun getAssignmentById(assignmentId: Int): Flow<AssignmentEntity?> = taskDao.getAssignmentById(assignmentId)
 
+    suspend fun deleteAssignmentById(assignmentId: Int) = taskDao.deleteAssignmentById(assignmentId)
+
     suspend fun insertSubmission(submission: SubmissionEntity) = taskDao.insertSubmission(submission)
 
     fun getSubmissionsByAssignment(assignmentId: Int): Flow<List<SubmissionEntity>> = taskDao.getSubmissionsByAssignment(assignmentId)

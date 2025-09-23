@@ -1,4 +1,4 @@
-package com.mjs.authentication.presentation.login.mahasiswa
+package com.mjs.authentication.presentation.login.student
 
 import android.app.ActivityOptions
 import android.content.Intent
@@ -11,22 +11,22 @@ import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.mjs.authentication.R
-import com.mjs.authentication.databinding.ActivityLoginMahasiswaBinding
-import com.mjs.authentication.di.loginMahasiswaModule
+import com.mjs.authentication.databinding.ActivityLoginStudentBinding
+import com.mjs.authentication.di.loginStudentModule
 import com.mjs.authentication.presentation.register.RegisterActivity
 import com.mjs.authentication.presentation.utils.LoginResult
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
 
-class LoginMahasiswaActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityLoginMahasiswaBinding
-    private val loginMahasiswaViewModel: LoginMahasiswaViewModel by viewModel()
+class LoginStudentActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityLoginStudentBinding
+    private val loginStudentViewModel: LoginStudentViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        loadKoinModules(loginMahasiswaModule)
-        binding = ActivityLoginMahasiswaBinding.inflate(layoutInflater)
+        loadKoinModules(loginStudentModule)
+        binding = ActivityLoginStudentBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -41,13 +41,13 @@ class LoginMahasiswaActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.btnChangeTheme.setOnClickListener {
-            loginMahasiswaViewModel.saveThemeSetting(
-                loginMahasiswaViewModel.getThemeSetting.value == false,
+            loginStudentViewModel.saveThemeSetting(
+                loginStudentViewModel.getThemeSetting.value == false,
             )
         }
 
-        binding.btnRegisterLoginMahasiswa.setOnClickListener {
-            val intent = Intent(this@LoginMahasiswaActivity, RegisterActivity::class.java)
+        binding.btnRegisterLoginStudent.setOnClickListener {
+            val intent = Intent(this@LoginStudentActivity, RegisterActivity::class.java)
             val options =
                 ActivityOptions.makeCustomAnimation(
                     this,
@@ -58,8 +58,8 @@ class LoginMahasiswaActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.btnLoginMahasiswa.setOnClickListener {
-            val nim =
+        binding.btnLoginStudent.setOnClickListener {
+            val studentId =
                 binding.etNim.text
                     .toString()
                     .trim()
@@ -67,16 +67,16 @@ class LoginMahasiswaActivity : AppCompatActivity() {
                 binding.etPassword.text
                     .toString()
                     .trim()
-            loginMahasiswaViewModel.login(nim, password)
+            loginStudentViewModel.login(studentId, password)
         }
     }
 
     private fun observeLoginResult() {
-        loginMahasiswaViewModel.loginResult.observe(this) { result ->
+        loginStudentViewModel.loginResult.observe(this) { result ->
             when (result) {
                 is LoginResult.Success -> {
-                    Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
-                    val uri = "mahasiswa://mainactivity".toUri()
+                    Toast.makeText(this, "Login Berhasil", Toast.LENGTH_SHORT).show()
+                    val uri = "student://mainactivity".toUri()
                     val intent = Intent(Intent.ACTION_VIEW, uri)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
@@ -91,7 +91,7 @@ class LoginMahasiswaActivity : AppCompatActivity() {
     }
 
     private fun checkDarkMode() {
-        loginMahasiswaViewModel.getThemeSetting.observe(this) {
+        loginStudentViewModel.getThemeSetting.observe(this) {
             if (it) {
                 delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
             } else {

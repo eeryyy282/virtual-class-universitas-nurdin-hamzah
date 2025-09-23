@@ -1,24 +1,24 @@
 package com.mjs.authentication.di
 
-import com.mjs.authentication.presentation.login.dosen.LoginDosenViewModel
-import com.mjs.authentication.presentation.login.mahasiswa.LoginMahasiswaViewModel
+import com.mjs.authentication.presentation.login.lecturer.LoginLecturerViewModel
+import com.mjs.authentication.presentation.login.student.LoginStudentViewModel
 import com.mjs.authentication.presentation.register.RegisterViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-val loginDosenModule =
+val loginLecturerModule =
     module {
         viewModel {
-            LoginDosenViewModel(
+            LoginLecturerViewModel(
                 virtualClassUseCase = get(),
             )
         }
     }
 
-val loginMahasiswaModule =
+val loginStudentModule =
     module {
         viewModel {
-            LoginMahasiswaViewModel(
+            LoginStudentViewModel(
                 virtualClassUseCase = get(),
             )
         }

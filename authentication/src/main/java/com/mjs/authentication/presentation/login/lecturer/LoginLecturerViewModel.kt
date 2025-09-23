@@ -1,4 +1,4 @@
-package com.mjs.authentication.presentation.login.dosen
+package com.mjs.authentication.presentation.login.lecturer
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,7 +10,7 @@ import com.mjs.core.data.Resource
 import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
 import kotlinx.coroutines.launch
 
-class LoginDosenViewModel(
+class LoginLecturerViewModel(
     private val virtualClassUseCase: VirtualClassUseCase,
 ) : ViewModel() {
     private val _loginResult = MutableLiveData<LoginResult>()
@@ -25,30 +25,32 @@ class LoginDosenViewModel(
     }
 
     fun login(
-        nidn: String,
+        lecturerId: Long,
         password: String,
     ) {
         viewModelScope.launch {
-            if (nidn.isBlank() || password.isBlank()) {
-                _loginResult.value = LoginResult.Error("NIDN dan password tidak boleh kosong")
+            if (lecturerId.toString().isBlank() || password.isBlank()) {
+                _loginResult.value =
+                    LoginResult.Error("NIDN atau NIP dan password tidak boleh kosong")
                 return@launch
             }
-            virtualClassUseCase.loginDosen(nidn, password).collect { resource ->
+            virtualClassUseCase.loginLecturer(lecturerId, password).collect { resource ->
                 when (resource) {
                     is Resource.Loading -> {
                     }
 
                     is Resource.Success -> {
-                        val dosen = resource.data
-                        if (dosen != null) {
+                        val lecturer = resource.data
+                        if (lecturer != null) {
                             virtualClassUseCase.saveLoginSession(
-                                dosen.nidn,
-                                VirtualClassUseCase.USER_TYPE_DOSEN,
+                                lecturer.lecturerId,
+                                VirtualClassUseCase.USER_TYPE_LECTURER,
                             )
                             _loginResult.value =
-                                LoginResult.Success(VirtualClassUseCase.USER_TYPE_DOSEN)
+                                LoginResult.Success(VirtualClassUseCase.USER_TYPE_LECTURER)
                         } else {
-                            _loginResult.value = LoginResult.Error("NIDN dan Password salah")
+                            _loginResult.value =
+                                LoginResult.Error("NIDN atau NIP dan Password salah")
                         }
                     }
 

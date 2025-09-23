@@ -11,7 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.mjs.authentication.R
 import com.mjs.authentication.databinding.ActivityRegisterBinding
 import com.mjs.authentication.di.registerModule
-import com.mjs.authentication.presentation.login.mahasiswa.LoginMahasiswaActivity
+import com.mjs.authentication.presentation.login.student.LoginStudentActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
 
@@ -43,7 +43,7 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         binding.btnHaveAnAccount.setOnClickListener {
-            val intent = Intent(this, LoginMahasiswaActivity::class.java)
+            val intent = Intent(this, LoginStudentActivity::class.java)
             val options =
                 ActivityOptions.makeCustomAnimation(
                     this,

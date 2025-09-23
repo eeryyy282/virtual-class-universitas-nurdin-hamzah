@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.login.mahasiswa.LoginMahasiswaActivity">
+    tools:context=".presentation.login.lecturer.LoginLecturerActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -63,29 +63,30 @@
             app:layout_constraintTop_toTopOf="@+id/iv_logo" />
 
         <ImageView
-            android:id="@+id/iv_login_mahasiswa"
+            android:id="@+id/iv_login_dosen"
             android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:contentDescription="@string/description_image_view_login_mahasiswa"
+            android:layout_height="175dp"
+            android:contentDescription="@string/description_image_view_login_dosen"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_logo"
             app:layout_constraintVertical_bias="0.10"
-            app:srcCompat="@drawable/login_image_mahasiswa" />
+            app:srcCompat="@drawable/login_image_dosen" />
 
         <TextView
-            android:id="@+id/tv_login_mahasiswa"
+            android:id="@+id/tv_login_dosen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:fontFamily="@font/lato"
-            android:text="@string/tv_login_mahasiswa_text"
+            android:text="@string/tv_login_dosen_text"
             android:textAlignment="center"
             android:textColor="@color/text_color_themed"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@+id/iv_login_mahasiswa"
-            app:layout_constraintStart_toStartOf="@+id/iv_login_mahasiswa"
-            app:layout_constraintTop_toBottomOf="@+id/iv_login_mahasiswa" />
+            app:layout_constraintEnd_toEndOf="@+id/iv_login_dosen"
+            app:layout_constraintStart_toStartOf="@+id/iv_login_dosen"
+            app:layout_constraintTop_toBottomOf="@+id/iv_login_dosen" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_nim"
@@ -95,17 +96,17 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="64dp"
             android:layout_marginEnd="32dp"
-            android:hint="@string/hint_nim"
+            android:hint="@string/hint_nip"
             app:boxCornerRadiusBottomEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusTopStart="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_login_mahasiswa">
+            app:layout_constraintTop_toBottomOf="@+id/tv_login_dosen">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_nim"
+                android:id="@+id/et_nip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/profile_icon"
@@ -161,7 +162,7 @@
             tools:ignore="RtlSymmetry" />
 
         <Button
-            android:id="@+id/btn_login_mahasiswa"
+            android:id="@+id/btn_login_lecturer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
@@ -184,21 +185,21 @@
             android:padding="10dp"
             android:text="@string/doesnt_have_an_account_text"
             android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@+id/btn_register_login_mahasiswa"
+            app:layout_constraintBottom_toTopOf="@+id/btn_call_admin_login_dosen"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_login_mahasiswa"
+            app:layout_constraintTop_toBottomOf="@+id/btn_login_lecturer"
             app:layout_constraintVertical_bias="1.0" />
 
         <Button
-            android:id="@+id/btn_register_login_mahasiswa"
+            android:id="@+id/btn_call_admin_login_dosen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
             android:backgroundTint="@color/blue_gray"
             android:fontFamily="@font/lato"
             android:padding="14dp"
-            android:text="@string/register_text"
+            android:text="@string/call_admin_text"
             android:textAllCaps="false"
             android:textColor="@color/white"
             app:cornerRadius="16dp"
@@ -206,4 +207,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </ScrollView>

@@ -7,6 +7,7 @@ import com.mjs.core.domain.model.Assignment
 import com.mjs.core.domain.model.Course
 import com.mjs.core.domain.model.Lecturer
 import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
+import com.mjs.lecturer.utils.DateUtils
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,9 +16,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class HomeViewModel(
     private val virtualClassUseCase: VirtualClassUseCase,
@@ -51,7 +49,7 @@ class HomeViewModel(
                 .flatMapLatest { lecturerId ->
                     if (lecturerId != null) {
                         virtualClassUseCase.getLoggedInUserType().flatMapLatest { userType ->
-                            if (userType == VirtualClassUseCase.USER_TYPE_LECTURE) {
+                            if (userType == VirtualClassUseCase.USER_TYPE_LECTURER) {
                                 virtualClassUseCase.getLecturerByLecturerId(lecturerId)
                             } else {
                                 flowOf(Resource.Error("Pengguna bukan Dosen"))
@@ -128,24 +126,11 @@ class HomeViewModel(
                                             if (allAssignments.isNotEmpty()) {
                                                 val distinctAssignments =
                                                     allAssignments.distinctBy { it.assignmentId }
-                                                val dateFormat =
-                                                    SimpleDateFormat(
-                                                        "yyyy-MM-dd HH:mm:ss",
-                                                        Locale.getDefault(),
-                                                    )
-                                                val currentDate = Date()
                                                 val activeAssignments =
                                                     distinctAssignments.filter {
-                                                        try {
-                                                            val deadlineDate =
-                                                                dateFormat.parse(it.deadlineDate)
-                                                            deadlineDate != null &&
-                                                                deadlineDate.after(
-                                                                    currentDate,
-                                                                )
-                                                        } catch (_: Exception) {
-                                                            false
-                                                        }
+                                                        DateUtils.isDateAfterCurrent(
+                                                            it.deadlineDate,
+                                                        )
                                                     }
                                                 Resource.Success(activeAssignments)
                                             } else if (hasError) {

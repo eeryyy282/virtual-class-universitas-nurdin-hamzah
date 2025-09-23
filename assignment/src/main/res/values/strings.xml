@@ -21,7 +21,7 @@
     <string name="view_submissions">Lihat Pengumpulan</string>
     <string name="submit_assignment_button">Kumpulkan Tugas</string>
     <string name="no_submissions_image_description">Gambar yang menandakan tidak ada submission</string>
-    <string name="title_assignment">Judul Tugas</string>
+    <string name="title_assignment">Tugas</string>
     <string name="assignment_description">Deskripsi Tugas</string>
     <string name="select_date_and_time_start"><![CDATA[Pilih Tanggal & Waktu Mulai]]></string>
     <string name="date_deadline">Tanggal Selesai (Deadline)</string>

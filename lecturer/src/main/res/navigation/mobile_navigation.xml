@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.mjs.lecturer.presentation.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_assignment"
+            app:destination="@id/navigation_assignment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_assignment"
+        android:name="com.mjs.lecturer.presentation.assignment.AssignmentFragment"
+        android:label="@string/title_task"
+        tools:layout="@layout/fragment_assignment" />
+
+    <fragment
+        android:id="@+id/navigation_schedule"
+        android:name="com.mjs.lecturer.presentation.schedule.ScheduleFragment"
+        android:label="@string/title_schedule"
+        tools:layout="@layout/fragment_schedule" />
+
+    <fragment
+        android:id="@+id/navigation_course"
+        android:name="com.mjs.lecturer.presentation.course.CourseFragment"
+        android:label="@string/title_course"
+        tools:layout="@layout/fragment_course" />
+
+    <fragment
+        android:id="@+id/navigation_setting"
+        android:name="com.mjs.lecturer.presentation.setting.SettingFragment"
+        android:label="@string/title_setting"
+        tools:layout="@layout/fragment_setting" />
+</navigation>

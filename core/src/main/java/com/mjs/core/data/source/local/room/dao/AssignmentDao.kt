@@ -20,15 +20,6 @@ interface AssignmentDao {
     suspend fun updateAssignment(assignment: AssignmentEntity)
 
     @Query(
-        "SELECT assignment_id FROM assignments WHERE assignment_title = :assignmentTitle AND " +
-            "course_id = :courseId ORDER BY assignment_id DESC LIMIT 1",
-    )
-    suspend fun getAssignmentIdByTitleAndCourseId(
-        assignmentTitle: String,
-        courseId: String,
-    ): Long?
-
-    @Query(
         """
         SELECT a.* FROM assignments a
         LEFT JOIN submissions s ON a.assignment_id = s.assignment_id AND s.student_id = :studentId

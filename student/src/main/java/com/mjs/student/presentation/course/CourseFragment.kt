@@ -23,8 +23,9 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CourseFragment : Fragment() {
+    @Suppress("ktlint:standard:backing-property-naming")
     private var _binding: FragmentCourseBinding? = null
-    private val binding get() = _binding!!
+    internal val binding get() = _binding!!
 
     private val courseViewModel: CourseViewModel by viewModel()
     private lateinit var courseAdapter: CourseAdapterStudent

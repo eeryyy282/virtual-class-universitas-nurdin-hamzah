@@ -40,18 +40,4 @@ object DateUtils {
             e.printStackTrace()
             date.toString()
         }
-
-    fun parseDateString(dateString: String): Calendar? =
-        try {
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            val parsedDate = inputFormat.parse(dateString)
-            if (parsedDate != null) {
-                Calendar.getInstance().apply { time = parsedDate }
-            } else {
-                null
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
 }

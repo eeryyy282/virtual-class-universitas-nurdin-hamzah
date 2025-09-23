@@ -45,12 +45,6 @@ interface CourseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMaterial(material: MaterialEntity)
 
-    @Query("SELECT course_id FROM courses WHERE course_name = :courseName AND lecturer_id = :lecturerId ORDER BY course_id DESC LIMIT 1")
-    suspend fun getCourseIdByNameAndLecturerId(
-        courseName: String,
-        lecturerId: Long,
-    ): String?
-
     @Query("SELECT * FROM courses WHERE department = :department")
     fun getAllCoursesByDepartment(department: String): Flow<List<CourseEntity>>
 

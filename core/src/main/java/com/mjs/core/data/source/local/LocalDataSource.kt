@@ -68,8 +68,6 @@ class LocalDataSource(
 
     fun getCourseById(courseId: String): Flow<CourseEntity?> = courseDao.getCourseById(courseId)
 
-    suspend fun insertCourse(course: CourseEntity) = courseDao.insertCourse(course)
-
     suspend fun insertEnrollment(enrollment: EnrollmentEntity) = courseDao.insertEnrollment(enrollment)
 
     suspend fun deleteEnrollment(
@@ -85,8 +83,6 @@ class LocalDataSource(
     ): Flow<EnrollmentEntity?> = courseDao.getEnrollmentByStudentIdAndCourseId(studentId, courseId)
 
     fun getMaterialsByCourseId(courseId: String): Flow<List<MaterialEntity>> = courseDao.getMaterialsByCourseId(courseId)
-
-    suspend fun insertMaterial(material: MaterialEntity) = courseDao.insertMaterial(material)
 
     fun getAssignmentsByCourse(courseId: String): Flow<List<AssignmentEntity>> = assignmentDao.getAssignmentsByCourse(courseId)
 
@@ -113,23 +109,16 @@ class LocalDataSource(
 
     fun getForumsByCourse(courseId: String): Flow<List<ForumEntity>> = forumDao.getForumsByCourse(courseId)
 
-    suspend fun insertForum(forum: ForumEntity): Long = forumDao.insertForum(forum)
-
     fun getPostsByForumId(forumId: Long): Flow<List<PostEntity>> = forumDao.getPostsByForumId(forumId)
 
     suspend fun insertPost(post: PostEntity) = forumDao.insertPost(post)
 
-    suspend fun insertAttendance(attendance: AttendanceEntity): Long =
-        attendanceDao.insertAttendance(attendance)
+    suspend fun insertAttendance(attendance: AttendanceEntity): Long = attendanceDao.insertAttendance(attendance)
 
     fun getAttendanceHistory(
         studentId: Long,
         courseId: String,
     ): Flow<List<AttendanceEntity>> = attendanceDao.getAttendanceHistory(studentId, courseId)
-
-    suspend fun insertAttendanceStreak(streak: AttendanceStreakEntity): Long = attendanceDao.insertAttendanceStreak(streak)
-
-    suspend fun updateAttendanceStreak(streak: AttendanceStreakEntity) = attendanceDao.updateAttendanceStreak(streak)
 
     fun getAttendanceStreak(
         studentId: Long,
@@ -140,42 +129,33 @@ class LocalDataSource(
         studentId: Long,
         courseId: String,
         currentDate: String,
-    ): Flow<List<AssignmentEntity>> =
-        assignmentDao.getPendingAssignmentsForStudent(studentId, courseId, currentDate)
+    ): Flow<List<AssignmentEntity>> = assignmentDao.getPendingAssignmentsForStudent(studentId, courseId, currentDate)
 
     fun getLateAssignments(
         studentId: Long,
         courseId: String,
         currentDate: String,
-    ): Flow<List<AssignmentEntity>> =
-        assignmentDao.getMissedAssignmentsForStudent(studentId, courseId, currentDate)
+    ): Flow<List<AssignmentEntity>> = assignmentDao.getMissedAssignmentsForStudent(studentId, courseId, currentDate)
 
     fun getAssignmentsByCourseIdsAndFutureDeadline(
         courseIds: List<String>,
         currentDate: String,
-    ): Flow<List<AssignmentEntity>> =
-        assignmentDao.getActiveAssignmentsByCourses(courseIds, currentDate)
+    ): Flow<List<AssignmentEntity>> = assignmentDao.getActiveAssignmentsByCourses(courseIds, currentDate)
 
     fun getAssignmentsByCourseIdsAndPastDeadline(
         courseIds: List<String>,
         currentDate: String,
-    ): Flow<List<AssignmentEntity>> =
-        assignmentDao.getPastAssignmentsByCourses(courseIds, currentDate)
+    ): Flow<List<AssignmentEntity>> = assignmentDao.getPastAssignmentsByCourses(courseIds, currentDate)
 
-    fun getStudentsByCourseId(courseId: String): Flow<List<StudentEntity>> =
-        courseDao.getStudentsByCourseId(courseId)
+    fun getStudentsByCourseId(courseId: String): Flow<List<StudentEntity>> = courseDao.getStudentsByCourseId(courseId)
 
-    fun getStudentCountByCourseId(courseId: String): Flow<Int> =
-        courseDao.getStudentCountByCourseId(courseId)
+    fun getStudentCountByCourseId(courseId: String): Flow<Int> = courseDao.getStudentCountByCourseId(courseId)
 
-    fun getAllCoursesByStudentId(studentId: Long): Flow<List<CourseEntity>> =
-        courseDao.getAllCoursesByStudentId(studentId)
+    fun getAllCoursesByStudentId(studentId: Long): Flow<List<CourseEntity>> = courseDao.getAllCoursesByStudentId(studentId)
 
-    fun getPendingEnrollmentRequests(courseId: String): Flow<List<StudentEntity>> =
-        courseDao.getPendingEnrollmentRequests(courseId)
+    fun getPendingEnrollmentRequests(courseId: String): Flow<List<StudentEntity>> = courseDao.getPendingEnrollmentRequests(courseId)
 
-    fun getPendingEnrollmentRequestCount(courseId: String): Flow<Int> =
-        courseDao.getPendingEnrollmentRequestCount(courseId)
+    fun getPendingEnrollmentRequestCount(courseId: String): Flow<Int> = courseDao.getPendingEnrollmentRequestCount(courseId)
 
     suspend fun updateEnrollmentStatus(
         studentId: Long,

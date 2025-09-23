@@ -153,8 +153,7 @@ class VirtualClassInteractor(
     override fun getAttendanceHistory(
         studentId: Long,
         courseId: String,
-    ): Flow<Resource<List<Attendance>>> =
-        virtualClassRepository.getAttendanceHistory(studentId, courseId)
+    ): Flow<Resource<List<Attendance>>> = virtualClassRepository.getAttendanceHistory(studentId, courseId)
 
     override suspend fun insertAttendance(attendance: AttendanceEntity): Flow<Resource<Long>> =
         virtualClassRepository.insertAttendance(attendance).map { resource ->
@@ -176,8 +175,7 @@ class VirtualClassInteractor(
             }
         }
 
-    override fun getTodaySchedule(studentId: Long): Flow<Resource<List<Course>>> =
-        virtualClassRepository.getTodaySchedule(studentId)
+    override fun getTodaySchedule(studentId: Long): Flow<Resource<List<Course>>> = virtualClassRepository.getTodaySchedule(studentId)
 
     override fun getTodayScheduleLecturer(lecturerId: Long): Flow<Resource<List<Course>>> =
         virtualClassRepository.getTodayScheduleLecturer(lecturerId)

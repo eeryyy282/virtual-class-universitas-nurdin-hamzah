@@ -16,7 +16,6 @@ import com.mjs.core.domain.model.Lecturer
 import com.mjs.core.domain.model.Material
 import com.mjs.core.domain.model.Post
 import com.mjs.core.domain.model.Student
-import java.util.Calendar
 
 object DataMapper {
     fun mapStudentEntityToStudentDomain(input: StudentEntity): Student =
@@ -148,16 +147,4 @@ object DataMapper {
 
     fun mapAttendanceEntitiesToAttendanceDomains(input: List<AttendanceEntity>): List<Attendance> =
         input.map { mapAttendanceEntityToAttendanceDomain(it) }
-
-    fun mapDayOfWeekToDayName(dayOfWeek: Int): String =
-        when (dayOfWeek) {
-            Calendar.SUNDAY -> "Sunday"
-            Calendar.MONDAY -> "Monday"
-            Calendar.TUESDAY -> "Tuesday"
-            Calendar.WEDNESDAY -> "Wednesday"
-            Calendar.THURSDAY -> "Thursday"
-            Calendar.FRIDAY -> "Friday"
-            Calendar.SATURDAY -> "Saturday"
-            else -> ""
-        }
 }

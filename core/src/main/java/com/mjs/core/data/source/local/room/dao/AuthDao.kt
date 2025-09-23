@@ -11,18 +11,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AuthDao {
-    @Query("SELECT * FROM student WHERE student_id = :studentId AND password = :password")
-    suspend fun loginStudent(
-        studentId: Long,
-        password: String,
-    ): StudentEntity?
-
-    @Query("SELECT * FROM lecturer WHERE lecturer_id = :lecturerId AND password = :password")
-    suspend fun loginLecturer(
-        lecturerId: Long,
-        password: String,
-    ): LecturerEntity?
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun registerStudent(student: StudentEntity)
 

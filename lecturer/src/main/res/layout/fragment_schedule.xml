@@ -106,7 +106,7 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_marginTop="84dp"
-            android:contentDescription="@string/doesnt_have_an_task_text" 
+            android:contentDescription="@string/doesnt_have_an_task_text"
             android:src="@drawable/doesnt_have_an_content_icon"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/tv_description_schedule"

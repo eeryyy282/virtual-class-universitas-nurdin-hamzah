@@ -1,4 +1,4 @@
-package com.mjs.detailtask
+package com.mjs.assignment
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

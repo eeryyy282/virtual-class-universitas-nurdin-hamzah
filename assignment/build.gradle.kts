@@ -8,7 +8,7 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint")
 }
 android {
-    namespace = "com.mjs.enrollclass"
+    namespace = "com.mjs.assignment"
     compileSdk = 36
 
     defaultConfig {
@@ -39,6 +39,7 @@ android {
 dependencies {
     implementation(project(":app"))
     implementation(project(":core"))
+    implementation(project(":submission"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)

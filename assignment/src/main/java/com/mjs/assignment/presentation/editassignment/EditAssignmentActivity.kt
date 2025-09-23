@@ -1,4 +1,4 @@
-package com.mjs.detailtask.presentation.edittask
+package com.mjs.assignment.presentation.editassignment
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
@@ -17,23 +17,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.mjs.assignment.R
+import com.mjs.assignment.databinding.ActivityEditAssignmentBinding
+import com.mjs.assignment.di.assignmentModule
+import com.mjs.assignment.presentation.detailassignment.DetailAssignmentActivity
+import com.mjs.assignment.utils.DateUtils
 import com.mjs.core.data.Resource
-import com.mjs.core.domain.model.Tugas
-import com.mjs.detailtask.R
-import com.mjs.detailtask.databinding.ActivityEditTaskBinding
-import com.mjs.detailtask.di.taskModule
-import com.mjs.detailtask.presentation.detailtask.DetailTaskActivity
-import com.mjs.detailtask.utils.DateUtils
+import com.mjs.core.domain.model.Assignment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Locale
 
-class EditTaskActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityEditTaskBinding
-    private val editTaskViewModel: EditTaskViewModel by viewModel()
-    private var currentTugas: Tugas? = null
+class EditAssignmentActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityEditAssignmentBinding
+    private val editAssignmentViewModel: EditAssignmentViewModel by viewModel()
+    private var currentAssignment: Assignment? = null
     private var selectedStartDate: Calendar? = null
     private var selectedDeadlineDate: Calendar? = null
     private var selectedAttachmentUri: Uri? = null
@@ -53,8 +51,8 @@ class EditTaskActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        loadKoinModules(taskModule)
-        binding = ActivityEditTaskBinding.inflate(layoutInflater)
+        loadKoinModules(assignmentModule)
+        binding = ActivityEditAssignmentBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -62,40 +60,47 @@ class EditTaskActivity : AppCompatActivity() {
             insets
         }
 
-        currentTugas =
+        currentAssignment =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                intent.getParcelableExtra(DetailTaskActivity.EXTRA_TASK, Tugas::class.java)
+                intent.getParcelableExtra(
+                    DetailAssignmentActivity.EXTRA_ASSIGNMENT,
+                    Assignment::class.java,
+                )
             } else {
                 @Suppress("DEPRECATION")
-                intent.getParcelableExtra(DetailTaskActivity.EXTRA_TASK)
+                intent.getParcelableExtra(DetailAssignmentActivity.EXTRA_ASSIGNMENT)
             }
 
-        if (currentTugas == null) {
+        if (currentAssignment == null) {
             Toast.makeText(this, "Error: Data tugas tidak ditemukan", Toast.LENGTH_LONG).show()
             finish()
             return
         }
 
-        populateTaskDetails()
+        populateAssignmentDetails()
         setupClickListeners()
         observeViewModel()
         checkDarkMode()
         setupOnBackPressed()
     }
 
-    private fun populateTaskDetails() {
-        currentTugas?.let {
-            binding.etTaskTitle.setText(it.judulTugas)
-            binding.etTaskDescription.setText(it.deskripsi)
+    private fun populateAssignmentDetails() {
+        currentAssignment?.let { assignment ->
+            binding.etAssignmentTitle.setText(assignment.assignmentTitle)
+            binding.etAssignmentDescription.setText(assignment.description)
 
-            selectedStartDate = DateUtils.parseDateString(it.tanggalMulai)
-            selectedDeadlineDate = DateUtils.parseDateString(it.tanggalSelesai)
+            selectedStartDate = Calendar.getInstance().apply { time = assignment.startDate }
+            selectedDeadlineDate = Calendar.getInstance().apply { time = assignment.deadlineDate }
 
-            binding.etStartDate.setText(DateUtils.formatDeadline(it.tanggalMulai))
-            binding.etDeadlineDate.setText(DateUtils.formatDeadline(it.tanggalSelesai))
+            selectedStartDate?.time?.let { date ->
+                binding.etStartDate.setText(DateUtils.formatDeadline(date))
+            }
+            selectedDeadlineDate?.time?.let { date ->
+                binding.etDeadlineDate.setText(DateUtils.formatDeadline(date))
+            }
 
-            if (!it.attachment.isNullOrBlank()) {
-                binding.tvCurrentAttachment.text = it.attachment
+            if (!assignment.attachment.isNullOrBlank()) {
+                binding.tvCurrentAttachment.text = assignment.attachment
                 binding.tvCurrentAttachment.visibility = View.VISIBLE
                 binding.tvNoAttachmentEdit.visibility = View.GONE
             } else {
@@ -106,7 +111,7 @@ class EditTaskActivity : AppCompatActivity() {
     }
 
     private fun setupClickListeners() {
-        binding.btnBackEditTask.setOnClickListener { showExitConfirmationDialog() }
+        binding.btnBackEditAssignment.setOnClickListener { showExitConfirmationDialog() }
 
         binding.etStartDate.setOnClickListener {
             showDateTimePicker(true)
@@ -125,7 +130,7 @@ class EditTaskActivity : AppCompatActivity() {
             filePickerLauncher.launch(intent)
         }
 
-        binding.btnSaveTaskChanges.setOnClickListener {
+        binding.btnSaveAssignmentChanges.setOnClickListener {
             showSaveConfirmationDialog()
         }
     }
@@ -152,15 +157,12 @@ class EditTaskActivity : AppCompatActivity() {
                                 set(Calendar.HOUR_OF_DAY, hourOfDay)
                                 set(Calendar.MINUTE, minute)
                             }
-                        val dateFormat =
-                            SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-                        val formattedDate = dateFormat.format(selectedDateTime.time)
                         if (isStartDate) {
                             selectedStartDate = selectedDateTime
-                            binding.etStartDate.setText(DateUtils.formatDeadline(formattedDate))
+                            binding.etStartDate.setText(DateUtils.formatDeadline(selectedDateTime.time))
                         } else {
                             selectedDeadlineDate = selectedDateTime
-                            binding.etDeadlineDate.setText(DateUtils.formatDeadline(formattedDate))
+                            binding.etDeadlineDate.setText(DateUtils.formatDeadline(selectedDateTime.time))
                         }
                     },
                     calendar.get(Calendar.HOUR_OF_DAY),
@@ -176,26 +178,26 @@ class EditTaskActivity : AppCompatActivity() {
 
     private fun saveChanges() {
         val title =
-            binding.etTaskTitle.text
+            binding.etAssignmentTitle.text
                 .toString()
                 .trim()
         val description =
-            binding.etTaskDescription.text
+            binding.etAssignmentDescription.text
                 .toString()
                 .trim()
 
         if (title.isEmpty()) {
-            binding.tilTaskTitle.error = "Judul tidak boleh kosong"
+            binding.tilAssignmentTitle.error = "Judul tidak boleh kosong"
             return
         } else {
-            binding.tilTaskTitle.error = null
+            binding.tilAssignmentTitle.error = null
         }
 
         if (description.isEmpty()) {
-            binding.tilTaskDescription.error = "Deskripsi tidak boleh kosong"
+            binding.tilAssignmentDescription.error = "Deskripsi tidak boleh kosong"
             return
         } else {
-            binding.tilTaskDescription.error = null
+            binding.tilAssignmentDescription.error = null
         }
 
         if (selectedStartDate == null) {
@@ -218,28 +220,24 @@ class EditTaskActivity : AppCompatActivity() {
             return
         }
 
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        val startDateString = dateFormat.format(selectedStartDate!!.time)
-        val deadlineDateString = dateFormat.format(selectedDeadlineDate!!.time)
-
         val attachmentName =
-            if (selectedAttachmentUri != null) getFileName(selectedAttachmentUri!!) else currentTugas?.attachment
+            if (selectedAttachmentUri != null) getFileName(selectedAttachmentUri!!) else currentAssignment?.attachment
 
-        currentTugas?.let {
-            val updatedTugas =
-                it.copy(
-                    judulTugas = title,
-                    deskripsi = description,
-                    tanggalMulai = startDateString,
-                    tanggalSelesai = deadlineDateString,
+        currentAssignment?.let { assignment ->
+            val updatedAssignment =
+                assignment.copy(
+                    assignmentTitle = title,
+                    description = description,
+                    startDate = selectedStartDate!!.time,
+                    deadlineDate = selectedDeadlineDate!!.time,
                     attachment = attachmentName,
                 )
-            editTaskViewModel.updateTask(updatedTugas)
+            editAssignmentViewModel.updateAssignment(updatedAssignment)
         }
     }
 
     private fun observeViewModel() {
-        editTaskViewModel.updateTaskResult.observe(this) { resource ->
+        editAssignmentViewModel.updateAssignmentResult.observe(this) { resource ->
             when (resource) {
                 is Resource.Loading -> {
                     Toast.makeText(this, "Menyimpan perubahan...", Toast.LENGTH_SHORT).show()
@@ -277,7 +275,7 @@ class EditTaskActivity : AppCompatActivity() {
     }
 
     private fun checkDarkMode() {
-        editTaskViewModel.getThemeSetting.observe(this) {
+        editAssignmentViewModel.getThemeSetting.observe(this) {
             if (it) {
                 delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
             } else {

@@ -1,4 +1,4 @@
-package com.mjs.detailtask.presentation.detailtask
+package com.mjs.assignment.presentation.detailassignment
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,21 +6,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.mjs.core.data.Resource
-import com.mjs.core.domain.model.Kelas
-import com.mjs.core.domain.model.Tugas
+import com.mjs.core.domain.model.Assignment
+import com.mjs.core.domain.model.Course
 import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
 import kotlinx.coroutines.launch
 
-class DetailTaskViewModel(
+class DetailAssignmentViewModel(
     private val virtualClassUseCase: VirtualClassUseCase,
 ) : ViewModel() {
     val getThemeSetting = virtualClassUseCase.getThemeSetting().asLiveData()
 
-    private val _tugasDetail = MutableLiveData<Tugas?>()
-    val tugasDetail: LiveData<Tugas?> = _tugasDetail
+    private val _assignmentDetail = MutableLiveData<Assignment?>()
+    val assignmentDetail: LiveData<Assignment?> = _assignmentDetail
 
-    private val _kelasDetail = MutableLiveData<Resource<Kelas>>()
-    val kelasDetail: LiveData<Resource<Kelas>> = _kelasDetail
+    private val _courseDetail = MutableLiveData<Resource<Course>>()
+    val courseDetail: LiveData<Resource<Course>> = _courseDetail
 
     private val _userRole = MutableLiveData<String?>()
     val userRole: LiveData<String?> = _userRole
@@ -28,8 +28,8 @@ class DetailTaskViewModel(
     private val _errorState = MutableLiveData<String?>()
     val errorState: LiveData<String?> = _errorState
 
-    private val _deleteTaskResult = MutableLiveData<Resource<String>>()
-    val deleteTaskResult: LiveData<Resource<String>> = _deleteTaskResult
+    private val _deleteAssignmentResult = MutableLiveData<Resource<String>>()
+    val deleteAssignmentResult: LiveData<Resource<String>> = _deleteAssignmentResult
 
     init {
         viewModelScope.launch {
@@ -39,21 +39,21 @@ class DetailTaskViewModel(
         }
     }
 
-    fun loadTaskAndClassDetailsById(assignmentId: Int) {
+    fun loadAssignmentAndCourseDetailsById(assignmentId: Long) {
         viewModelScope.launch {
-            virtualClassUseCase.getAssignmentById(assignmentId).collect { tugasResource ->
-                when (tugasResource) {
+            virtualClassUseCase.getAssignmentById(assignmentId).collect { assignmentResource ->
+                when (assignmentResource) {
                     is Resource.Loading -> {
                     }
 
                     is Resource.Success -> {
-                        val taskData = tugasResource.data
-                        _tugasDetail.value = taskData
-                        if (taskData != null) {
+                        val assignmentData = assignmentResource.data
+                        _assignmentDetail.value = assignmentData
+                        if (assignmentData != null) {
                             virtualClassUseCase
-                                .getKelasById(taskData.kelasId)
-                                .collect { kelasResource ->
-                                    _kelasDetail.value = kelasResource
+                                .getCourseById(assignmentData.courseId)
+                                .collect { courseResource ->
+                                    _courseDetail.value = courseResource
                                 }
                         } else {
                             _errorState.value = "Data tugas tidak ditemukan setelah refresh."
@@ -61,18 +61,19 @@ class DetailTaskViewModel(
                     }
 
                     is Resource.Error -> {
-                        _tugasDetail.value = null
-                        _errorState.value = tugasResource.message ?: "Gagal memuat detail tugas."
+                        _assignmentDetail.value = null
+                        _errorState.value =
+                            assignmentResource.message ?: "Gagal memuat detail tugas."
                     }
                 }
             }
         }
     }
 
-    fun deleteTask(assignmentId: Int) {
+    fun deleteAssignment(assignmentId: Long) {
         viewModelScope.launch {
             virtualClassUseCase.deleteAssignmentById(assignmentId).collect { result ->
-                _deleteTaskResult.value = result
+                _deleteAssignmentResult.value = result
             }
         }
     }

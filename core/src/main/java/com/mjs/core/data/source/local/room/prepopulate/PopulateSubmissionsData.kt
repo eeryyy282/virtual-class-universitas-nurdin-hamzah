@@ -1,112 +1,113 @@
 package com.mjs.core.data.source.local.room.prepopulate
 
 import com.mjs.core.data.source.local.entity.SubmissionEntity
-import com.mjs.core.data.source.local.room.dao.TaskDao
+import com.mjs.core.data.source.local.room.dao.SubmissionDao
+import java.util.Date
 
 internal suspend fun populateSubmissions(
-    taskDao: TaskDao,
-    tugas1PMLId: Long,
-    tugas1AIId: Long,
-    tugas1BDTId: Long,
-    tugas1KOMMASId: Long,
-    tugas1POLPEMId: Long,
-    tugas1KEBPUBId: Long,
-    mhs1Nim: Int,
-    mhs2Nim: Int,
-    mhs3Nim: Int,
-    mhs4Nim: Int,
-    mhs5Nim: Int,
-    mhs6Nim: Int,
-    yesterday: String,
-    currentDate: String,
+    submissionDao: SubmissionDao,
+    assignment1PMLId: Long,
+    assignment1AIId: Long,
+    assignment1BDTId: Long,
+    assignment1KOMMASId: Long,
+    assignment1POLPEMId: Long,
+    assignment1KEBPUBId: Long,
+    student1Id: Long,
+    student2Id: Long,
+    student3Id: Long,
+    student4Id: Long,
+    student5Id: Long,
+    student6Id: Long,
+    yesterday: Date,
+    currentDate: Date,
 ) {
-    taskDao.insertSubmission(
+    submissionDao.insertSubmission(
         SubmissionEntity(
-            0,
-            tugas1PMLId.toInt(),
-            mhs3Nim,
-            "kalkulator_budi.zip",
-            yesterday,
-            85,
-            "Bagus, tapi UI bisa ditingkatkan.",
+            submissionId = 0L,
+            assignmentId = assignment1PMLId,
+            studentId = student3Id,
+            attachment = "kalkulator_budi.zip",
+            submissionDate = yesterday,
+            grade = 85,
+            note = "Bagus, tapi UI bisa ditingkatkan.",
         ),
     )
-    taskDao.insertSubmission(
+    submissionDao.insertSubmission(
         SubmissionEntity(
-            0,
-            tugas1PMLId.toInt(),
-            mhs1Nim,
-            "kalkulator_juzairi.zip",
-            currentDate,
-            90,
-            "Implementasi logic sudah benar.",
+            submissionId = 0L,
+            assignmentId = assignment1PMLId,
+            studentId = student1Id,
+            attachment = "kalkulator_juzairi.zip",
+            submissionDate = currentDate,
+            grade = 90,
+            note = "Implementasi logic sudah benar.",
         ),
     )
-    taskDao.insertSubmission(
+    submissionDao.insertSubmission(
         SubmissionEntity(
-            0,
-            tugas1AIId.toInt(),
-            mhs3Nim,
-            "cnn_model_budi.zip",
-            currentDate,
+            submissionId = 0L,
+            assignmentId = assignment1AIId,
+            studentId = student3Id,
+            attachment = "cnn_model_budi.zip",
+            submissionDate = currentDate,
         ),
     )
-    taskDao.insertSubmission(
+    submissionDao.insertSubmission(
         SubmissionEntity(
-            0,
-            tugas1BDTId.toInt(),
-            mhs1Nim,
-            "partisi_db_juzairi.pdf",
-            yesterday,
-            78,
-            "Perlu penjelasan lebih detail pada pilihan strategi.",
+            submissionId = 0L,
+            assignmentId = assignment1BDTId,
+            studentId = student1Id,
+            attachment = "partisi_db_juzairi.pdf",
+            submissionDate = yesterday,
+            grade = 78,
+            note = "Perlu penjelasan lebih detail pada pilihan strategi.",
         ),
     )
-    taskDao.insertSubmission(
+    submissionDao.insertSubmission(
         SubmissionEntity(
-            0,
-            tugas1BDTId.toInt(),
-            mhs2Nim,
-            "partisi_db_yuni.pdf",
-            currentDate,
+            submissionId = 0L,
+            assignmentId = assignment1BDTId,
+            studentId = student2Id,
+            attachment = "partisi_db_yuni.pdf",
+            submissionDate = currentDate,
         ),
     )
-    taskDao.insertSubmission(
+    submissionDao.insertSubmission(
         SubmissionEntity(
-            0,
-            tugas1KOMMASId.toInt(),
-            mhs4Nim,
-            "analisis_iklan_rina.docx",
-            yesterday,
+            submissionId = 0L,
+            assignmentId = assignment1KOMMASId,
+            studentId = student4Id,
+            attachment = "analisis_iklan_rina.docx",
+            submissionDate = yesterday,
         ),
     )
-    taskDao.insertSubmission(
+    submissionDao.insertSubmission(
         SubmissionEntity(
-            0,
-            tugas1POLPEMId.toInt(),
-            mhs5Nim,
-            "esai_eko.docx",
-            yesterday,
-            88,
-            "Analisis cukup tajam.",
+            submissionId = 0L,
+            assignmentId = assignment1POLPEMId,
+            studentId = student5Id,
+            attachment = "esai_eko.docx",
+            submissionDate = yesterday,
+            grade = 88,
+            note = "Analisis cukup tajam.",
         ),
     )
-    taskDao.insertSubmission(
+    submissionDao.insertSubmission(
         SubmissionEntity(
-            0,
-            tugas1POLPEMId.toInt(),
-            mhs6Nim,
-            "esai_siti.pdf",
-            currentDate,
+            submissionId = 0L,
+            assignmentId = assignment1POLPEMId,
+            studentId = student6Id,
+            attachment = "esai_siti.pdf",
+            submissionDate = currentDate,
         ),
     )
-    taskDao.insertSubmission(
+    submissionDao.insertSubmission(
         SubmissionEntity(
-            0,
-            tugas1KEBPUBId.toInt(),
-            mhs5Nim,
-            "review_eko.pdf",
-            currentDate,
+            submissionId = 0L,
+            assignmentId = assignment1KEBPUBId,
+            studentId = student5Id,
+            attachment = "review_eko.pdf",
+            submissionDate = currentDate,
         ),
     )
 }

@@ -5,8 +5,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Forum(
-    val forumId: Int,
-    val kelasId: String,
-    val judulForum: String,
-    val deskripsi: String,
+    val forumId: Long,
+    val courseId: String,
+    val forumTitle: String,
+    val description: String,
 ) : Parcelable

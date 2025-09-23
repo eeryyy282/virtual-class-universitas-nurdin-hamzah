@@ -1,182 +1,183 @@
 package com.mjs.core.data.source.local.room.prepopulate
 
 import com.mjs.core.data.source.local.entity.EnrollmentEntity
-import com.mjs.core.data.source.local.room.dao.ClassroomDao
+import com.mjs.core.data.source.local.room.dao.CourseDao
+import java.util.Date
 
 internal suspend fun populateEnrollments(
-    classroomDao: ClassroomDao,
-    mhs1Nim: Int,
-    mhs2Nim: Int,
-    mhs3Nim: Int,
-    mhs4Nim: Int,
-    mhs5Nim: Int,
-    mhs6Nim: Int,
-    kelasPML: String,
-    kelasAI: String,
-    kelasWEB: String,
-    kelasJARKOM: String,
-    kelasBDT: String,
-    kelasAPSI: String,
-    kelasMANPROSI: String,
-    kelasKOMMAS: String,
-    kelasJURDIG: String,
-    kelasPOLPEM: String,
-    kelasKEBPUB: String,
-    kelasPEMDA: String,
-    oneMonthAgo: String,
-    twoWeeksAgo: String,
-    oneWeekAgo: String,
-    threeDaysAgo: String,
+    courseDao: CourseDao,
+    student1Id: Long,
+    student2Id: Long,
+    student3Id: Long,
+    student4Id: Long,
+    student5Id: Long,
+    student6Id: Long,
+    coursePML: String,
+    courseAI: String,
+    courseWEB: String,
+    courseJARKOM: String,
+    courseBDT: String,
+    courseAPSI: String,
+    courseMANPROSI: String,
+    courseKOMMAS: String,
+    courseJURDIG: String,
+    coursePOLPEM: String,
+    courseKEBPUB: String,
+    coursePEMDA: String,
+    oneMonthAgo: Date,
+    twoWeeksAgo: Date,
+    oneWeekAgo: Date,
+    threeDaysAgo: Date,
 ) {
-    classroomDao.insertEnrollment(
+    courseDao.insertEnrollment(
         EnrollmentEntity(
-            0,
-            mhs3Nim,
-            kelasPML,
+            0L,
+            student3Id,
+            coursePML,
             oneMonthAgo,
             "approved",
         ),
     )
-    classroomDao.insertEnrollment(
+    courseDao.insertEnrollment(
         EnrollmentEntity(
-            0,
-            mhs3Nim,
-            kelasAI,
+            0L,
+            student3Id,
+            courseAI,
             oneMonthAgo,
             "approved",
         ),
     )
-    classroomDao.insertEnrollment(
+    courseDao.insertEnrollment(
         EnrollmentEntity(
-            0,
-            mhs3Nim,
-            kelasWEB,
+            0L,
+            student3Id,
+            courseWEB,
             twoWeeksAgo,
             "approved",
         ),
     )
-    classroomDao.insertEnrollment(
+    courseDao.insertEnrollment(
         EnrollmentEntity(
-            0,
-            mhs3Nim,
-            kelasJARKOM,
+            0L,
+            student3Id,
+            courseJARKOM,
             oneWeekAgo,
             "approved",
         ),
     )
-    classroomDao.insertEnrollment(
+    courseDao.insertEnrollment(
         EnrollmentEntity(
-            0,
-            mhs1Nim,
-            kelasBDT,
+            0L,
+            student1Id,
+            courseBDT,
             oneMonthAgo,
             "approved",
         ),
     )
-    classroomDao.insertEnrollment(
+    courseDao.insertEnrollment(
         EnrollmentEntity(
-            0,
-            mhs1Nim,
-            kelasAPSI,
+            0L,
+            student1Id,
+            courseAPSI,
             twoWeeksAgo,
             "approved",
         ),
     )
-    classroomDao.insertEnrollment(
+    courseDao.insertEnrollment(
         EnrollmentEntity(
-            0,
-            mhs1Nim,
-            kelasPML,
-            oneWeekAgo,
-            "approved",
-        ),
-    ) // Cross-major
-    classroomDao.insertEnrollment(
-        EnrollmentEntity(
-            0,
-            mhs2Nim,
-            kelasBDT,
-            oneMonthAgo,
-            "approved",
-        ),
-    )
-    classroomDao.insertEnrollment(
-        EnrollmentEntity(
-            0,
-            mhs2Nim,
-            kelasMANPROSI,
+            0L,
+            student1Id,
+            coursePML,
             oneWeekAgo,
             "approved",
         ),
     )
-    classroomDao.insertEnrollment(
+    courseDao.insertEnrollment(
         EnrollmentEntity(
-            0,
-            mhs4Nim,
-            kelasKOMMAS,
+            0L,
+            student2Id,
+            courseBDT,
             oneMonthAgo,
             "approved",
         ),
     )
-    classroomDao.insertEnrollment(
+    courseDao.insertEnrollment(
         EnrollmentEntity(
-            0,
-            mhs4Nim,
-            kelasJURDIG,
+            0L,
+            student2Id,
+            courseMANPROSI,
+            oneWeekAgo,
+            "approved",
+        ),
+    )
+    courseDao.insertEnrollment(
+        EnrollmentEntity(
+            0L,
+            student4Id,
+            courseKOMMAS,
+            oneMonthAgo,
+            "approved",
+        ),
+    )
+    courseDao.insertEnrollment(
+        EnrollmentEntity(
+            0L,
+            student4Id,
+            courseJURDIG,
             twoWeeksAgo,
             "approved",
         ),
     )
-    classroomDao.insertEnrollment(
+    courseDao.insertEnrollment(
         EnrollmentEntity(
-            0,
-            mhs4Nim,
-            kelasWEB,
+            0L,
+            student4Id,
+            courseWEB,
             oneWeekAgo,
             "approved",
         ),
-    ) // Cross-major
-    classroomDao.insertEnrollment(
+    )
+    courseDao.insertEnrollment(
         EnrollmentEntity(
-            0,
-            mhs5Nim,
-            kelasPOLPEM,
+            0L,
+            student5Id,
+            coursePOLPEM,
             oneMonthAgo,
             "approved",
         ),
     )
-    classroomDao.insertEnrollment(
+    courseDao.insertEnrollment(
         EnrollmentEntity(
-            0,
-            mhs5Nim,
-            kelasKEBPUB,
+            0L,
+            student5Id,
+            courseKEBPUB,
             twoWeeksAgo,
             "approved",
         ),
     )
-    classroomDao.insertEnrollment(
+    courseDao.insertEnrollment(
         EnrollmentEntity(
-            0,
-            mhs6Nim,
-            kelasPOLPEM,
+            0L,
+            student6Id,
+            coursePOLPEM,
             oneMonthAgo,
             "approved",
         ),
     )
-    classroomDao.insertEnrollment(
+    courseDao.insertEnrollment(
         EnrollmentEntity(
-            0,
-            mhs6Nim,
-            kelasPEMDA,
+            0L,
+            student6Id,
+            coursePEMDA,
             oneWeekAgo,
             "approved",
         ),
     )
-    classroomDao.insertEnrollment(
+    courseDao.insertEnrollment(
         EnrollmentEntity(
-            0,
-            mhs5Nim,
-            kelasJARKOM,
+            0L,
+            student5Id,
+            courseJARKOM,
             threeDaysAgo,
             "approved",
         ),

@@ -5,39 +5,39 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.mjs.core.data.source.local.entity.DosenEntity
-import com.mjs.core.data.source.local.entity.MahasiswaEntity
+import com.mjs.core.data.source.local.entity.LecturerEntity
+import com.mjs.core.data.source.local.entity.StudentEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AuthDao {
-    @Query("SELECT * FROM mahasiswa WHERE nim = :nim AND password = :sandi")
-    suspend fun loginMahasiswa(
-        nim: Int,
-        sandi: String,
-    ): MahasiswaEntity?
+    @Query("SELECT * FROM student WHERE student_id = :studentId AND password = :password")
+    suspend fun loginStudent(
+        studentId: Long,
+        password: String,
+    ): StudentEntity?
 
-    @Query("SELECT * FROM dosen WHERE nidn = :nidn AND password = :sandi")
-    suspend fun loginDosen(
-        nidn: Int,
-        sandi: String,
-    ): DosenEntity?
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun registerMahasiswa(mahasiswa: MahasiswaEntity)
+    @Query("SELECT * FROM lecturer WHERE lecturer_id = :lecturerId AND password = :password")
+    suspend fun loginLecturer(
+        lecturerId: Long,
+        password: String,
+    ): LecturerEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun registerDosen(dosen: DosenEntity)
+    suspend fun registerStudent(student: StudentEntity)
 
-    @Query("SELECT * FROM mahasiswa WHERE nim = :nim")
-    fun getMahasiswaByNim(nim: Int): Flow<MahasiswaEntity?>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun registerLecturer(lecturer: LecturerEntity)
 
-    @Query("SELECT * FROM dosen WHERE nidn = :nidn")
-    fun getDosenByNidn(nidn: Int): Flow<DosenEntity?>
+    @Query("SELECT * FROM student WHERE student_id = :studentId")
+    fun getStudentById(studentId: Long): Flow<StudentEntity?>
+
+    @Query("SELECT * FROM lecturer WHERE lecturer_id = :lecturerId")
+    fun getLecturerById(lecturerId: Long): Flow<LecturerEntity?>
 
     @Update
-    suspend fun updateMahasiswa(mahasiswa: MahasiswaEntity)
+    suspend fun updateStudent(student: StudentEntity)
 
     @Update
-    suspend fun updateDosen(dosen: DosenEntity)
+    suspend fun updateLecturer(lecturer: LecturerEntity)
 }

@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.util.Date
 
 @Entity(
     tableName = "posts",
@@ -19,15 +20,15 @@ import androidx.room.PrimaryKey
 data class PostEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "post_id")
-    val postId: Int = 0,
+    val postId: Long = 0L,
     @ColumnInfo(name = "forum_id")
-    val forumId: Int,
+    val forumId: Long,
     @ColumnInfo(name = "user_id")
-    val userId: Int,
+    val userId: Long,
     @ColumnInfo(name = "user_role")
     val userRole: String,
-    @ColumnInfo(name = "isi_post")
-    val isiPost: String,
-    @ColumnInfo(name = "tanggal_post")
-    val tanggalPost: String,
+    @ColumnInfo(name = "post_content")
+    val postContent: String,
+    @ColumnInfo(name = "post_date")
+    val postDate: Date,
 )

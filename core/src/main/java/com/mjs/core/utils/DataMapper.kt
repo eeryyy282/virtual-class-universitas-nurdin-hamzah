@@ -1,160 +1,163 @@
 package com.mjs.core.utils
 
 import com.mjs.core.data.source.local.entity.AssignmentEntity
-import com.mjs.core.data.source.local.entity.AttendanceEntity
-import com.mjs.core.data.source.local.entity.DosenEntity
+import com.mjs.core.data.source.local.entity.CourseEntity
 import com.mjs.core.data.source.local.entity.ForumEntity
-import com.mjs.core.data.source.local.entity.KelasEntity
-import com.mjs.core.data.source.local.entity.MahasiswaEntity
+import com.mjs.core.data.source.local.entity.LecturerEntity
 import com.mjs.core.data.source.local.entity.MaterialEntity
 import com.mjs.core.data.source.local.entity.PostEntity
-import com.mjs.core.domain.model.Dosen
+import com.mjs.core.data.source.local.entity.StudentEntity
+import com.mjs.core.data.source.local.entity.attendance.AttendanceEntity
+import com.mjs.core.domain.model.Assignment
+import com.mjs.core.domain.model.Attendance
+import com.mjs.core.domain.model.Course
 import com.mjs.core.domain.model.Forum
-import com.mjs.core.domain.model.Kehadiran
-import com.mjs.core.domain.model.Kelas
-import com.mjs.core.domain.model.Mahasiswa
-import com.mjs.core.domain.model.Materi
-import com.mjs.core.domain.model.Postingan
-import com.mjs.core.domain.model.Tugas
+import com.mjs.core.domain.model.Lecturer
+import com.mjs.core.domain.model.Material
+import com.mjs.core.domain.model.Post
+import com.mjs.core.domain.model.Student
 import java.util.Calendar
 
 object DataMapper {
-    fun mapMahasiswaEntityToDomain(input: MahasiswaEntity): Mahasiswa =
-        Mahasiswa(
-            nim = input.nim,
-            nama = input.nama,
+    fun mapStudentEntityToStudentDomain(input: StudentEntity): Student =
+        Student(
+            studentId = input.studentId,
+            name = input.name,
             email = input.email,
-            fotoProfil = input.fotoProfil,
-            dosenPembimbing = input.dosenPembimbing,
-            jurusan = input.jurusan,
+            profilePicture = input.profilePicture,
+            supervisor = input.supervisor,
+            department = input.department,
         )
 
-    fun mapMahasiswaEntitiesToDomains(input: List<MahasiswaEntity>): List<Mahasiswa> = input.map { mapMahasiswaEntityToDomain(it) }
+    fun mapStudentsEntitiesToStudentsDomains(input: List<StudentEntity>): List<Student> = input.map { mapStudentEntityToStudentDomain(it) }
 
-    fun mapMahasiswaDomainToEntity(input: Mahasiswa): MahasiswaEntity =
-        MahasiswaEntity(
-            nim = input.nim,
-            nama = input.nama,
+    fun mapStudentDomainToStudentEntity(input: Student): StudentEntity =
+        StudentEntity(
+            studentId = input.studentId,
+            name = input.name,
             email = input.email,
-            fotoProfil = input.fotoProfil,
-            dosenPembimbing = input.dosenPembimbing,
-            jurusan = input.jurusan,
+            profilePicture = input.profilePicture,
+            supervisor = input.supervisor,
+            department = input.department,
             password = "",
         )
 
-    fun mapDosenEntityToDomain(input: DosenEntity): Dosen =
-        Dosen(
-            nidn = input.nidn,
-            nama = input.nama,
+    fun mapLecturerEntityToLecturerDomain(input: LecturerEntity): Lecturer =
+        Lecturer(
+            lecturerId = input.lecturerId,
+            name = input.name,
             email = input.email,
-            fotoProfil = input.fotoProfil,
+            profilePicture = input.profilePicture,
         )
 
-    fun mapDosenDomainToEntity(input: Dosen): DosenEntity =
-        DosenEntity(
-            nidn = input.nidn,
-            nama = input.nama,
+    fun mapLecturerDomainToLecturerEntity(input: Lecturer): LecturerEntity =
+        LecturerEntity(
+            lecturerId = input.lecturerId,
+            name = input.name,
             email = input.email,
-            fotoProfil = input.fotoProfil,
+            profilePicture = input.profilePicture,
             password = "",
         )
 
-    fun mapKelasEntityToDomain(input: KelasEntity): Kelas =
-        Kelas(
-            kelasId = input.kelasId,
-            namaKelas = input.namaKelas,
-            deskripsi = input.deskripsi,
-            nidn = input.nidn,
-            jadwal = input.jadwal,
+    fun mapCourseEntityToCourseDomain(input: CourseEntity): Course =
+        Course(
+            courseId = input.courseId,
+            courseName = input.courseName,
+            description = input.description,
+            lecturerId = input.lecturerId,
+            schedule = input.schedule,
             semester = input.semester,
             credit = input.credit,
-            jurusan = input.jurusan,
-            classImage = input.classImage,
-            ruang = input.ruang,
+            department = input.department,
+            courseImage = input.courseImage,
+            room = input.room,
         )
 
-    fun mapKelasEntitiesToDomains(input: List<KelasEntity>): List<Kelas> = input.map { mapKelasEntityToDomain(it) }
+    fun mapCourseEntitiesToCourseDomains(input: List<CourseEntity>): List<Course> = input.map { mapCourseEntityToCourseDomain(it) }
 
-    fun mapTugasEntityToDomain(input: AssignmentEntity): Tugas =
-        Tugas(
+    fun mapAssignmentEntityToAssignmentDomain(input: AssignmentEntity): Assignment =
+        Assignment(
             assignmentId = input.assignmentId,
-            kelasId = input.kelasId,
-            judulTugas = input.judulTugas,
-            deskripsi = input.deskripsi,
-            tanggalMulai = input.tanggalMulai,
-            tanggalSelesai = input.tanggalSelesai,
+            courseId = input.courseId,
+            assignmentTitle = input.assignmentTitle,
+            description = input.description,
+            startDate = input.startDate,
+            deadlineDate = input.deadlineDate,
             attachment = input.attachment,
         )
 
-    fun mapTugasEntitiesToDomains(input: List<AssignmentEntity>): List<Tugas> = input.map { mapTugasEntityToDomain(it) }
+    fun mapAssignmentEntitiesToAssignmentDomains(input: List<AssignmentEntity>): List<Assignment> =
+        input.map { mapAssignmentEntityToAssignmentDomain(it) }
 
-    fun mapTugasDomainToEntity(input: Tugas): AssignmentEntity =
+    fun mapAssignmentDomainToAssignmentEntity(input: Assignment): AssignmentEntity =
         AssignmentEntity(
             assignmentId = input.assignmentId,
-            kelasId = input.kelasId,
-            judulTugas = input.judulTugas,
-            deskripsi = input.deskripsi,
-            tanggalMulai = input.tanggalMulai,
-            tanggalSelesai = input.tanggalSelesai,
+            courseId = input.courseId,
+            assignmentTitle = input.assignmentTitle,
+            description = input.description,
+            startDate = input.startDate,
+            deadlineDate = input.deadlineDate,
             attachment = input.attachment,
         )
 
-    fun mapMateriEntityToDomain(input: MaterialEntity): Materi =
-        Materi(
-            materiId = input.materiId,
-            kelasId = input.kelasId,
-            judulMateri = input.judulMateri,
-            deskripsi = input.deskripsi,
+    fun mapMaterialEntityToMaterialDomain(input: MaterialEntity): Material =
+        Material(
+            materialId = input.materialId,
+            courseId = input.courseId,
+            courseTitle = input.materialTitle,
+            description = input.description,
             attachment = input.attachment,
-            tanggalUpload = input.tanggalUpload,
-            tipe = input.tipe,
+            uploadDate = input.uploadDate,
+            type = input.type,
         )
 
-    fun mapMateriEntitiesToDomains(input: List<MaterialEntity>): List<Materi> = input.map { mapMateriEntityToDomain(it) }
+    fun mapMaterialEntitiesToMaterialDomains(input: List<MaterialEntity>): List<Material> =
+        input.map { mapMaterialEntityToMaterialDomain(it) }
 
     fun mapForumEntityToDomain(input: ForumEntity): Forum =
         Forum(
             forumId = input.forumId,
-            kelasId = input.kelasId,
-            judulForum = input.judulForum,
-            deskripsi = input.deskripsi,
+            courseId = input.courseId,
+            forumTitle = input.forumTitle,
+            description = input.description,
         )
 
     fun mapForumEntitiesToDomains(input: List<ForumEntity>): List<Forum> = input.map { mapForumEntityToDomain(it) }
 
-    fun mapPostinganEntityToDomain(input: PostEntity): Postingan =
-        Postingan(
+    fun mapPostEntityToPostDomain(input: PostEntity): Post =
+        Post(
             postId = input.postId,
             forumId = input.forumId,
             userId = input.userId,
             userRole = input.userRole,
-            isiPost = input.isiPost,
-            tanggalPost = input.tanggalPost,
+            postContent = input.postContent,
+            postDate = input.postDate,
         )
 
-    fun mapPostinganEntitiesToDomains(input: List<PostEntity>): List<Postingan> = input.map { mapPostinganEntityToDomain(it) }
+    fun mapPostEntitiesToPostDomains(input: List<PostEntity>): List<Post> = input.map { mapPostEntityToPostDomain(it) }
 
-    fun mapKehadiranEntityToDomain(input: AttendanceEntity): Kehadiran =
-        Kehadiran(
-            absensiId = input.absensiId,
-            kelasId = input.kelasId,
-            nim = input.nim,
-            tanggalHadir = input.tanggalHadir,
+    fun mapAttendanceEntityToAttendanceDomain(input: AttendanceEntity): Attendance =
+        Attendance(
+            attendanceId = input.attendanceId,
+            courseId = input.courseId,
+            studentId = input.studentId,
+            attendanceDate = input.attendanceDate,
             status = input.status,
-            keterangan = input.keterangan,
+            description = input.description,
         )
 
-    fun mapKehadiranEntitiesToDomains(input: List<AttendanceEntity>): List<Kehadiran> = input.map { mapKehadiranEntityToDomain(it) }
+    fun mapAttendanceEntitiesToAttendanceDomains(input: List<AttendanceEntity>): List<Attendance> =
+        input.map { mapAttendanceEntityToAttendanceDomain(it) }
 
     fun mapDayOfWeekToDayName(dayOfWeek: Int): String =
         when (dayOfWeek) {
-            Calendar.SUNDAY -> "Minggu"
-            Calendar.MONDAY -> "Senin"
-            Calendar.TUESDAY -> "Selasa"
-            Calendar.WEDNESDAY -> "Rabu"
-            Calendar.THURSDAY -> "Kamis"
-            Calendar.FRIDAY -> "Jumat"
-            Calendar.SATURDAY -> "Sabtu"
+            Calendar.SUNDAY -> "Sunday"
+            Calendar.MONDAY -> "Monday"
+            Calendar.TUESDAY -> "Tuesday"
+            Calendar.WEDNESDAY -> "Wednesday"
+            Calendar.THURSDAY -> "Thursday"
+            Calendar.FRIDAY -> "Friday"
+            Calendar.SATURDAY -> "Saturday"
             else -> ""
         }
 }

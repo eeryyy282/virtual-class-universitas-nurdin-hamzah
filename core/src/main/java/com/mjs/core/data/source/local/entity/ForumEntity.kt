@@ -4,14 +4,15 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.util.Date
 
 @Entity(
     tableName = "forums",
     foreignKeys = [
         ForeignKey(
-            entity = KelasEntity::class,
-            parentColumns = ["kelas_id"],
-            childColumns = ["kelas_id"],
+            entity = CourseEntity::class,
+            parentColumns = ["course_id"],
+            childColumns = ["course_id"],
             onDelete = ForeignKey.CASCADE,
         ),
     ],
@@ -19,11 +20,13 @@ import androidx.room.PrimaryKey
 data class ForumEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "forum_id")
-    val forumId: Int = 0,
-    @ColumnInfo(name = "kelas_id")
-    val kelasId: String,
-    @ColumnInfo(name = "judul_forum")
-    val judulForum: String,
-    val deskripsi: String,
-    val tanggalDibuat: String,
+    val forumId: Long = 0L,
+    @ColumnInfo(name = "course_id", index = true)
+    val courseId: String,
+    @ColumnInfo(name = "forum_title")
+    val forumTitle: String,
+    @ColumnInfo(name = "description")
+    val description: String,
+    @ColumnInfo(name = "created_date")
+    val createdDate: Date,
 )

@@ -1,57 +1,58 @@
 package com.mjs.core.data.source.local.room.prepopulate
 
-import com.mjs.core.data.source.local.entity.AttendanceEntity
+import com.mjs.core.data.source.local.entity.attendance.AttendanceEntity
 import com.mjs.core.data.source.local.room.dao.AttendanceDao
+import java.util.Date
 
 internal suspend fun populateAttendance(
     attendanceDao: AttendanceDao,
-    kelasPML: String,
-    kelasBDT: String,
-    kelasKOMMAS: String,
-    kelasWEB: String,
-    kelasPOLPEM: String,
-    kelasKEBPUB: String,
-    mhs1Nim: Int,
-    mhs2Nim: Int,
-    mhs3Nim: Int,
-    mhs4Nim: Int,
-    mhs5Nim: Int,
-    mhs6Nim: Int,
-    oneMonthAgo: String,
-    twoWeeksAgo: String,
+    coursePML: String,
+    courseBDT: String,
+    courseKOMMAS: String,
+    courseWEB: String,
+    coursePOLPEM: String,
+    courseKEBPUB: String,
+    student1Id: Long,
+    student2Id: Long,
+    student3Id: Long,
+    student4Id: Long,
+    student5Id: Long,
+    student6Id: Long,
+    oneMonthAgo: Date,
+    twoWeeksAgo: Date,
 ) {
     attendanceDao.insertAttendance(
         AttendanceEntity(
-            0,
-            kelasPML,
-            mhs3Nim,
+            0L,
+            coursePML,
+            student3Id,
             oneMonthAgo,
             "Hadir",
         ),
     )
     attendanceDao.insertAttendance(
         AttendanceEntity(
-            0,
-            kelasPML,
-            mhs1Nim,
+            0L,
+            coursePML,
+            student1Id,
             oneMonthAgo,
             "Hadir",
         ),
     )
     attendanceDao.insertAttendance(
         AttendanceEntity(
-            0,
-            kelasPML,
-            mhs3Nim,
+            0L,
+            coursePML,
+            student3Id,
             twoWeeksAgo,
             "Hadir",
         ),
     )
     attendanceDao.insertAttendance(
         AttendanceEntity(
-            0,
-            kelasPML,
-            mhs1Nim,
+            0L,
+            coursePML,
+            student1Id,
             twoWeeksAgo,
             "Sakit",
             "Surat dokter terlampir",
@@ -59,36 +60,36 @@ internal suspend fun populateAttendance(
     )
     attendanceDao.insertAttendance(
         AttendanceEntity(
-            0,
-            kelasBDT,
-            mhs1Nim,
+            0L,
+            courseBDT,
+            student1Id,
             oneMonthAgo,
             "Hadir",
         ),
     )
     attendanceDao.insertAttendance(
         AttendanceEntity(
-            0,
-            kelasBDT,
-            mhs2Nim,
+            0L,
+            courseBDT,
+            student2Id,
             oneMonthAgo,
             "Hadir",
         ),
     )
     attendanceDao.insertAttendance(
         AttendanceEntity(
-            0,
-            kelasBDT,
-            mhs1Nim,
+            0L,
+            courseBDT,
+            student1Id,
             twoWeeksAgo,
             "Hadir",
         ),
     )
     attendanceDao.insertAttendance(
         AttendanceEntity(
-            0,
-            kelasBDT,
-            mhs2Nim,
+            0L,
+            courseBDT,
+            student2Id,
             twoWeeksAgo,
             "Izin",
             "Acara keluarga",
@@ -96,81 +97,81 @@ internal suspend fun populateAttendance(
     )
     attendanceDao.insertAttendance(
         AttendanceEntity(
-            0,
-            kelasKOMMAS,
-            mhs4Nim,
+            0L,
+            courseKOMMAS,
+            student4Id,
             oneMonthAgo,
             "Hadir",
         ),
     )
     attendanceDao.insertAttendance(
         AttendanceEntity(
-            0,
-            kelasKOMMAS,
-            mhs4Nim,
+            0L,
+            courseKOMMAS,
+            student4Id,
             twoWeeksAgo,
             "Hadir",
         ),
     )
     attendanceDao.insertAttendance(
         AttendanceEntity(
-            0,
-            kelasWEB,
-            mhs3Nim,
+            0L,
+            courseWEB,
+            student3Id,
             twoWeeksAgo,
             "Hadir",
         ),
     )
     attendanceDao.insertAttendance(
         AttendanceEntity(
-            0,
-            kelasWEB,
-            mhs4Nim,
+            0L,
+            courseWEB,
+            student4Id,
             twoWeeksAgo,
             "Hadir",
         ),
     )
     attendanceDao.insertAttendance(
         AttendanceEntity(
-            0,
-            kelasPOLPEM,
-            mhs5Nim,
+            0L,
+            coursePOLPEM,
+            student5Id,
             oneMonthAgo,
             "Hadir",
         ),
     )
     attendanceDao.insertAttendance(
         AttendanceEntity(
-            0,
-            kelasPOLPEM,
-            mhs6Nim,
+            0L,
+            coursePOLPEM,
+            student6Id,
             oneMonthAgo,
             "Hadir",
         ),
     )
     attendanceDao.insertAttendance(
         AttendanceEntity(
-            0,
-            kelasPOLPEM,
-            mhs5Nim,
+            0L,
+            coursePOLPEM,
+            student5Id,
             twoWeeksAgo,
             "Hadir",
         ),
     )
     attendanceDao.insertAttendance(
         AttendanceEntity(
-            0,
-            kelasPOLPEM,
-            mhs6Nim,
+            0L,
+            coursePOLPEM,
+            student6Id,
             twoWeeksAgo,
             "Alpha",
         ),
     )
     attendanceDao.insertAttendance(
         AttendanceEntity(
-            0,
-            kelasKEBPUB,
-            mhs5Nim,
+            0L,
+            courseKEBPUB,
+            student5Id,
             twoWeeksAgo,
             "Hadir",
         ),

@@ -1,29 +1,30 @@
 package com.mjs.core.data.source.local.room.prepopulate
 
 import com.mjs.core.data.source.local.entity.MaterialEntity
-import com.mjs.core.data.source.local.room.dao.TaskDao
+import com.mjs.core.data.source.local.room.dao.CourseDao
+import java.util.Date
 
 internal suspend fun populateMaterials(
-    taskDao: TaskDao,
-    kelasPML: String,
-    kelasAI: String,
-    kelasBDT: String,
-    kelasAPSI: String,
-    kelasKOMMAS: String,
-    kelasWEB: String,
-    kelasJARKOM: String,
-    kelasPOLPEM: String,
-    kelasKEBPUB: String,
-    kelasPEMDA: String,
-    oneMonthAgo: String,
-    threeDaysAgo: String,
-    twoWeeksAgo: String,
-    oneWeekAgo: String,
+    courseDao: CourseDao,
+    coursePML: String,
+    courseAI: String,
+    courseBDT: String,
+    courseAPSI: String,
+    courseKOMMAS: String,
+    courseWEB: String,
+    courseJARKOM: String,
+    coursePOLPEM: String,
+    courseKEBPUB: String,
+    coursePEMDA: String,
+    oneMonthAgo: Date,
+    threeDaysAgo: Date,
+    twoWeeksAgo: Date,
+    oneWeekAgo: Date,
 ) {
-    taskDao.insertMaterial(
+    courseDao.insertMaterial(
         MaterialEntity(
-            0,
-            kelasPML,
+            0L,
+            coursePML,
             "Slide Pengantar Kotlin",
             "Pengenalan dasar bahasa Kotlin untuk Android.",
             "kotlin_intro.pdf",
@@ -31,10 +32,10 @@ internal suspend fun populateMaterials(
             "pdf",
         ),
     )
-    taskDao.insertMaterial(
+    courseDao.insertMaterial(
         MaterialEntity(
-            0,
-            kelasPML,
+            0L,
+            coursePML,
             "Video Tutorial Jetpack Compose",
             "Link video tutorial membuat UI dengan Compose.",
             "https://youtube.com/compose-tutorial",
@@ -42,10 +43,10 @@ internal suspend fun populateMaterials(
             "link",
         ),
     )
-    taskDao.insertMaterial(
+    courseDao.insertMaterial(
         MaterialEntity(
-            0,
-            kelasAI,
+            0L,
+            courseAI,
             "Paper Deep Learning",
             "Riset terkini tentang convolutional neural networks.",
             "cnn_research.pdf",
@@ -53,10 +54,10 @@ internal suspend fun populateMaterials(
             "pdf",
         ),
     )
-    taskDao.insertMaterial(
+    courseDao.insertMaterial(
         MaterialEntity(
-            0,
-            kelasBDT,
+            0L,
+            courseBDT,
             "Modul Replikasi Database",
             "Konsep dan teknik replikasi pada basis data terdistribusi.",
             "replikasi_db.pdf",
@@ -64,10 +65,10 @@ internal suspend fun populateMaterials(
             "pdf",
         ),
     )
-    taskDao.insertMaterial(
+    courseDao.insertMaterial(
         MaterialEntity(
-            0,
-            kelasAPSI,
+            0L,
+            courseAPSI,
             "Studi Kasus Perancangan SI",
             "Contoh analisis dan perancangan sistem untuk e-commerce.",
             "case_study_ecommerce.docx",
@@ -75,10 +76,10 @@ internal suspend fun populateMaterials(
             "docx",
         ),
     )
-    taskDao.insertMaterial(
+    courseDao.insertMaterial(
         MaterialEntity(
-            0,
-            kelasKOMMAS,
+            0L,
+            courseKOMMAS,
             "Ebook Digital Marketing",
             "Panduan lengkap strategi pemasaran digital.",
             "digital_marketing_guide.epub",
@@ -86,10 +87,10 @@ internal suspend fun populateMaterials(
             "epub",
         ),
     )
-    taskDao.insertMaterial(
+    courseDao.insertMaterial(
         MaterialEntity(
-            0,
-            kelasWEB,
+            0L,
+            courseWEB,
             "Dokumentasi ReactJS",
             "Link ke dokumentasi resmi ReactJS.",
             "https://reactjs.org/docs",
@@ -97,10 +98,10 @@ internal suspend fun populateMaterials(
             "link",
         ),
     )
-    taskDao.insertMaterial(
+    courseDao.insertMaterial(
         MaterialEntity(
-            0,
-            kelasJARKOM,
+            0L,
+            courseJARKOM,
             "Simulasi Jaringan Cisco",
             "File packet tracer untuk simulasi jaringan.",
             "simulasi_router.pkt",
@@ -108,10 +109,10 @@ internal suspend fun populateMaterials(
             "pkt",
         ),
     )
-    taskDao.insertMaterial(
+    courseDao.insertMaterial(
         MaterialEntity(
-            0,
-            kelasPOLPEM,
+            0L,
+            coursePOLPEM,
             "Buku Dasar Ilmu Pemerintahan",
             "Referensi utama mata kuliah.",
             "dasar_pemerintahan.pdf",
@@ -119,10 +120,10 @@ internal suspend fun populateMaterials(
             "pdf",
         ),
     )
-    taskDao.insertMaterial(
+    courseDao.insertMaterial(
         MaterialEntity(
-            0,
-            kelasKEBPUB,
+            0L,
+            courseKEBPUB,
             "Contoh Analisis Kebijakan",
             "Studi kasus analisis kebijakan pendidikan.",
             "analisis_kebijakan_pendidikan.pdf",
@@ -130,10 +131,10 @@ internal suspend fun populateMaterials(
             "pdf",
         ),
     )
-    taskDao.insertMaterial(
+    courseDao.insertMaterial(
         MaterialEntity(
-            0,
-            kelasPEMDA,
+            0L,
+            coursePEMDA,
             "UU Otonomi Daerah",
             "Salinan Undang-Undang terkait Pemda.",
             "uu_otda.pdf",

@@ -10,21 +10,21 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ForumDao {
-    @Query("SELECT * FROM forums WHERE kelas_id = :kelasId")
-    fun getForumsByClass(kelasId: String): Flow<List<ForumEntity>>
+    @Query("SELECT * FROM forums WHERE course_id = :courseId")
+    fun getForumsByCourse(courseId: String): Flow<List<ForumEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertForum(forum: ForumEntity): Long
 
-    @Query("SELECT * FROM posts WHERE forum_id = :forumId ORDER BY tanggal_post ASC")
-    fun getPostsByForum(forumId: Int): Flow<List<PostEntity>>
+    @Query("SELECT * FROM posts WHERE forum_id = :forumId ORDER BY post_date ASC")
+    fun getPostsByForumId(forumId: Long): Flow<List<PostEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPost(post: PostEntity)
 
-    @Query("SELECT forum_id FROM forums WHERE judul_forum = :judul AND kelas_id = :kelasId ORDER BY forum_id DESC LIMIT 1")
-    suspend fun getForumIdByTitleAndClassId(
-        judul: String,
-        kelasId: String,
-    ): Int?
+    @Query("SELECT forum_id FROM forums WHERE forum_title = :forumTitle AND course_id = :courseId ORDER BY forum_id DESC LIMIT 1")
+    suspend fun getForumIdByTitleAndCourseId(
+        forumTitle: String,
+        courseId: String,
+    ): Long?
 }

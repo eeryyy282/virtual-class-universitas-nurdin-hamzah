@@ -2,21 +2,21 @@ package com.mjs.core.domain.usecase.virtualclass
 
 import com.mjs.core.data.Resource
 import com.mjs.core.data.source.local.entity.AssignmentEntity
-import com.mjs.core.data.source.local.entity.AttendanceEntity
 import com.mjs.core.data.source.local.entity.EnrollmentEntity
-import com.mjs.core.data.source.local.entity.MahasiswaEntity
 import com.mjs.core.data.source.local.entity.PostEntity
+import com.mjs.core.data.source.local.entity.StudentEntity
 import com.mjs.core.data.source.local.entity.SubmissionEntity
+import com.mjs.core.data.source.local.entity.attendance.AttendanceEntity
 import com.mjs.core.data.source.local.pref.AppPreference
-import com.mjs.core.domain.model.Dosen
+import com.mjs.core.domain.model.Assignment
+import com.mjs.core.domain.model.Attendance
+import com.mjs.core.domain.model.Course
 import com.mjs.core.domain.model.Forum
-import com.mjs.core.domain.model.Kehadiran
-import com.mjs.core.domain.model.Kelas
-import com.mjs.core.domain.model.Mahasiswa
-import com.mjs.core.domain.model.Materi
-import com.mjs.core.domain.model.Postingan
-import com.mjs.core.domain.model.Tugas
-import com.mjs.core.ui.task.SubmissionListItem
+import com.mjs.core.domain.model.Lecturer
+import com.mjs.core.domain.model.Material
+import com.mjs.core.domain.model.Post
+import com.mjs.core.domain.model.Student
+import com.mjs.core.ui.submission.SubmissionListItem
 import kotlinx.coroutines.flow.Flow
 
 interface VirtualClassUseCase {
@@ -24,141 +24,141 @@ interface VirtualClassUseCase {
 
     suspend fun saveThemeSetting(isDarkModeActive: Boolean)
 
-    fun getLoggedInUserId(): Flow<Int?>
+    fun getLoggedInUserId(): Flow<Long?>
 
     fun getLoggedInUserType(): Flow<String?>
 
     fun getLoginStatus(): Flow<Boolean>
 
     suspend fun saveLoginSession(
-        userId: Int,
+        userId: Long,
         userType: String,
     )
 
     suspend fun clearLoginSession()
 
-    fun loginDosen(
-        nidn: String,
+    fun loginLecturer(
+        lecturerId: Long,
         password: String,
-    ): Flow<Resource<Dosen>>
+    ): Flow<Resource<Lecturer>>
 
-    fun loginMahasiswa(
-        nim: String,
+    fun loginStudent(
+        studentId: Long,
         password: String,
-    ): Flow<Resource<Mahasiswa>>
+    ): Flow<Resource<Student>>
 
-    fun getMahasiswaByNim(nim: Int): Flow<Resource<Mahasiswa>>
+    fun getStudentByStudentId(studentId: Long): Flow<Resource<Student>>
 
-    fun getDosenByNidn(nidn: Int): Flow<Resource<Dosen>>
+    fun getLecturerByLecturerId(lecturerId: Long): Flow<Resource<Lecturer>>
 
-    suspend fun registerMahasiswa(mahasiswa: MahasiswaEntity): Flow<Resource<String>>
+    suspend fun registerStudent(student: StudentEntity): Flow<Resource<String>>
 
-    suspend fun updateMahasiswaProfile(mahasiswa: Mahasiswa): Flow<Resource<String>>
+    suspend fun updateStudentProfile(student: Student): Flow<Resource<String>>
 
-    suspend fun updateDosenProfile(dosen: Dosen): Flow<Resource<String>>
+    suspend fun updateLecturerProfile(lecturer: Lecturer): Flow<Resource<String>>
 
-    fun getAllKelas(): Flow<Resource<List<Kelas>>>
+    fun getAllCourse(): Flow<Resource<List<Course>>>
 
-    fun getAllKelasByJurusan(jurusan: String): Flow<Resource<List<Kelas>>>
+    fun getAllCourseByDepartment(department: String): Flow<Resource<List<Course>>>
 
-    fun getKelasById(kelasId: String): Flow<Resource<Kelas>>
+    fun getCourseById(courseId: String): Flow<Resource<Course>>
 
-    fun getEnrolledClasses(nim: Int): Flow<Resource<List<EnrollmentEntity>>>
+    fun getEnrolledCourse(studentId: Long): Flow<Resource<List<EnrollmentEntity>>>
 
-    fun getEnrollmentByNimAndKelasId(
-        nim: Int,
-        kelasId: String,
+    fun getEnrollmentByStudentIdAndCourseId(
+        studentId: Long,
+        courseId: String,
     ): Flow<EnrollmentEntity?>
 
-    suspend fun enrollToClass(enrollment: EnrollmentEntity): Flow<Resource<String>>
+    suspend fun enrollToCourse(enrollment: EnrollmentEntity): Flow<Resource<String>>
 
-    suspend fun leaveClass(
-        nim: Int,
-        kelasId: String,
+    suspend fun leaveCourse(
+        studentId: Long,
+        courseId: String,
     ): Flow<Resource<String>>
 
-    fun getMaterialsByClass(kelasId: String): Flow<Resource<List<Materi>>>
+    fun getMaterialsByCourse(courseId: String): Flow<Resource<List<Material>>>
 
-    fun getAssignmentsByClass(kelasId: String): Flow<Resource<List<Tugas>>>
+    fun getAssignmentsByCourse(courseId: String): Flow<Resource<List<Assignment>>>
 
-    fun getAssignmentById(assignmentId: Int): Flow<Resource<Tugas?>>
+    fun getAssignmentById(assignmentId: Long): Flow<Resource<Assignment?>>
 
     suspend fun insertAssignment(assignment: AssignmentEntity): Flow<Resource<String>>
 
-    suspend fun updateTask(tugas: Tugas): Flow<Resource<String>>
+    suspend fun updateAssignment(assignment: Assignment): Flow<Resource<String>>
 
-    suspend fun deleteAssignmentById(assignmentId: Int): Flow<Resource<String>>
+    suspend fun deleteAssignmentById(assignmentId: Long): Flow<Resource<String>>
 
     suspend fun insertSubmission(submission: SubmissionEntity): Flow<Resource<String>>
 
-    fun getSubmissionListItemsByAssignment(assignmentId: Int): Flow<Resource<List<SubmissionListItem>>>
+    fun getSubmissionListItemsByAssignment(assignmentId: Long): Flow<Resource<List<SubmissionListItem>>>
 
-    fun getSubmissionDetailById(submissionId: Int): Flow<Resource<SubmissionListItem?>>
+    fun getSubmissionDetailById(submissionId: Long): Flow<Resource<SubmissionListItem?>>
 
     suspend fun updateSubmissionGradeAndNote(
-        submissionId: Int,
+        submissionId: Long,
         grade: Int?,
         note: String?,
     ): Flow<Resource<String>>
 
-    fun getNotFinishedTasks(
-        nim: Int,
-        kelasId: String,
-    ): Flow<Resource<List<Tugas>>>
+    fun getNotFinishedAssignment(
+        studentId: Long,
+        courseId: String,
+    ): Flow<Resource<List<Assignment>>>
 
-    fun getLateTasks(
-        nim: Int,
-        kelasId: String,
-    ): Flow<Resource<List<Tugas>>>
+    fun getLateAssignment(
+        studentId: Long,
+        courseId: String,
+    ): Flow<Resource<List<Assignment>>>
 
-    fun getActiveAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>>
+    fun getActiveAssignmentsForLecturer(lecturerId: Long): Flow<Resource<List<Assignment>>>
 
-    fun getPastDeadlineAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>>
+    fun getPastDeadlineAssignmentsForLecturer(lecturerId: Long): Flow<Resource<List<Assignment>>>
 
-    fun getForumsByClass(kelasId: String): Flow<Resource<List<Forum>>>
+    fun getForumsByCourse(courseId: String): Flow<Resource<List<Forum>>>
 
-    fun getPostsByForum(forumId: Int): Flow<Resource<List<Postingan>>>
+    fun getPostsByForum(forumId: Long): Flow<Resource<List<Post>>>
 
     suspend fun insertPost(post: PostEntity): Flow<Resource<String>>
 
     fun getAttendanceHistory(
-        nim: Int,
-        kelasId: String,
-    ): Flow<Resource<List<Kehadiran>>>
+        studentId: Long,
+        courseId: String,
+    ): Flow<Resource<List<Attendance>>>
 
-    suspend fun insertAttendance(attendance: AttendanceEntity): Flow<Resource<String>>
+    suspend fun insertAttendance(attendance: AttendanceEntity): Flow<Resource<Long>>
 
-    fun getTodaySchedule(nim: Int): Flow<Resource<List<Kelas>>>
+    fun getTodaySchedule(studentId: Long): Flow<Resource<List<Course>>>
 
-    fun getTodayScheduleDosen(nidn: Int): Flow<Resource<List<Kelas>>>
+    fun getTodayScheduleLecturer(lecturerId: Long): Flow<Resource<List<Course>>>
 
-    fun getAllSchedulesByNim(nim: Int): Flow<Resource<List<Kelas>>>
+    fun getAllSchedulesByStudentId(studentId: Long): Flow<Resource<List<Course>>>
 
-    fun getAllSchedulesByNidn(nidn: Int): Flow<Resource<List<Kelas>>>
+    fun getAllSchedulesByLecturerId(lecturerId: Long): Flow<Resource<List<Course>>>
 
     fun getAttendanceStreak(
-        nim: Int,
-        kelasId: String,
+        studentId: Long,
+        courseId: String,
     ): Flow<Resource<Int>>
 
-    fun getMahasiswaByKelasId(kelasId: String): Flow<Resource<List<Mahasiswa>>>
+    fun getStudentByCourseId(courseId: String): Flow<Resource<List<Student>>>
 
-    fun getMahasiswaCountByKelasId(kelasId: String): Flow<Resource<Int>>
+    fun getStudentCountByCourseId(courseId: String): Flow<Resource<Int>>
 
-    fun getPendingEnrollmentRequests(kelasId: String): Flow<Resource<List<Mahasiswa>>>
+    fun getPendingEnrollmentRequests(courseId: String): Flow<Resource<List<Student>>>
 
-    fun getPendingEnrollmentRequestCount(kelasId: String): Flow<Resource<Int>>
+    fun getPendingEnrollmentRequestCount(courseId: String): Flow<Resource<Int>>
 
-    fun getPendingEnrollmentRequestCountForDosen(nidn: Int): Flow<Resource<Int>>
+    fun getPendingEnrollmentRequestCountForLecturer(lecturerId: Long): Flow<Resource<Int>>
 
     suspend fun acceptEnrollment(
-        nim: Int,
-        kelasId: String,
+        studentId: Long,
+        courseId: String,
     ): Flow<Resource<String>>
 
     suspend fun rejectEnrollment(
-        nim: Int,
-        kelasId: String,
+        studentId: Long,
+        courseId: String,
     ): Flow<Resource<String>>
 
     fun getLastNotifiedPendingCount(): Flow<Int>
@@ -166,7 +166,7 @@ interface VirtualClassUseCase {
     suspend fun saveLastNotifiedPendingCount(count: Int)
 
     companion object {
-        const val USER_TYPE_MAHASISWA = AppPreference.USER_TYPE_MAHASISWA
-        const val USER_TYPE_DOSEN = AppPreference.USER_TYPE_DOSEN
+        const val USER_TYPE_STUDENT = AppPreference.USER_TYPE_STUDENT
+        const val USER_TYPE_LECTURER = AppPreference.USER_TYPE_LECTURER
     }
 }

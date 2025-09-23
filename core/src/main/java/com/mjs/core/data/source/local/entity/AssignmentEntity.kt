@@ -4,14 +4,15 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.util.Date
 
 @Entity(
     tableName = "assignments",
     foreignKeys = [
         ForeignKey(
-            entity = KelasEntity::class,
-            parentColumns = ["kelas_id"],
-            childColumns = ["kelas_id"],
+            entity = CourseEntity::class,
+            parentColumns = ["course_id"],
+            childColumns = ["course_id"],
             onDelete = ForeignKey.CASCADE,
         ),
     ],
@@ -19,14 +20,14 @@ import androidx.room.PrimaryKey
 data class AssignmentEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "assignment_id")
-    val assignmentId: Int = 0,
-    @ColumnInfo(name = "kelas_id")
-    val kelasId: String,
-    @ColumnInfo(name = "judul_tugas")
-    val judulTugas: String,
-    val deskripsi: String,
-    val tanggalMulai: String,
-    val tanggalSelesai: String,
+    val assignmentId: Long = 0L,
+    @ColumnInfo(name = "course_id")
+    val courseId: String,
+    @ColumnInfo(name = "assignment_title")
+    val assignmentTitle: String,
+    val description: String,
+    val startDate: Date,
+    val deadlineDate: Date,
     @ColumnInfo(name = "attachment")
     val attachment: String? = null,
 )

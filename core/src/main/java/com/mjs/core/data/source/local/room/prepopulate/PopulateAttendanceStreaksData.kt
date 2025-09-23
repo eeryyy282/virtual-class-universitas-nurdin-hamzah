@@ -1,27 +1,28 @@
 package com.mjs.core.data.source.local.room.prepopulate
 
-import com.mjs.core.data.source.local.entity.AttendanceStreakEntity
+import com.mjs.core.data.source.local.entity.attendance.AttendanceStreakEntity
 import com.mjs.core.data.source.local.room.dao.AttendanceDao
+import java.util.Date
 
 internal suspend fun populateAttendanceStreaks(
     attendanceDao: AttendanceDao,
-    mhs1Nim: Int,
-    mhs3Nim: Int,
-    mhs4Nim: Int,
-    mhs5Nim: Int,
-    mhs6Nim: Int,
-    kelasPML: String,
-    kelasBDT: String,
-    kelasKOMMAS: String,
-    kelasPOLPEM: String,
-    twoWeeksAgo: String,
-    oneMonthAgo: String,
+    student1Id: Long,
+    student3Id: Long,
+    student4Id: Long,
+    student5Id: Long,
+    student6Id: Long,
+    coursePML: String,
+    courseBDT: String,
+    courseKOMMAS: String,
+    coursePOLPEM: String,
+    twoWeeksAgo: Date,
+    oneMonthAgo: Date,
 ) {
     attendanceDao.insertAttendanceStreak(
         AttendanceStreakEntity(
-            0,
-            mhs3Nim,
-            kelasPML,
+            0L,
+            student3Id,
+            coursePML,
             2,
             5,
             twoWeeksAgo,
@@ -29,9 +30,9 @@ internal suspend fun populateAttendanceStreaks(
     )
     attendanceDao.insertAttendanceStreak(
         AttendanceStreakEntity(
-            0,
-            mhs1Nim,
-            kelasBDT,
+            0L,
+            student1Id,
+            courseBDT,
             3,
             3,
             twoWeeksAgo,
@@ -39,9 +40,9 @@ internal suspend fun populateAttendanceStreaks(
     )
     attendanceDao.insertAttendanceStreak(
         AttendanceStreakEntity(
-            0,
-            mhs4Nim,
-            kelasKOMMAS,
+            0L,
+            student4Id,
+            courseKOMMAS,
             4,
             4,
             twoWeeksAgo,
@@ -49,9 +50,9 @@ internal suspend fun populateAttendanceStreaks(
     )
     attendanceDao.insertAttendanceStreak(
         AttendanceStreakEntity(
-            0,
-            mhs5Nim,
-            kelasPOLPEM,
+            0L,
+            student5Id,
+            coursePOLPEM,
             2,
             3,
             twoWeeksAgo,
@@ -59,9 +60,9 @@ internal suspend fun populateAttendanceStreaks(
     )
     attendanceDao.insertAttendanceStreak(
         AttendanceStreakEntity(
-            0,
-            mhs6Nim,
-            kelasPOLPEM,
+            0L,
+            student6Id,
+            coursePOLPEM,
             1,
             2,
             oneMonthAgo,

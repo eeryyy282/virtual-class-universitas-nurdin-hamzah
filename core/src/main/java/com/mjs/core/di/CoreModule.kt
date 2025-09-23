@@ -18,8 +18,9 @@ val databaseModule =
         val sqlCipherFactory = SupportFactory(passphrase)
 
         factory { get<VirtualClassDatabase>().authDao() }
-        factory { get<VirtualClassDatabase>().classroomDao() }
-        factory { get<VirtualClassDatabase>().taskDao() }
+        factory { get<VirtualClassDatabase>().courseDao() }
+        factory { get<VirtualClassDatabase>().assignmentDao() }
+        factory { get<VirtualClassDatabase>().submissionDao() }
         factory { get<VirtualClassDatabase>().forumDao() }
         factory { get<VirtualClassDatabase>().attendanceDao() }
 
@@ -32,7 +33,7 @@ val databaseModule =
                         androidContext(),
                         VirtualClassDatabase::class.java,
                         "virtual_class.db",
-                    ).fallbackToDestructiveMigration(false)
+                    ).fallbackToDestructiveMigration(true)
                     .openHelperFactory(sqlCipherFactory)
                     .addCallback(callback)
                     .build()
@@ -46,8 +47,9 @@ val repositoryModule =
             LocalDataSource(
                 appPreference = get(),
                 authDao = get(),
-                classroomDao = get(),
-                taskDao = get(),
+                courseDao = get(),
+                assignmentDao = get(),
+                submissionDao = get(),
                 forumDao = get(),
                 attendanceDao = get(),
             )

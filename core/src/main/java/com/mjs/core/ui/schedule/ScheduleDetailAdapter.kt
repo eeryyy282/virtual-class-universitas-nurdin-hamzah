@@ -7,12 +7,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mjs.core.databinding.ItemScheduleDetailBinding
-import com.mjs.core.domain.model.Kelas
+import com.mjs.core.domain.model.Course
+import com.mjs.core.utils.DateUtils
 
-class ScheduleDetailAdapter : ListAdapter<Kelas, ScheduleDetailAdapter.ListViewHolder>(KELAS_DIFF_CALLBACK) {
-    var onItemClick: ((Kelas) -> Unit)? = null
-    var getDosenName: ((String) -> String)? = null
-    var isForDosenView: Boolean = false
+class ScheduleDetailAdapter : ListAdapter<Course, ScheduleDetailAdapter.ListViewHolder>(COURSE_DIFF_CALLBACK) {
+    var onItemClick: ((Course) -> Unit)? = null
+    var getLecturerName: ((Long) -> String?)? = null
+    var isForLecturerView: Boolean = false
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -27,37 +28,32 @@ class ScheduleDetailAdapter : ListAdapter<Kelas, ScheduleDetailAdapter.ListViewH
         holder: ListViewHolder,
         position: Int,
     ) {
-        val data = getItem(position)
-        holder.bind(data)
+        val courseData = getItem(position)
+        holder.bind(courseData)
     }
 
-    @Suppress("DEPRECATION")
     inner class ListViewHolder(
         private val binding: ItemScheduleDetailBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: Kelas) {
+        fun bind(course: Course) {
             with(binding) {
-                tvScheduleClassroom.text =
-                    data.jadwal
-                        .split(",")
-                        .getOrElse(1) { data.jadwal }
-                        .trim()
-                textSubjectSchedule.text = data.namaKelas
-                tvSubjectRoom.text = data.ruang
+                tvScheduleTime.text = DateUtils.formatScheduleTime(course.schedule.toString())
+                tvCourseName.text = course.courseName
+                tvRoom.text = course.room
 
-                if (isForDosenView) {
-                    tvDosenSubject.visibility = View.GONE
+                if (isForLecturerView) {
+                    tvLecturerName.visibility = View.GONE
                 } else {
-                    tvDosenSubject.visibility = View.VISIBLE
-                    tvDosenSubject.text =
-                        getDosenName?.invoke(data.nidn.toString()) ?: data.nidn.toString()
+                    tvLecturerName.visibility = View.VISIBLE
+                    tvLecturerName.text =
+                        getLecturerName?.invoke(course.lecturerId) ?: course.lecturerId.toString()
                 }
             }
         }
 
         init {
             binding.root.setOnClickListener {
-                val position = adapterPosition
+                val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     onItemClick?.invoke(getItem(position))
                 }
@@ -66,16 +62,16 @@ class ScheduleDetailAdapter : ListAdapter<Kelas, ScheduleDetailAdapter.ListViewH
     }
 
     companion object {
-        private val KELAS_DIFF_CALLBACK =
-            object : DiffUtil.ItemCallback<Kelas>() {
+        private val COURSE_DIFF_CALLBACK =
+            object : DiffUtil.ItemCallback<Course>() {
                 override fun areItemsTheSame(
-                    oldItem: Kelas,
-                    newItem: Kelas,
-                ): Boolean = oldItem.kelasId == newItem.kelasId
+                    oldItem: Course,
+                    newItem: Course,
+                ): Boolean = oldItem.courseId == newItem.courseId
 
                 override fun areContentsTheSame(
-                    oldItem: Kelas,
-                    newItem: Kelas,
+                    oldItem: Course,
+                    newItem: Course,
                 ): Boolean = oldItem == newItem
             }
     }

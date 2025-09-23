@@ -2,59 +2,63 @@ package com.mjs.core.data.source.local.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.mjs.core.data.source.local.entity.AssignmentEntity
-import com.mjs.core.data.source.local.entity.AttendanceEntity
-import com.mjs.core.data.source.local.entity.AttendanceStreakEntity
-import com.mjs.core.data.source.local.entity.DosenEntity
+import com.mjs.core.data.source.local.entity.CourseEntity
 import com.mjs.core.data.source.local.entity.EnrollmentEntity
 import com.mjs.core.data.source.local.entity.ForumEntity
-import com.mjs.core.data.source.local.entity.KelasEntity
-import com.mjs.core.data.source.local.entity.MahasiswaEntity
+import com.mjs.core.data.source.local.entity.LecturerEntity
 import com.mjs.core.data.source.local.entity.MaterialEntity
 import com.mjs.core.data.source.local.entity.PostEntity
+import com.mjs.core.data.source.local.entity.StudentEntity
 import com.mjs.core.data.source.local.entity.SubmissionEntity
+import com.mjs.core.data.source.local.entity.attendance.AttendanceEntity
+import com.mjs.core.data.source.local.entity.attendance.AttendanceStreakEntity
+import com.mjs.core.data.source.local.room.dao.AssignmentDao
 import com.mjs.core.data.source.local.room.dao.AttendanceDao
 import com.mjs.core.data.source.local.room.dao.AuthDao
-import com.mjs.core.data.source.local.room.dao.ClassroomDao
+import com.mjs.core.data.source.local.room.dao.CourseDao
 import com.mjs.core.data.source.local.room.dao.ForumDao
-import com.mjs.core.data.source.local.room.dao.TaskDao
+import com.mjs.core.data.source.local.room.dao.SubmissionDao
 import com.mjs.core.data.source.local.room.prepopulate.populateAssignmentsAndGetIds
 import com.mjs.core.data.source.local.room.prepopulate.populateAttendance
 import com.mjs.core.data.source.local.room.prepopulate.populateAttendanceStreaks
-import com.mjs.core.data.source.local.room.prepopulate.populateDosen
+import com.mjs.core.data.source.local.room.prepopulate.populateCourses
 import com.mjs.core.data.source.local.room.prepopulate.populateEnrollments
 import com.mjs.core.data.source.local.room.prepopulate.populateForumsAndGetIds
-import com.mjs.core.data.source.local.room.prepopulate.populateKelas
-import com.mjs.core.data.source.local.room.prepopulate.populateMahasiswa
+import com.mjs.core.data.source.local.room.prepopulate.populateLecturers
 import com.mjs.core.data.source.local.room.prepopulate.populateMaterials
 import com.mjs.core.data.source.local.room.prepopulate.populatePosts
+import com.mjs.core.data.source.local.room.prepopulate.populateStudents
 import com.mjs.core.data.source.local.room.prepopulate.populateSubmissions
+import com.mjs.core.utils.TimeDateConverters
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
-import java.util.Locale
 
 @Database(
     entities = [
-        MahasiswaEntity::class, DosenEntity::class,
-        KelasEntity::class, EnrollmentEntity::class, MaterialEntity::class,
+        StudentEntity::class, LecturerEntity::class,
+        CourseEntity::class, EnrollmentEntity::class, MaterialEntity::class,
         AssignmentEntity::class, SubmissionEntity::class, ForumEntity::class,
         PostEntity::class, AttendanceEntity::class, AttendanceStreakEntity::class,
     ],
     version = 1,
     exportSchema = false,
 )
+@TypeConverters(TimeDateConverters::class)
 abstract class VirtualClassDatabase : RoomDatabase() {
     abstract fun authDao(): AuthDao
 
-    abstract fun classroomDao(): ClassroomDao
+    abstract fun courseDao(): CourseDao
 
-    abstract fun taskDao(): TaskDao
+    abstract fun assignmentDao(): AssignmentDao
+
+    abstract fun submissionDao(): SubmissionDao
 
     abstract fun forumDao(): ForumDao
 
@@ -74,135 +78,191 @@ abstract class VirtualClassDatabase : RoomDatabase() {
         }
 
         private fun getDate(
-            dateFormat: SimpleDateFormat,
             timeUnit: Int,
             amount: Int,
             referenceDate: Date = Date(),
-        ): String {
+        ): Date {
             val cal = Calendar.getInstance()
             cal.time = referenceDate
             cal.add(
                 timeUnit,
                 amount,
             )
-            return dateFormat.format(cal.time)
+            return cal.time
+        }
+
+        private fun createScheduleTime(
+            dayOfWeek: Int,
+            hour: Int,
+            minute: Int,
+        ): Date {
+            val calendar = Calendar.getInstance()
+
+            calendar.set(
+                2024,
+                Calendar.JULY,
+                22,
+                hour,
+                minute,
+                0,
+            )
+            while (calendar.get(Calendar.DAY_OF_WEEK) != dayOfWeek) {
+                calendar.add(Calendar.DAY_OF_MONTH, 1)
+            }
+            if (calendar.time.before(Date())) {
+                calendar.add(
+                    Calendar.DAY_OF_YEAR,
+                    7 * ((Date().time - calendar.time.time) / (7 * 24 * 60 * 60 * 1000) + 1).toInt(),
+                )
+            }
+            return calendar.time
         }
 
         suspend fun populateDatabaseInternal(database: VirtualClassDatabase) {
             val authDao = database.authDao()
-            val classroomDao = database.classroomDao()
-            val taskDao = database.taskDao()
+            val courseDao = database.courseDao()
+            val assignmentDao = database.assignmentDao()
+            val submissionDao = database.submissionDao()
             val forumDao = database.forumDao()
             val attendanceDao = database.attendanceDao()
 
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-
             val today = Date()
-            val currentDate = getDate(dateFormat, Calendar.DAY_OF_YEAR, 0, today)
-            val yesterday = getDate(dateFormat, Calendar.DAY_OF_YEAR, -1, today)
-            val threeDaysAgo = getDate(dateFormat, Calendar.DAY_OF_YEAR, -3, today)
-            val oneWeekAgo = getDate(dateFormat, Calendar.DAY_OF_YEAR, -7, today)
-            val twoWeeksAgo = getDate(dateFormat, Calendar.DAY_OF_YEAR, -14, today)
-            val oneMonthAgo = getDate(dateFormat, Calendar.MONTH, -1, today)
-            val inThreeDays = getDate(dateFormat, Calendar.DAY_OF_YEAR, 3, today)
-            val inOneWeek = getDate(dateFormat, Calendar.DAY_OF_YEAR, 7, today)
-            val inTwoWeeks = getDate(dateFormat, Calendar.DAY_OF_YEAR, 14, today)
-            val inOneMonth = getDate(dateFormat, Calendar.MONTH, 1, today)
+            val currentDate = getDate(Calendar.DAY_OF_YEAR, 0, today)
+            val yesterday = getDate(Calendar.DAY_OF_YEAR, -1, today)
+            val threeDaysAgo = getDate(Calendar.DAY_OF_YEAR, -3, today)
+            val sixDaysAgo = getDate(Calendar.DAY_OF_YEAR, -6, today)
+            val oneWeekAgo = getDate(Calendar.DAY_OF_YEAR, -7, today)
+            val tenDaysAgo = getDate(Calendar.DAY_OF_YEAR, -10, today)
+            val twoWeeksAgo = getDate(Calendar.DAY_OF_YEAR, -14, today)
+            val eighteenDaysAgo = getDate(Calendar.DAY_OF_YEAR, -18, today)
+            val nineteenDaysAgo = getDate(Calendar.DAY_OF_YEAR, -19, today)
+            val twentyDaysAgo = getDate(Calendar.DAY_OF_YEAR, -20, today)
+            val oneMonthAgo = getDate(Calendar.MONTH, -1, today)
+            val inThreeDays = getDate(Calendar.DAY_OF_YEAR, 3, today)
+            val inOneWeek = getDate(Calendar.DAY_OF_YEAR, 7, today)
+            val inTwoWeeks = getDate(Calendar.DAY_OF_YEAR, 14, today)
+            val inOneMonth = getDate(Calendar.MONTH, 1, today)
 
-            val roleDosen = "dosen"
-            val roleMahasiswa = "mahasiswa"
+            // Define specific schedule Date objects
+            val scheduleMonday1000 = createScheduleTime(Calendar.MONDAY, 10, 0)
+            val scheduleWednesday0800 = createScheduleTime(Calendar.WEDNESDAY, 8, 0)
+            val scheduleThursday1400 = createScheduleTime(Calendar.THURSDAY, 14, 0)
 
-            val dosen1Nidn = 112233445
-            val dosen2Nidn = 223344556
-            val dosen3Nidn = 334455667
-            val dosen4Nidn = 445566778
-            val dosen5Nidn = 556677889
-            // Mahasiswa NIMS
-            val mhs1Nim = 21111073
-            val mhs2Nim = 22021002
-            val mhs3Nim = 22032003
-            val mhs4Nim = 23041004
-            val mhs5Nim = 23052005
-            val mhs6Nim = 23052006
-            // Kelas IDs
-            val kelasPML = "IF-401"
-            val kelasAI = "IF-503"
-            val kelasWEB = "IF-305"
-            val kelasJARKOM = "IF-301"
-            val kelasGRAFKOM = "IF-405"
-            val kelasBDT = "SI-302"
-            val kelasAPSI = "SI-401"
-            val kelasMANPROSI = "SI-501"
-            val kelasKOMMAS = "IK-201"
-            val kelasJURDIG = "IK-305"
-            val kelasPOLPEM = "IP-101"
-            val kelasKEBPUB = "IP-205"
-            val kelasPEMDA = "IP-303"
+            val roleLecturer = "lecturer"
+            val roleStudent = "student"
+
+            val lecturer1Id: Long = 112233445L
+            val lecturer2Id: Long = 223344556L
+            val lecturer3Id: Long = 334455667L
+            val lecturer4Id: Long = 445566778L
+            val lecturer5Id: Long = 556677889L
+
+            val student1Id: Long = 21111073L
+            val student2Id: Long =
+                22021002L
+            val student3Id: Long = 22032003L
+            val student4Id: Long = 23041004L
+            val student5Id: Long = 23052005L
+            val student6Id: Long = 23052006L
+
+            val coursePML = "IF-401"
+            val courseAI = "IF-503"
+            val courseWEB =
+                "IF-305"
+            val courseJARKOM = "IF-301"
+            val courseGRAFKOM = "IF-405"
+            val courseBDT = "SI-302"
+            val courseAPSI = "SI-401"
+            val courseMANPROSI = "SI-501"
+            val courseKOMMAS = "IK-201"
+            val courseJURDIG = "IK-305"
+            val coursePOLPEM = "IP-101"
+            val courseKEBPUB =
+                "IP-205"
+            val coursePEMDA = "IP-303"
 
             val placeholderImageUrl =
                 "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400"
 
-            populateDosen(authDao, dosen1Nidn, dosen2Nidn, dosen3Nidn, dosen4Nidn, dosen5Nidn)
-            populateMahasiswa(authDao, mhs1Nim, mhs2Nim, mhs3Nim, mhs4Nim, mhs5Nim, mhs6Nim)
-            populateKelas(
-                classroomDao,
+            populateLecturers(
+                authDao,
+                lecturer1Id,
+                lecturer2Id,
+                lecturer3Id,
+                lecturer4Id,
+                lecturer5Id,
+            )
+            populateStudents(
+                authDao,
+                student1Id,
+                student2Id,
+                student3Id,
+                student4Id,
+                student5Id,
+                student6Id,
+            )
+            populateCourses(
+                courseDao,
                 placeholderImageUrl,
-                dosen1Nidn,
-                dosen2Nidn,
-                dosen3Nidn,
-                dosen4Nidn,
-                dosen5Nidn,
-                kelasPML,
-                kelasAI,
-                kelasWEB,
-                kelasJARKOM,
-                kelasGRAFKOM,
-                kelasBDT,
-                kelasAPSI,
-                kelasMANPROSI,
-                kelasKOMMAS,
-                kelasJURDIG,
-                kelasPOLPEM,
-                kelasKEBPUB,
-                kelasPEMDA,
+                lecturer1Id,
+                lecturer2Id,
+                lecturer3Id,
+                lecturer4Id,
+                lecturer5Id,
+                coursePML,
+                courseAI,
+                courseWEB,
+                courseJARKOM,
+                courseGRAFKOM,
+                courseBDT,
+                courseAPSI,
+                courseMANPROSI,
+                courseKOMMAS,
+                courseJURDIG,
+                coursePOLPEM,
+                courseKEBPUB,
+                coursePEMDA,
+                scheduleMonday1000,
+                scheduleWednesday0800,
+                scheduleThursday1400,
             )
             populateEnrollments(
-                classroomDao,
-                mhs1Nim,
-                mhs2Nim,
-                mhs3Nim,
-                mhs4Nim,
-                mhs5Nim,
-                mhs6Nim,
-                kelasPML,
-                kelasAI,
-                kelasWEB,
-                kelasJARKOM,
-                kelasBDT,
-                kelasAPSI,
-                kelasMANPROSI,
-                kelasKOMMAS,
-                kelasJURDIG,
-                kelasPOLPEM,
-                kelasKEBPUB,
-                kelasPEMDA,
+                courseDao,
+                student1Id,
+                student2Id,
+                student3Id,
+                student4Id,
+                student5Id,
+                student6Id,
+                coursePML,
+                courseAI,
+                courseWEB,
+                courseJARKOM,
+                courseBDT,
+                courseAPSI,
+                courseMANPROSI,
+                courseKOMMAS,
+                courseJURDIG,
+                coursePOLPEM,
+                courseKEBPUB,
+                coursePEMDA,
                 oneMonthAgo,
                 twoWeeksAgo,
                 oneWeekAgo,
                 threeDaysAgo,
             )
             populateMaterials(
-                taskDao,
-                kelasPML,
-                kelasAI,
-                kelasBDT,
-                kelasAPSI,
-                kelasKOMMAS,
-                kelasWEB,
-                kelasJARKOM,
-                kelasPOLPEM,
-                kelasKEBPUB,
-                kelasPEMDA,
+                courseDao,
+                coursePML,
+                courseAI,
+                courseBDT,
+                courseAPSI,
+                courseKOMMAS,
+                courseWEB,
+                courseJARKOM,
+                coursePOLPEM,
+                courseKEBPUB,
+                coursePEMDA,
                 oneMonthAgo,
                 threeDaysAgo,
                 twoWeeksAgo,
@@ -211,16 +271,16 @@ abstract class VirtualClassDatabase : RoomDatabase() {
 
             val assignmentIds =
                 populateAssignmentsAndGetIds(
-                    taskDao,
-                    kelasPML,
-                    kelasAI,
-                    kelasBDT,
-                    kelasAPSI,
-                    kelasKOMMAS,
-                    kelasWEB,
-                    kelasPOLPEM,
-                    kelasKEBPUB,
-                    kelasPEMDA,
+                    assignmentDao,
+                    coursePML,
+                    courseAI,
+                    courseBDT,
+                    courseAPSI,
+                    courseKOMMAS,
+                    courseWEB,
+                    coursePOLPEM,
+                    courseKEBPUB,
+                    coursePEMDA,
                     oneMonthAgo,
                     inOneWeek,
                     twoWeeksAgo,
@@ -231,37 +291,37 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                     inThreeDays,
                 )
             populateSubmissions(
-                taskDao,
-                assignmentIds["tugas1PML"]!!,
-                assignmentIds["tugas1AI"]!!,
-                assignmentIds["tugas1BDT"]!!,
-                assignmentIds["tugas1KOMMAS"]!!,
-                assignmentIds["tugas1POLPEM"]!!,
-                assignmentIds["tugas1KEBPUB"]!!,
-                mhs1Nim,
-                mhs2Nim,
-                mhs3Nim,
-                mhs4Nim,
-                mhs5Nim,
-                mhs6Nim,
+                submissionDao,
+                assignmentIds["assignment1PML"]!!,
+                assignmentIds["assignment1AI"]!!,
+                assignmentIds["assignment1BDT"]!!,
+                assignmentIds["assignment1KOMMAS"]!!,
+                assignmentIds["assignment1POLPEM"]!!,
+                assignmentIds["assignment1KEBPUB"]!!,
+                student1Id,
+                student2Id,
+                student3Id,
+                student4Id,
+                student5Id,
+                student6Id,
                 yesterday,
                 currentDate,
             )
 
             populateAttendance(
                 attendanceDao,
-                kelasPML,
-                kelasBDT,
-                kelasKOMMAS,
-                kelasWEB,
-                kelasPOLPEM,
-                kelasKEBPUB,
-                mhs1Nim,
-                mhs2Nim,
-                mhs3Nim,
-                mhs4Nim,
-                mhs5Nim,
-                mhs6Nim,
+                coursePML,
+                courseBDT,
+                courseKOMMAS,
+                courseWEB,
+                coursePOLPEM,
+                courseKEBPUB,
+                student1Id,
+                student2Id,
+                student3Id,
+                student4Id,
+                student5Id,
+                student6Id,
                 oneMonthAgo,
                 twoWeeksAgo,
             )
@@ -269,12 +329,12 @@ abstract class VirtualClassDatabase : RoomDatabase() {
             val forumIds =
                 populateForumsAndGetIds(
                     forumDao,
-                    kelasPML,
-                    kelasAI,
-                    kelasBDT,
-                    kelasKOMMAS,
-                    kelasPOLPEM,
-                    kelasKEBPUB,
+                    coursePML,
+                    courseAI,
+                    courseBDT,
+                    courseKOMMAS,
+                    coursePOLPEM,
+                    courseKEBPUB,
                     oneMonthAgo,
                     twoWeeksAgo,
                     threeDaysAgo,
@@ -288,37 +348,42 @@ abstract class VirtualClassDatabase : RoomDatabase() {
                 forumIds["forumKOMMAS"]!!,
                 forumIds["forumPOLPEM"]!!,
                 forumIds["forumKEBPUB"]!!,
-                dosen1Nidn,
-                dosen2Nidn,
-                dosen4Nidn,
-                dosen5Nidn,
-                mhs1Nim,
-                mhs2Nim,
-                mhs3Nim,
-                mhs4Nim,
-                mhs5Nim,
-                mhs6Nim,
-                roleDosen,
-                roleMahasiswa,
+                lecturer1Id,
+                lecturer2Id,
+                lecturer4Id,
+                lecturer5Id,
+                student1Id,
+                student2Id,
+                student3Id,
+                student4Id,
+                student5Id,
+                student6Id,
+                roleLecturer,
+                roleStudent,
                 oneMonthAgo,
+                twentyDaysAgo,
+                nineteenDaysAgo,
+                eighteenDaysAgo,
                 twoWeeksAgo,
-                threeDaysAgo,
+                tenDaysAgo,
                 oneWeekAgo,
-                currentDate,
+                sixDaysAgo,
+                threeDaysAgo,
                 yesterday,
+                currentDate,
             )
 
             populateAttendanceStreaks(
                 attendanceDao,
-                mhs1Nim,
-                mhs3Nim,
-                mhs4Nim,
-                mhs5Nim,
-                mhs6Nim,
-                kelasPML,
-                kelasBDT,
-                kelasKOMMAS,
-                kelasPOLPEM,
+                student1Id,
+                student3Id,
+                student4Id,
+                student5Id,
+                student6Id,
+                coursePML,
+                courseBDT,
+                courseKOMMAS,
+                coursePOLPEM,
                 twoWeeksAgo,
                 oneMonthAgo,
             )

@@ -2,9 +2,7 @@ package com.mjs.core.data.source.local.room.prepopulate
 
 import com.mjs.core.data.source.local.entity.PostEntity
 import com.mjs.core.data.source.local.room.dao.ForumDao
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import java.util.Date
 
 internal suspend fun populatePosts(
     forumDao: ForumDao,
@@ -14,234 +12,164 @@ internal suspend fun populatePosts(
     forumKOMMASId: Long,
     forumPOLPEMId: Long,
     forumKEBPUBId: Long,
-    dosen1Nidn: Int,
-    dosen2Nidn: Int,
-    dosen4Nidn: Int,
-    dosen5Nidn: Int,
-    mhs1Nim: Int,
-    mhs2Nim: Int,
-    mhs3Nim: Int,
-    mhs4Nim: Int,
-    mhs5Nim: Int,
-    mhs6Nim: Int,
-    roleDosen: String,
-    roleMahasiswa: String,
-    oneMonthAgo: String,
-    twoWeeksAgo: String,
-    threeDaysAgo: String,
-    oneWeekAgo: String,
-    currentDate: String,
-    yesterday: String,
+    lecturer1Id: Long,
+    lecturer2Id: Long,
+    lecturer4Id: Long,
+    lecturer5Id: Long,
+    student1Id: Long,
+    student2Id: Long,
+    student3Id: Long,
+    student4Id: Long,
+    student5Id: Long,
+    student6Id: Long,
+    roleLecturer: String,
+    roleStudent: String,
+    oneMonthAgo: Date,
+    twentyDaysAgo: Date,
+    nineteenDaysAgo: Date,
+    eighteenDaysAgo: Date,
+    twoWeeksAgo: Date,
+    tenDaysAgo: Date,
+    oneWeekAgo: Date,
+    sixDaysAgo: Date,
+    threeDaysAgo: Date,
+    yesterday: Date,
+    currentDate: Date,
 ) {
-    // Forum PML
-    forumDao.insertPost(
-        PostEntity(
-            0,
-            forumPMLId.toInt(),
-            dosen1Nidn,
-            roleDosen,
-            "Selamat datang di forum diskusi Jetpack Compose. Silakan bertanya jika ada kendala.",
-            oneMonthAgo,
-        ),
-    )
-    forumDao.insertPost(
-        PostEntity(
-            0,
-            forumPMLId.toInt(),
-            mhs3Nim,
-            roleMahasiswa,
-            "Saya mengalami error 'XYZ' saat menjalankan preview, ada solusi?",
-            twentyDaysAgoFormat(),
-        ),
-    )
-    forumDao.insertPost(
-        PostEntity(
-            0,
-            forumPMLId.toInt(),
-            mhs1Nim,
-            roleMahasiswa,
-            "Coba cek versi library Compose dan Android Studio nya mas, mungkin tidak kompatibel.",
-            nineteenDaysAgoFormat(),
-        ),
-    )
-    forumDao.insertPost(
-        PostEntity(
-            0,
-            forumPMLId.toInt(),
-            dosen1Nidn,
-            roleDosen,
-            "@Budi Hartono, bisa lampirkan screenshot errornya?",
-            eighteenDaysAgoFormat(),
-        ),
-    )
-    // Forum AI
-    forumDao.insertPost(
-        PostEntity(
-            0,
-            forumAIId.toInt(),
-            dosen2Nidn,
-            roleDosen,
-            "Ada yang sudah membaca tentang Transformer model terbaru? Bagaimana implikasinya di computer vision?",
-            twoWeeksAgo,
-        ),
-    )
-    forumDao.insertPost(
-        PostEntity(
-            0,
-            forumAIId.toInt(),
-            mhs3Nim,
-            roleMahasiswa,
-            "Saya baru baca sekilas Prof, sepertinya menarik untuk NLP dan CV.",
-            tenDaysAgoFormat(),
-        ),
-    )
-    // Forum BDT
-    forumDao.insertPost(
-        PostEntity(
-            0,
-            forumBDTId.toInt(),
-            mhs1Nim,
-            roleMahasiswa,
-            "Untuk soal nomor 5 kuis kemarin, apakah ada yang punya jawaban berbeda?",
-            threeDaysAgo,
-        ),
-    )
-    forumDao.insertPost(
-        PostEntity(
-            0,
-            forumBDTId.toInt(),
-            mhs2Nim,
-            roleMahasiswa,
-            "Saya juga agak bingung di soal itu, terutama bagian konsistensi data.",
-            yesterday,
-        ),
-    )
-    forumDao.insertPost(
-        PostEntity(
-            0,
-            forumBDTId.toInt(),
-            dosen2Nidn,
-            roleDosen,
-            "Akan kita bahas di pertemuan berikutnya ya.",
-            currentDate,
-        ),
-    )
-    // Forum KOMMAS
-    forumDao.insertPost(
-        PostEntity(
-            0,
-            forumKOMMASId.toInt(),
-            mhs4Nim,
-            roleMahasiswa,
-            "Bagaimana cara membuat konten video pendek yang viral ya?",
-            oneWeekAgo,
-        ),
-    )
-    forumDao.insertPost(
-        PostEntity(
-            0,
-            forumKOMMASId.toInt(),
-            dosen4Nidn,
-            roleDosen,
-            "Fokus pada tren, musik yang sedang populer, dan storytelling yang singkat namun mengena.",
-            sixDaysAgoFormat(),
-        ),
-    )
-    // Forum POLPEM
-    forumDao.insertPost(
-        PostEntity(
-            0,
-            forumPOLPEMId.toInt(),
-            dosen4Nidn,
-            roleDosen,
-            "Mari kita diskusikan relevansi teori negara integralistik dalam konteks Indonesia saat ini.",
-            oneMonthAgo,
-        ),
-    )
-    forumDao.insertPost(
-        PostEntity(
-            0,
-            forumPOLPEMId.toInt(),
-            mhs5Nim,
-            roleMahasiswa,
-            "Menurut saya masih relevan Bu, terutama dalam menjaga persatuan.",
-            twentyDaysAgoFormat(),
-        ),
-    )
-    forumDao.insertPost(
-        PostEntity(
-            0,
-            forumPOLPEMId.toInt(),
-            mhs6Nim,
-            roleMahasiswa,
-            "Saya setuju dengan Eko, tapi bagaimana dengan potensi sentralisasi kekuasaan?",
-            nineteenDaysAgoFormat(),
-        ),
-    )
-    // Forum KEBPUB
-    forumDao.insertPost(
-        PostEntity(
-            0,
-            forumKEBPUBId.toInt(),
-            dosen5Nidn,
-            roleDosen,
-            "Silakan share temuan menarik dari analisis kebijakan yang sudah kalian baca.",
-            twoWeeksAgo,
-        ),
-    )
-    forumDao.insertPost(
-        PostEntity(
-            0,
-            forumKEBPUBId.toInt(),
-            mhs5Nim,
-            roleMahasiswa,
-            "Saya menemukan studi kasus menarik tentang partisipasi publik dalam kebijakan di negara Skandinavia.",
-            tenDaysAgoFormat(),
-        ),
-    )
-}
+    val postsToCreate =
+        listOf(
+            PostEntity(
+                postId = 0L,
+                forumId = forumPMLId,
+                userId = lecturer1Id,
+                userRole = roleLecturer,
+                postContent = "Selamat datang di forum diskusi Jetpack Compose. Silakan bertanya jika ada kendala.",
+                postDate = oneMonthAgo,
+            ),
+            PostEntity(
+                postId = 0L,
+                forumId = forumPMLId,
+                userId = student3Id,
+                userRole = roleStudent,
+                postContent = "Saya mengalami error 'XYZ' saat menjalankan preview, ada solusi?",
+                postDate = twentyDaysAgo,
+            ),
+            PostEntity(
+                postId = 0L,
+                forumId = forumPMLId,
+                userId = student1Id,
+                userRole = roleStudent,
+                postContent = "Coba cek versi library Compose dan Android Studio nya mas, mungkin tidak kompatibel.",
+                postDate = nineteenDaysAgo,
+            ),
+            PostEntity(
+                postId = 0L,
+                forumId = forumPMLId,
+                userId = lecturer1Id,
+                userRole = roleLecturer,
+                postContent = "@Budi Hartono, bisa lampirkan screenshot errornya?",
+                postDate = eighteenDaysAgo,
+            ),
+            PostEntity(
+                postId = 0L,
+                forumId = forumAIId,
+                userId = lecturer2Id,
+                userRole = roleLecturer,
+                postContent = "Ada yang sudah membaca tentang Transformer model terbaru? Bagaimana implikasinya di computer vision?",
+                postDate = twoWeeksAgo,
+            ),
+            PostEntity(
+                postId = 0L,
+                forumId = forumAIId,
+                userId = student3Id,
+                userRole = roleStudent,
+                postContent = "Saya baru baca sekilas Prof, sepertinya menarik untuk NLP dan CV.",
+                postDate = tenDaysAgo,
+            ),
+            // Forum BDT
+            PostEntity(
+                postId = 0L,
+                forumId = forumBDTId,
+                userId = student1Id,
+                userRole = roleStudent,
+                postContent = "Untuk soal nomor 5 kuis kemarin, apakah ada yang punya jawaban berbeda?",
+                postDate = threeDaysAgo,
+            ),
+            PostEntity(
+                postId = 0L,
+                forumId = forumBDTId,
+                userId = student2Id,
+                userRole = roleStudent,
+                postContent = "Saya juga agak bingung di soal itu, terutama bagian konsistensi data.",
+                postDate = yesterday,
+            ),
+            PostEntity(
+                postId = 0L,
+                forumId = forumBDTId,
+                userId = lecturer2Id,
+                userRole = roleLecturer,
+                postContent = "Akan kita bahas di pertemuan berikutnya ya.",
+                postDate = currentDate,
+            ),
+            PostEntity(
+                postId = 0L,
+                forumId = forumKOMMASId,
+                userId = student4Id,
+                userRole = roleStudent,
+                postContent = "Bagaimana cara membuat konten video pendek yang viral ya?",
+                postDate = oneWeekAgo,
+            ),
+            PostEntity(
+                postId = 0L,
+                forumId = forumKOMMASId,
+                userId = lecturer4Id,
+                userRole = roleLecturer,
+                postContent = "Fokus pada tren, musik yang sedang populer, dan storytelling yang singkat namun mengena.",
+                postDate = sixDaysAgo,
+            ),
+            PostEntity(
+                postId = 0L,
+                forumId = forumPOLPEMId,
+                userId = lecturer4Id,
+                userRole = roleLecturer,
+                postContent = "Mari kita diskusikan relevansi teori negara integralistik dalam konteks Indonesia saat ini.",
+                postDate = oneMonthAgo,
+            ),
+            PostEntity(
+                postId = 0L,
+                forumId = forumPOLPEMId,
+                userId = student5Id,
+                userRole = roleStudent,
+                postContent = "Menurut saya masih relevan Bu, terutama dalam menjaga persatuan.",
+                postDate = twentyDaysAgo,
+            ),
+            PostEntity(
+                postId = 0L,
+                forumId = forumPOLPEMId,
+                userId = student6Id,
+                userRole = roleStudent,
+                postContent = "Saya setuju dengan Eko, tapi bagaimana dengan potensi sentralisasi kekuasaan?",
+                postDate = nineteenDaysAgo,
+            ),
+            PostEntity(
+                postId = 0L,
+                forumId = forumKEBPUBId,
+                userId = lecturer5Id,
+                userRole = roleLecturer,
+                postContent = "Silakan share temuan menarik dari analisis kebijakan yang sudah kalian baca.",
+                postDate = twoWeeksAgo,
+            ),
+            PostEntity(
+                postId = 0L,
+                forumId = forumKEBPUBId,
+                userId = student5Id,
+                userRole = roleStudent,
+                postContent = "Saya menemukan studi kasus menarik tentang partisipasi publik dalam kebijakan di negara Skandinavia.",
+                postDate = tenDaysAgo,
+            ),
+        )
 
-private fun twentyDaysAgoFormat(): String {
-    val cal = Calendar.getInstance()
-    cal.add(
-        Calendar.DAY_OF_YEAR,
-        -20,
-    )
-    return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(cal.time)
-}
-
-private fun nineteenDaysAgoFormat(): String {
-    val cal = Calendar.getInstance()
-    cal.add(
-        Calendar.DAY_OF_YEAR,
-        -19,
-    )
-    return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(cal.time)
-}
-
-private fun eighteenDaysAgoFormat(): String {
-    val cal = Calendar.getInstance()
-    cal.add(
-        Calendar.DAY_OF_YEAR,
-        -18,
-    )
-    return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(cal.time)
-}
-
-private fun tenDaysAgoFormat(): String {
-    val cal = Calendar.getInstance()
-    cal.add(
-        Calendar.DAY_OF_YEAR,
-        -10,
-    )
-    return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(cal.time)
-}
-
-private fun sixDaysAgoFormat(): String {
-    val cal = Calendar.getInstance()
-    cal.add(
-        Calendar.DAY_OF_YEAR,
-        -6,
-    )
-    return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(cal.time)
+    postsToCreate.forEach { post ->
+        forumDao.insertPost(post)
+    }
 }

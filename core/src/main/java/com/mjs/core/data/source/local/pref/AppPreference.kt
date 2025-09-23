@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +18,7 @@ class AppPreference(
     private val dataStore: DataStore<Preferences>,
 ) {
     private val isLoggedInKey = booleanPreferencesKey("is_logged_in")
-    private val loggedInUserIdKey = intPreferencesKey("logged_in_user_id")
+    private val loggedInUserIdKey = longPreferencesKey("logged_in_user_id")
     private val loggedInUserTypeKey = stringPreferencesKey("logged_in_user_type")
 
     private val themeKey = booleanPreferencesKey("theme_setting")
@@ -39,7 +40,7 @@ class AppPreference(
             preferences[isLoggedInKey] ?: false
         }
 
-    fun getLoggedInUserId(): Flow<Int?> =
+    fun getLoggedInUserId(): Flow<Long?> =
         dataStore.data.map { preferences ->
             preferences[loggedInUserIdKey]
         }
@@ -50,7 +51,7 @@ class AppPreference(
         }
 
     suspend fun saveLoginSession(
-        userId: Int,
+        userId: Long,
         userType: String,
     ) {
         dataStore.edit { preferences ->
@@ -80,7 +81,7 @@ class AppPreference(
     }
 
     companion object {
-        const val USER_TYPE_MAHASISWA = "mahasiswa"
-        const val USER_TYPE_DOSEN = "dosen"
+        const val USER_TYPE_STUDENT = "student"
+        const val USER_TYPE_LECTURER = "lecturer"
     }
 }

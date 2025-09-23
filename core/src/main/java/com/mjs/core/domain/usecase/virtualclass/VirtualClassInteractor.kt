@@ -2,21 +2,21 @@ package com.mjs.core.domain.usecase.virtualclass
 
 import com.mjs.core.data.Resource
 import com.mjs.core.data.source.local.entity.AssignmentEntity
-import com.mjs.core.data.source.local.entity.AttendanceEntity
 import com.mjs.core.data.source.local.entity.EnrollmentEntity
-import com.mjs.core.data.source.local.entity.MahasiswaEntity
 import com.mjs.core.data.source.local.entity.PostEntity
+import com.mjs.core.data.source.local.entity.StudentEntity
 import com.mjs.core.data.source.local.entity.SubmissionEntity
-import com.mjs.core.domain.model.Dosen
+import com.mjs.core.data.source.local.entity.attendance.AttendanceEntity
+import com.mjs.core.domain.model.Assignment
+import com.mjs.core.domain.model.Attendance
+import com.mjs.core.domain.model.Course
 import com.mjs.core.domain.model.Forum
-import com.mjs.core.domain.model.Kehadiran
-import com.mjs.core.domain.model.Kelas
-import com.mjs.core.domain.model.Mahasiswa
-import com.mjs.core.domain.model.Materi
-import com.mjs.core.domain.model.Postingan
-import com.mjs.core.domain.model.Tugas
+import com.mjs.core.domain.model.Lecturer
+import com.mjs.core.domain.model.Material
+import com.mjs.core.domain.model.Post
+import com.mjs.core.domain.model.Student
 import com.mjs.core.domain.repository.IVirtualClassRepository
-import com.mjs.core.ui.task.SubmissionListItem
+import com.mjs.core.ui.submission.SubmissionListItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -27,164 +27,186 @@ class VirtualClassInteractor(
 
     override suspend fun saveThemeSetting(isDarkModeActive: Boolean) = virtualClassRepository.saveThemeSetting(isDarkModeActive)
 
-    override fun getLoggedInUserId(): Flow<Int?> = virtualClassRepository.getLoggedInUserId()
+    override fun getLoggedInUserId(): Flow<Long?> = virtualClassRepository.getLoggedInUserId()
 
     override fun getLoggedInUserType(): Flow<String?> = virtualClassRepository.getLoggedInUserType()
 
     override fun getLoginStatus(): Flow<Boolean> = virtualClassRepository.getLoginStatus()
 
     override suspend fun saveLoginSession(
-        userId: Int,
+        userId: Long,
         userType: String,
     ) = virtualClassRepository.saveLoginSession(userId, userType)
 
     override suspend fun clearLoginSession() = virtualClassRepository.clearLoginSession()
 
-    override fun loginDosen(
-        nidn: String,
+    override fun loginLecturer(
+        lecturerId: Long,
         password: String,
-    ): Flow<Resource<Dosen>> = virtualClassRepository.loginDosen(nidn, password)
+    ): Flow<Resource<Lecturer>> = virtualClassRepository.loginLecturer(lecturerId, password)
 
-    override fun loginMahasiswa(
-        nim: String,
+    override fun loginStudent(
+        studentId: Long,
         password: String,
-    ): Flow<Resource<Mahasiswa>> = virtualClassRepository.loginMahasiswa(nim, password)
+    ): Flow<Resource<Student>> = virtualClassRepository.loginStudent(studentId, password)
 
-    override fun getMahasiswaByNim(nim: Int): Flow<Resource<Mahasiswa>> = virtualClassRepository.getMahasiswaByNim(nim)
+    override fun getStudentByStudentId(studentId: Long): Flow<Resource<Student>> = virtualClassRepository.getStudentByStudentId(studentId)
 
-    override fun getDosenByNidn(nidn: Int): Flow<Resource<Dosen>> = virtualClassRepository.getDosenByNidn(nidn)
+    override fun getLecturerByLecturerId(lecturerId: Long): Flow<Resource<Lecturer>> =
+        virtualClassRepository.getLecturerByLecturerId(lecturerId)
 
-    override suspend fun registerMahasiswa(mahasiswa: MahasiswaEntity): Flow<Resource<String>> =
-        virtualClassRepository.registerMahasiswa(mahasiswa)
+    override suspend fun registerStudent(student: StudentEntity): Flow<Resource<String>> = virtualClassRepository.registerStudent(student)
 
-    override suspend fun updateMahasiswaProfile(mahasiswa: Mahasiswa): Flow<Resource<String>> =
-        virtualClassRepository.updateMahasiswaProfile(mahasiswa)
+    override suspend fun updateStudentProfile(student: Student): Flow<Resource<String>> =
+        virtualClassRepository.updateStudentProfile(student)
 
-    override suspend fun updateDosenProfile(dosen: Dosen): Flow<Resource<String>> = virtualClassRepository.updateDosenProfile(dosen)
+    override suspend fun updateLecturerProfile(lecturer: Lecturer): Flow<Resource<String>> =
+        virtualClassRepository.updateLecturerProfile(lecturer)
 
-    override fun getAllKelas(): Flow<Resource<List<Kelas>>> = virtualClassRepository.getAllKelas()
+    override fun getAllCourse(): Flow<Resource<List<Course>>> = virtualClassRepository.getAllCourse()
 
-    override fun getAllKelasByJurusan(jurusan: String): Flow<Resource<List<Kelas>>> = virtualClassRepository.getAllKelasByJurusan(jurusan)
+    override fun getAllCourseByDepartment(department: String): Flow<Resource<List<Course>>> =
+        virtualClassRepository.getAllCourseByDepartment(department)
 
-    override fun getKelasById(kelasId: String): Flow<Resource<Kelas>> = virtualClassRepository.getKelasById(kelasId)
+    override fun getCourseById(courseId: String): Flow<Resource<Course>> = virtualClassRepository.getCourseById(courseId)
 
-    override fun getEnrolledClasses(nim: Int): Flow<Resource<List<EnrollmentEntity>>> = virtualClassRepository.getEnrolledClasses(nim)
+    override fun getEnrolledCourse(studentId: Long): Flow<Resource<List<EnrollmentEntity>>> =
+        virtualClassRepository.getEnrolledCourse(studentId)
 
-    override fun getEnrollmentByNimAndKelasId(
-        nim: Int,
-        kelasId: String,
-    ): Flow<EnrollmentEntity?> = virtualClassRepository.getEnrollmentByNimAndKelasId(nim, kelasId)
+    override fun getEnrollmentByStudentIdAndCourseId(
+        studentId: Long,
+        courseId: String,
+    ): Flow<EnrollmentEntity?> = virtualClassRepository.getEnrollmentByStudentIdAndCourseId(studentId, courseId)
 
-    override suspend fun enrollToClass(enrollment: EnrollmentEntity): Flow<Resource<String>> =
-        virtualClassRepository.enrollToClass(enrollment)
+    override suspend fun enrollToCourse(enrollment: EnrollmentEntity): Flow<Resource<String>> =
+        virtualClassRepository.enrollToCourse(enrollment)
 
-    override suspend fun leaveClass(
-        nim: Int,
-        kelasId: String,
-    ): Flow<Resource<String>> = virtualClassRepository.leaveClass(nim, kelasId)
+    override suspend fun leaveCourse(
+        studentId: Long,
+        courseId: String,
+    ): Flow<Resource<String>> = virtualClassRepository.leaveCourse(studentId, courseId)
 
     override suspend fun acceptEnrollment(
-        nim: Int,
-        kelasId: String,
-    ): Flow<Resource<String>> = virtualClassRepository.updateEnrollmentStatus(nim, kelasId, "approved")
+        studentId: Long,
+        courseId: String,
+    ): Flow<Resource<String>> = virtualClassRepository.updateEnrollmentStatus(studentId, courseId, "approved")
 
     override suspend fun rejectEnrollment(
-        nim: Int,
-        kelasId: String,
-    ): Flow<Resource<String>> = virtualClassRepository.updateEnrollmentStatus(nim, kelasId, "rejected")
+        studentId: Long,
+        courseId: String,
+    ): Flow<Resource<String>> = virtualClassRepository.updateEnrollmentStatus(studentId, courseId, "rejected")
 
-    override fun getMaterialsByClass(kelasId: String): Flow<Resource<List<Materi>>> = virtualClassRepository.getMaterialsByClass(kelasId)
+    override fun getMaterialsByCourse(courseId: String): Flow<Resource<List<Material>>> =
+        virtualClassRepository.getMaterialsByCourse(courseId)
 
-    override fun getAssignmentsByClass(kelasId: String): Flow<Resource<List<Tugas>>> = virtualClassRepository.getAssignmentsByClass(kelasId)
+    override fun getAssignmentsByCourse(courseId: String): Flow<Resource<List<Assignment>>> =
+        virtualClassRepository.getAssignmentsByCourse(courseId)
 
-    override fun getAssignmentById(assignmentId: Int): Flow<Resource<Tugas?>> = virtualClassRepository.getAssignmentById(assignmentId)
+    override fun getAssignmentById(assignmentId: Long): Flow<Resource<Assignment?>> = virtualClassRepository.getAssignmentById(assignmentId)
 
     override suspend fun insertAssignment(assignment: AssignmentEntity): Flow<Resource<String>> =
         virtualClassRepository.insertAssignment(assignment)
 
-    override suspend fun updateTask(tugas: Tugas): Flow<Resource<String>> = virtualClassRepository.updateTask(tugas)
+    override suspend fun updateAssignment(assignment: Assignment): Flow<Resource<String>> =
+        virtualClassRepository.updateAssignment(assignment)
 
-    override suspend fun deleteAssignmentById(assignmentId: Int): Flow<Resource<String>> =
+    override suspend fun deleteAssignmentById(assignmentId: Long): Flow<Resource<String>> =
         virtualClassRepository.deleteAssignmentById(assignmentId)
 
     override suspend fun insertSubmission(submission: SubmissionEntity): Flow<Resource<String>> =
         virtualClassRepository.insertSubmission(submission)
 
-    override fun getSubmissionListItemsByAssignment(assignmentId: Int): Flow<Resource<List<SubmissionListItem>>> =
+    override fun getSubmissionListItemsByAssignment(assignmentId: Long): Flow<Resource<List<SubmissionListItem>>> =
         virtualClassRepository.getSubmissionListItemsByAssignment(assignmentId)
 
-    override fun getSubmissionDetailById(submissionId: Int): Flow<Resource<SubmissionListItem?>> =
+    override fun getSubmissionDetailById(submissionId: Long): Flow<Resource<SubmissionListItem?>> =
         virtualClassRepository.getSubmissionDetailById(submissionId)
 
     override suspend fun updateSubmissionGradeAndNote(
-        submissionId: Int,
+        submissionId: Long,
         grade: Int?,
         note: String?,
     ): Flow<Resource<String>> = virtualClassRepository.updateSubmissionGradeAndNote(submissionId, grade, note)
 
-    override fun getNotFinishedTasks(
-        nim: Int,
-        kelasId: String,
-    ): Flow<Resource<List<Tugas>>> = virtualClassRepository.getNotFinishedTasks(nim, kelasId)
+    override fun getNotFinishedAssignment(
+        studentId: Long,
+        courseId: String,
+    ): Flow<Resource<List<Assignment>>> = virtualClassRepository.getNotFinishedAssignment(studentId, courseId)
 
-    override fun getLateTasks(
-        nim: Int,
-        kelasId: String,
-    ): Flow<Resource<List<Tugas>>> = virtualClassRepository.getLateTasks(nim, kelasId)
+    override fun getLateAssignment(
+        studentId: Long,
+        courseId: String,
+    ): Flow<Resource<List<Assignment>>> = virtualClassRepository.getLateAssignment(studentId, courseId)
 
-    override fun getActiveAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>> =
-        virtualClassRepository.getActiveAssignmentsForDosen(nidn)
+    override fun getActiveAssignmentsForLecturer(lecturerId: Long): Flow<Resource<List<Assignment>>> =
+        virtualClassRepository.getActiveAssignmentsForLecturer(lecturerId)
 
-    override fun getPastDeadlineAssignmentsForDosen(nidn: Int): Flow<Resource<List<Tugas>>> =
-        virtualClassRepository.getPastDeadlineAssignmentsForDosen(nidn)
+    override fun getPastDeadlineAssignmentsForLecturer(lecturerId: Long): Flow<Resource<List<Assignment>>> =
+        virtualClassRepository.getPastDeadlineAssignmentsForLecturer(lecturerId)
 
-    override fun getForumsByClass(kelasId: String): Flow<Resource<List<Forum>>> = virtualClassRepository.getForumsByClass(kelasId)
+    override fun getForumsByCourse(courseId: String): Flow<Resource<List<Forum>>> = virtualClassRepository.getForumsByCourse(courseId)
 
-    override fun getPostsByForum(forumId: Int): Flow<Resource<List<Postingan>>> = virtualClassRepository.getPostsByForum(forumId)
+    override fun getPostsByForum(forumId: Long): Flow<Resource<List<Post>>> = virtualClassRepository.getPostsByForum(forumId)
 
     override suspend fun insertPost(post: PostEntity): Flow<Resource<String>> = virtualClassRepository.insertPost(post)
 
     override fun getAttendanceHistory(
-        nim: Int,
-        kelasId: String,
-    ): Flow<Resource<List<Kehadiran>>> = virtualClassRepository.getAttendanceHistory(nim, kelasId)
+        studentId: Long,
+        courseId: String,
+    ): Flow<Resource<List<Attendance>>> =
+        virtualClassRepository.getAttendanceHistory(studentId, courseId)
 
-    override suspend fun insertAttendance(attendance: AttendanceEntity): Flow<Resource<String>> =
+    override suspend fun insertAttendance(attendance: AttendanceEntity): Flow<Resource<Long>> =
         virtualClassRepository.insertAttendance(attendance).map { resource ->
             when (resource) {
-                is Resource.Success -> Resource.Success("Kehadiran berhasil dicatat dengan status: ${resource.data}")
-                is Resource.Error -> Resource.Error(resource.message ?: "Gagal mencatat kehadiran")
-                is Resource.Loading -> Resource.Loading()
+                is Resource.Success -> {
+                    val attendanceId = resource.data
+                    if (attendanceId != null) {
+                        Resource.Success(attendanceId)
+                    } else {
+                        Resource.Error("Failed to record attendance: Received null ID from repository")
+                    }
+                }
+
+                is Resource.Error ->
+                    Resource.Error(resource.message ?: "Failed to record attendance")
+
+                is Resource.Loading ->
+                    Resource.Loading()
             }
         }
 
-    override fun getTodaySchedule(nim: Int): Flow<Resource<List<Kelas>>> = virtualClassRepository.getTodaySchedule(nim)
+    override fun getTodaySchedule(studentId: Long): Flow<Resource<List<Course>>> =
+        virtualClassRepository.getTodaySchedule(studentId)
 
-    override fun getTodayScheduleDosen(nidn: Int): Flow<Resource<List<Kelas>>> = virtualClassRepository.getTodayScheduleDosen(nidn)
+    override fun getTodayScheduleLecturer(lecturerId: Long): Flow<Resource<List<Course>>> =
+        virtualClassRepository.getTodayScheduleLecturer(lecturerId)
 
-    override fun getAllSchedulesByNim(nim: Int): Flow<Resource<List<Kelas>>> = virtualClassRepository.getAllSchedulesByNim(nim)
+    override fun getAllSchedulesByStudentId(studentId: Long): Flow<Resource<List<Course>>> =
+        virtualClassRepository.getAllSchedulesByStudentId(studentId)
 
-    override fun getAllSchedulesByNidn(nidn: Int): Flow<Resource<List<Kelas>>> = virtualClassRepository.getAllSchedulesByNidn(nidn)
+    override fun getAllSchedulesByLecturerId(lecturerId: Long): Flow<Resource<List<Course>>> =
+        virtualClassRepository.getAllSchedulesByLecturerId(lecturerId)
 
     override fun getAttendanceStreak(
-        nim: Int,
-        kelasId: String,
-    ): Flow<Resource<Int>> = virtualClassRepository.getAttendanceStreak(nim, kelasId)
+        studentId: Long,
+        courseId: String,
+    ): Flow<Resource<Int>> = virtualClassRepository.getAttendanceStreak(studentId, courseId)
 
-    override fun getMahasiswaByKelasId(kelasId: String): Flow<Resource<List<Mahasiswa>>> =
-        virtualClassRepository.getMahasiswaByKelasId(kelasId)
+    override fun getStudentByCourseId(courseId: String): Flow<Resource<List<Student>>> =
+        virtualClassRepository.getStudentByCourseId(courseId)
 
-    override fun getMahasiswaCountByKelasId(kelasId: String): Flow<Resource<Int>> =
-        virtualClassRepository.getMahasiswaCountByKelasId(kelasId)
+    override fun getStudentCountByCourseId(courseId: String): Flow<Resource<Int>> =
+        virtualClassRepository.getStudentCountByCourseId(courseId)
 
-    override fun getPendingEnrollmentRequests(kelasId: String): Flow<Resource<List<Mahasiswa>>> =
-        virtualClassRepository.getPendingEnrollmentRequests(kelasId)
+    override fun getPendingEnrollmentRequests(courseId: String): Flow<Resource<List<Student>>> =
+        virtualClassRepository.getPendingEnrollmentRequests(courseId)
 
-    override fun getPendingEnrollmentRequestCount(kelasId: String): Flow<Resource<Int>> =
-        virtualClassRepository.getPendingEnrollmentRequestCount(kelasId)
+    override fun getPendingEnrollmentRequestCount(courseId: String): Flow<Resource<Int>> =
+        virtualClassRepository.getPendingEnrollmentRequestCount(courseId)
 
-    override fun getPendingEnrollmentRequestCountForDosen(nidn: Int): Flow<Resource<Int>> =
-        virtualClassRepository.getPendingEnrollmentRequestCountForDosen(nidn)
+    override fun getPendingEnrollmentRequestCountForLecturer(lecturerId: Long): Flow<Resource<Int>> =
+        virtualClassRepository.getPendingEnrollmentRequestCountForLecturer(lecturerId)
 
     override fun getLastNotifiedPendingCount(): Flow<Int> = virtualClassRepository.getLastNotifiedPendingCount()
 

@@ -1,29 +1,31 @@
 package com.mjs.core.data.source.local
 
 import com.mjs.core.data.source.local.entity.AssignmentEntity
-import com.mjs.core.data.source.local.entity.AttendanceEntity
-import com.mjs.core.data.source.local.entity.AttendanceStreakEntity
-import com.mjs.core.data.source.local.entity.DosenEntity
+import com.mjs.core.data.source.local.entity.CourseEntity
 import com.mjs.core.data.source.local.entity.EnrollmentEntity
 import com.mjs.core.data.source.local.entity.ForumEntity
-import com.mjs.core.data.source.local.entity.KelasEntity
-import com.mjs.core.data.source.local.entity.MahasiswaEntity
+import com.mjs.core.data.source.local.entity.LecturerEntity
 import com.mjs.core.data.source.local.entity.MaterialEntity
 import com.mjs.core.data.source.local.entity.PostEntity
+import com.mjs.core.data.source.local.entity.StudentEntity
 import com.mjs.core.data.source.local.entity.SubmissionEntity
+import com.mjs.core.data.source.local.entity.attendance.AttendanceEntity
+import com.mjs.core.data.source.local.entity.attendance.AttendanceStreakEntity
 import com.mjs.core.data.source.local.pref.AppPreference
+import com.mjs.core.data.source.local.room.dao.AssignmentDao
 import com.mjs.core.data.source.local.room.dao.AttendanceDao
 import com.mjs.core.data.source.local.room.dao.AuthDao
-import com.mjs.core.data.source.local.room.dao.ClassroomDao
+import com.mjs.core.data.source.local.room.dao.CourseDao
 import com.mjs.core.data.source.local.room.dao.ForumDao
-import com.mjs.core.data.source.local.room.dao.TaskDao
+import com.mjs.core.data.source.local.room.dao.SubmissionDao
 import kotlinx.coroutines.flow.Flow
 
 class LocalDataSource(
     private val appPreference: AppPreference,
     private val authDao: AuthDao,
-    private val classroomDao: ClassroomDao,
-    private val taskDao: TaskDao,
+    private val courseDao: CourseDao,
+    private val assignmentDao: AssignmentDao,
+    private val submissionDao: SubmissionDao,
     private val forumDao: ForumDao,
     private val attendanceDao: AttendanceDao,
 ) {
@@ -36,7 +38,7 @@ class LocalDataSource(
     fun getLoginStatus(): Flow<Boolean> = appPreference.getLoginStatus()
 
     suspend fun saveLoginSession(
-        userId: Int,
+        userId: Long,
         userType: String,
     ) {
         appPreference.saveLoginSession(userId, userType)
@@ -46,127 +48,140 @@ class LocalDataSource(
         appPreference.clearLoginSession()
     }
 
-    fun getLoggedInUserId(): Flow<Int?> = appPreference.getLoggedInUserId()
+    fun getLoggedInUserId(): Flow<Long?> = appPreference.getLoggedInUserId()
 
     fun getLoggedInUserType(): Flow<String?> = appPreference.getLoggedInUserType()
 
-    suspend fun registerMahasiswa(mahasiswa: MahasiswaEntity) = authDao.registerMahasiswa(mahasiswa)
+    suspend fun registerStudent(student: StudentEntity) = authDao.registerStudent(student)
 
-    fun getMahasiswaByNim(nim: Int): Flow<MahasiswaEntity?> = authDao.getMahasiswaByNim(nim)
+    fun getStudentById(studentId: Long): Flow<StudentEntity?> = authDao.getStudentById(studentId)
 
-    suspend fun updateMahasiswa(mahasiswa: MahasiswaEntity) = authDao.updateMahasiswa(mahasiswa)
+    suspend fun updateStudent(student: StudentEntity) = authDao.updateStudent(student)
 
-    fun getDosenByNidn(nidn: Int): Flow<DosenEntity?> = authDao.getDosenByNidn(nidn)
+    fun getLecturerById(lecturerId: Long): Flow<LecturerEntity?> = authDao.getLecturerById(lecturerId)
 
-    suspend fun updateDosen(dosen: DosenEntity) = authDao.updateDosen(dosen)
+    suspend fun updateLecturer(lecturer: LecturerEntity) = authDao.updateLecturer(lecturer)
 
-    fun getAllKelas(): Flow<List<KelasEntity>> = classroomDao.getAllKelas()
+    fun getAllCourses(): Flow<List<CourseEntity>> = courseDao.getAllCourses()
 
-    fun getAllKelasByJurusan(jurusan: String): Flow<List<KelasEntity>> = classroomDao.getAllKelasByJurusan(jurusan)
+    fun getAllCoursesByDepartment(department: String): Flow<List<CourseEntity>> = courseDao.getAllCoursesByDepartment(department)
 
-    fun getKelasById(kelasId: String): Flow<KelasEntity?> = classroomDao.getKelasById(kelasId)
+    fun getCourseById(courseId: String): Flow<CourseEntity?> = courseDao.getCourseById(courseId)
 
-    suspend fun insertKelas(kelas: KelasEntity) = classroomDao.insertKelas(kelas)
+    suspend fun insertCourse(course: CourseEntity) = courseDao.insertCourse(course)
 
-    suspend fun insertEnrollment(enrollment: EnrollmentEntity) = classroomDao.insertEnrollment(enrollment)
+    suspend fun insertEnrollment(enrollment: EnrollmentEntity) = courseDao.insertEnrollment(enrollment)
 
     suspend fun deleteEnrollment(
-        nim: Int,
-        kelasId: String,
-    ) = classroomDao.deleteEnrollment(nim, kelasId)
+        studentId: Long,
+        courseId: String,
+    ) = courseDao.deleteEnrollment(studentId, courseId)
 
-    fun getEnrolledClasses(nim: Int): Flow<List<EnrollmentEntity>> = classroomDao.getEnrolledClasses(nim)
+    fun getEnrollmentsByStudentId(studentId: Long): Flow<List<EnrollmentEntity>> = courseDao.getEnrollmentsByStudentId(studentId)
 
-    fun getEnrollmentByNimAndKelasId(
-        nim: Int,
-        kelasId: String,
-    ): Flow<EnrollmentEntity?> = classroomDao.getEnrollmentByNimAndKelasId(nim, kelasId)
+    fun getEnrollmentByStudentIdAndCourseId(
+        studentId: Long,
+        courseId: String,
+    ): Flow<EnrollmentEntity?> = courseDao.getEnrollmentByStudentIdAndCourseId(studentId, courseId)
 
-    fun getMaterialsByClass(kelasId: String): Flow<List<MaterialEntity>> = classroomDao.getMaterialsByClass(kelasId)
+    fun getMaterialsByCourseId(courseId: String): Flow<List<MaterialEntity>> = courseDao.getMaterialsByCourseId(courseId)
 
-    suspend fun insertMaterial(material: MaterialEntity) = classroomDao.insertMaterial(material)
+    suspend fun insertMaterial(material: MaterialEntity) = courseDao.insertMaterial(material)
 
-    fun getAssignmentsByClass(kelasId: String): Flow<List<AssignmentEntity>> = taskDao.getAssignmentsByClass(kelasId)
+    fun getAssignmentsByCourse(courseId: String): Flow<List<AssignmentEntity>> = assignmentDao.getAssignmentsByCourse(courseId)
 
-    suspend fun insertAssignment(assignment: AssignmentEntity) = taskDao.insertAssignment(assignment)
+    suspend fun insertAssignment(assignment: AssignmentEntity): Long = assignmentDao.insertAssignment(assignment)
 
-    suspend fun updateTask(assignment: AssignmentEntity) = taskDao.updateTask(assignment)
+    suspend fun updateAssignment(assignment: AssignmentEntity) = assignmentDao.updateAssignment(assignment)
 
-    fun getAssignmentById(assignmentId: Int): Flow<AssignmentEntity?> = taskDao.getAssignmentById(assignmentId)
+    fun getAssignmentById(assignmentId: Long): Flow<AssignmentEntity?> = assignmentDao.getAssignmentById(assignmentId)
 
-    suspend fun deleteAssignmentById(assignmentId: Int) = taskDao.deleteAssignmentById(assignmentId)
+    suspend fun deleteAssignmentById(assignmentId: Long) = assignmentDao.deleteAssignmentById(assignmentId)
 
-    suspend fun insertSubmission(submission: SubmissionEntity) = taskDao.insertSubmission(submission)
+    suspend fun insertSubmission(submission: SubmissionEntity): Long = submissionDao.insertSubmission(submission)
 
-    fun getSubmissionsByAssignment(assignmentId: Int): Flow<List<SubmissionEntity>> = taskDao.getSubmissionsByAssignment(assignmentId)
+    fun getSubmissionsByAssignment(assignmentId: Long): Flow<List<SubmissionEntity>> =
+        submissionDao.getSubmissionsByAssignment(assignmentId)
 
-    fun getSubmissionById(submissionId: Int): Flow<SubmissionEntity?> = taskDao.getSubmissionById(submissionId)
+    fun getSubmissionById(submissionId: Long): Flow<SubmissionEntity?> = submissionDao.getSubmissionById(submissionId)
 
     suspend fun updateSubmissionGradeAndNote(
-        submissionId: Int,
+        submissionId: Long,
         grade: Int?,
         note: String?,
-    ) = taskDao.updateSubmissionGradeAndNote(submissionId, grade, note)
+    ) = submissionDao.updateSubmissionGradeAndNote(submissionId, grade, note)
 
-    fun getForumsByClass(kelasId: String): Flow<List<ForumEntity>> = forumDao.getForumsByClass(kelasId)
+    fun getForumsByCourse(courseId: String): Flow<List<ForumEntity>> = forumDao.getForumsByCourse(courseId)
 
-    suspend fun insertForum(forum: ForumEntity) = forumDao.insertForum(forum)
+    suspend fun insertForum(forum: ForumEntity): Long = forumDao.insertForum(forum)
 
-    fun getPostsByForum(forumId: Int): Flow<List<PostEntity>> = forumDao.getPostsByForum(forumId)
+    fun getPostsByForumId(forumId: Long): Flow<List<PostEntity>> = forumDao.getPostsByForumId(forumId)
 
     suspend fun insertPost(post: PostEntity) = forumDao.insertPost(post)
 
-    suspend fun insertAttendance(attendance: AttendanceEntity) = attendanceDao.insertAttendance(attendance)
+    suspend fun insertAttendance(attendance: AttendanceEntity): Long =
+        attendanceDao.insertAttendance(attendance)
 
     fun getAttendanceHistory(
-        nim: Int,
-        kelasId: String,
-    ): Flow<List<AttendanceEntity>> = attendanceDao.getAttendanceHistory(nim, kelasId)
+        studentId: Long,
+        courseId: String,
+    ): Flow<List<AttendanceEntity>> = attendanceDao.getAttendanceHistory(studentId, courseId)
+
+    suspend fun insertAttendanceStreak(streak: AttendanceStreakEntity): Long = attendanceDao.insertAttendanceStreak(streak)
 
     suspend fun updateAttendanceStreak(streak: AttendanceStreakEntity) = attendanceDao.updateAttendanceStreak(streak)
 
     fun getAttendanceStreak(
-        nim: Int,
-        kelasId: String,
-    ): Flow<AttendanceStreakEntity?> = attendanceDao.getAttendanceStreak(nim, kelasId)
+        studentId: Long,
+        courseId: String,
+    ): Flow<AttendanceStreakEntity?> = attendanceDao.getAttendanceStreak(studentId, courseId)
 
-    fun getNotFinishedTasks(
-        nim: Int,
-        kelasId: String,
+    fun getNotFinishedAssignments(
+        studentId: Long,
+        courseId: String,
         currentDate: String,
-    ): Flow<List<AssignmentEntity>> = taskDao.getNotFinishedTasks(nim, kelasId, currentDate)
+    ): Flow<List<AssignmentEntity>> =
+        assignmentDao.getPendingAssignmentsForStudent(studentId, courseId, currentDate)
 
-    fun getLateTasks(
-        nim: Int,
-        kelasId: String,
+    fun getLateAssignments(
+        studentId: Long,
+        courseId: String,
         currentDate: String,
-    ): Flow<List<AssignmentEntity>> = taskDao.getLateTasks(nim, kelasId, currentDate)
+    ): Flow<List<AssignmentEntity>> =
+        assignmentDao.getMissedAssignmentsForStudent(studentId, courseId, currentDate)
 
-    fun getAssignmentsByKelasIdsAndFutureDeadline(
-        kelasIds: List<String>,
+    fun getAssignmentsByCourseIdsAndFutureDeadline(
+        courseIds: List<String>,
         currentDate: String,
-    ): Flow<List<AssignmentEntity>> = taskDao.getAssignmentsByKelasIdsAndFutureDeadline(kelasIds, currentDate)
+    ): Flow<List<AssignmentEntity>> =
+        assignmentDao.getActiveAssignmentsByCourses(courseIds, currentDate)
 
-    fun getAssignmentsByKelasIdsAndPastDeadline(
-        kelasIds: List<String>,
+    fun getAssignmentsByCourseIdsAndPastDeadline(
+        courseIds: List<String>,
         currentDate: String,
-    ): Flow<List<AssignmentEntity>> = taskDao.getAssignmentsByKelasIdsAndPastDeadline(kelasIds, currentDate)
+    ): Flow<List<AssignmentEntity>> =
+        assignmentDao.getPastAssignmentsByCourses(courseIds, currentDate)
 
-    fun getMahasiswaByKelasId(kelasId: String): Flow<List<MahasiswaEntity>> = classroomDao.getMahasiswaByKelasId(kelasId)
+    fun getStudentsByCourseId(courseId: String): Flow<List<StudentEntity>> =
+        courseDao.getStudentsByCourseId(courseId)
 
-    fun getMahasiswaCountByKelasId(kelasId: String): Flow<Int> = classroomDao.getMahasiswaCountByKelasId(kelasId)
+    fun getStudentCountByCourseId(courseId: String): Flow<Int> =
+        courseDao.getStudentCountByCourseId(courseId)
 
-    fun getAllSchedulesByNim(nim: Int): Flow<List<KelasEntity>> = classroomDao.getAllSchedulesByNim(nim)
+    fun getAllCoursesByStudentId(studentId: Long): Flow<List<CourseEntity>> =
+        courseDao.getAllCoursesByStudentId(studentId)
 
-    fun getPendingEnrollmentRequests(kelasId: String): Flow<List<MahasiswaEntity>> = classroomDao.getPendingEnrollmentRequests(kelasId)
+    fun getPendingEnrollmentRequests(courseId: String): Flow<List<StudentEntity>> =
+        courseDao.getPendingEnrollmentRequests(courseId)
 
-    fun getPendingEnrollmentRequestCount(kelasId: String): Flow<Int> = classroomDao.getPendingEnrollmentRequestCount(kelasId)
+    fun getPendingEnrollmentRequestCount(courseId: String): Flow<Int> =
+        courseDao.getPendingEnrollmentRequestCount(courseId)
 
     suspend fun updateEnrollmentStatus(
-        nim: Int,
-        kelasId: String,
+        studentId: Long,
+        courseId: String,
         newStatus: String,
-    ) = classroomDao.updateEnrollmentStatus(nim, kelasId, newStatus)
+    ) = courseDao.updateEnrollmentStatus(studentId, courseId, newStatus)
 
     fun getLastNotifiedPendingCount(): Flow<Int> = appPreference.getLastNotifiedPendingCount()
 

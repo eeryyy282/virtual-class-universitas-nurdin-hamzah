@@ -22,9 +22,6 @@ interface AttendanceDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAttendanceStreak(streak: AttendanceStreakEntity): Long
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun updateAttendanceStreak(streak: AttendanceStreakEntity)
-
     @Query("SELECT * FROM attendance_streak WHERE student_id = :studentId AND course_id = :courseId")
     fun getAttendanceStreak(
         studentId: Long,

@@ -47,13 +47,13 @@ class SplashScreen : AppCompatActivity() {
 
             if (isLoggedIn) {
                 when (userType) {
-                    VirtualClassUseCase.USER_TYPE_MAHASISWA -> {
-                        val uri = "mahasiswa://mainactivity".toUri()
+                    VirtualClassUseCase.USER_TYPE_STUDENT -> {
+                        val uri = "student://mainactivity".toUri()
                         navigateTo(uri)
                     }
 
-                    VirtualClassUseCase.USER_TYPE_DOSEN -> {
-                        val uri = "dosen://mainactivity".toUri()
+                    VirtualClassUseCase.USER_TYPE_LECTURER -> {
+                        val uri = "lecturer://mainactivity".toUri()
                         navigateTo(uri)
                     }
 

@@ -46,12 +46,12 @@ android {
             setOf(
                 ":onboarding",
                 ":authentication",
-                ":mahasiswa",
-                ":dosen",
+                ":student",
+                ":course",
                 ":profilesettings",
             )
     }
-    dynamicFeatures += setOf(":detailclass", ":enrollclass", ":task")
+    dynamicFeatures += setOf(":course", ":enrollcourse", ":assignment", ":submission")
 
     dependencies {
 

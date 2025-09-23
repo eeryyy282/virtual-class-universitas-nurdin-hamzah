@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.course.CourseFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/image_view_logo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="17dp"
+            android:contentDescription="@string/unh_logo_image_description"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/logo_unh" />
+
+        <TextView
+            android:id="@+id/text_view_logo_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/unh_logo_title"
+            android:textColor="@color/outline_color_theme"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/image_view_logo"
+            app:layout_constraintStart_toEndOf="@+id/image_view_logo"
+            app:layout_constraintTop_toTopOf="@+id/image_view_logo" />
+
+        <ImageView
+            android:id="@+id/image_view_course_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="18dp"
+            android:contentDescription="@string/course_icon_description"
+            android:src="@drawable/classroom_icon"
+            app:layout_constraintStart_toStartOf="@+id/image_view_logo"
+            app:layout_constraintTop_toBottomOf="@+id/image_view_logo"
+            app:tint="@color/outline_color_theme" />
+
+        <TextView
+            android:id="@+id/text_view_course_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/title_course"
+            android:textColor="@color/outline_color_theme"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/image_view_course_icon"
+            app:layout_constraintStart_toEndOf="@+id/image_view_course_icon"
+            app:layout_constraintTop_toTopOf="@+id/image_view_course_icon" />
+
+        <TextView
+            android:id="@+id/text_view_course_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="27dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/course_page_description"
+            android:textColor="@color/text_color_themed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/image_view_course_icon"
+            app:layout_constraintTop_toBottomOf="@+id/image_view_course_icon" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_view_course_stats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/classic_blue"
+            app:layout_constraintStart_toStartOf="@+id/text_view_course_description"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_course_description"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card.RoundedExceptRightBottom">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/text_view_total_courses_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/zero"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/text_view_total_courses_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="14dp"
+                    android:fontFamily="@font/lato"
+                    android:text="@string/enrolled_courses_label"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_total_courses_count" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/text_view_enroll_prompt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/find_course_prompt"
+            android:textColor="@color/outline_color_theme"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/text_view_course_description"
+            app:layout_constraintStart_toEndOf="@+id/card_view_course_stats"
+            app:layout_constraintTop_toTopOf="@+id/card_view_course_stats" />
+
+        <Button
+            android:id="@+id/button_enroll_course"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:backgroundTint="@color/air_force_blue"
+            android:fontFamily="@font/lato"
+            android:text="@string/enroll_new_course_button"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:cornerRadius="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/card_view_course_stats"
+            app:layout_constraintEnd_toEndOf="@+id/text_view_enroll_prompt"
+            app:layout_constraintStart_toStartOf="@+id/text_view_enroll_prompt"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_enroll_prompt"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_course_list"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/button_enroll_course"
+            app:layout_constraintStart_toStartOf="@+id/card_view_course_stats"
+            app:layout_constraintTop_toBottomOf="@+id/card_view_course_stats"
+            tools:listitem="@layout/item_course_detail" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar_course_loading"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="128dp"
+            android:indeterminateTint="@color/outline_color_theme"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/button_enroll_course"
+            app:layout_constraintStart_toStartOf="@+id/card_view_course_stats"
+            app:layout_constraintTop_toBottomOf="@+id/card_view_course_stats" />
+
+        <ImageView
+            android:id="@+id/image_view_no_course"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="64dp"
+            android:contentDescription="@string/no_content_image_description"
+            android:src="@drawable/doesnt_have_an_content_icon"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/button_enroll_course"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="@+id/card_view_course_stats"
+            app:layout_constraintTop_toBottomOf="@+id/card_view_course_stats" />
+
+        <TextView
+            android:id="@+id/text_view_no_course_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="64dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/no_courses_message"
+            android:textAlignment="center"
+            android:textColor="@color/text_color_themed"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/button_enroll_course"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/card_view_course_stats"
+            app:layout_constraintTop_toBottomOf="@+id/image_view_no_course"
+            app:layout_constraintVertical_bias="0.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

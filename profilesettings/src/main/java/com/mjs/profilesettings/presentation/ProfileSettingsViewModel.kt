@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.mjs.core.data.Resource
-import com.mjs.core.domain.model.Dosen
-import com.mjs.core.domain.model.Mahasiswa
+import com.mjs.core.domain.model.Lecturer
+import com.mjs.core.domain.model.Student
 import com.mjs.core.domain.usecase.virtualclass.VirtualClassUseCase
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -17,11 +17,11 @@ class ProfileSettingsViewModel(
 ) : ViewModel() {
     val getThemeSetting = virtualClassUseCase.getThemeSetting().asLiveData()
 
-    private val _mahasiswaProfile = MutableLiveData<Resource<Mahasiswa>>()
-    val mahasiswaProfile: LiveData<Resource<Mahasiswa>> = _mahasiswaProfile
+    private val _studentProfile = MutableLiveData<Resource<Student>>()
+    val studentProfile: LiveData<Resource<Student>> = _studentProfile
 
-    private val _dosenProfile = MutableLiveData<Resource<Dosen>>()
-    val dosenProfile: LiveData<Resource<Dosen>> = _dosenProfile
+    private val _lecturerProfile = MutableLiveData<Resource<Lecturer>>()
+    val lecturerProfile: LiveData<Resource<Lecturer>> = _lecturerProfile
 
     private val _updateProfileResult = MutableLiveData<Resource<String>>()
     val updateProfileResult: LiveData<Resource<String>> = _updateProfileResult
@@ -32,13 +32,13 @@ class ProfileSettingsViewModel(
             val userType = virtualClassUseCase.getLoggedInUserType().first()
 
             if (userId != null && userType != null) {
-                if (userType == VirtualClassUseCase.USER_TYPE_MAHASISWA) {
-                    virtualClassUseCase.getMahasiswaByNim(userId).collect {
-                        _mahasiswaProfile.value = it
+                if (userType == VirtualClassUseCase.USER_TYPE_STUDENT) {
+                    virtualClassUseCase.getStudentByStudentId(userId).collect {
+                        _studentProfile.value = it
                     }
-                } else if (userType == VirtualClassUseCase.USER_TYPE_DOSEN) {
-                    virtualClassUseCase.getDosenByNidn(userId).collect {
-                        _dosenProfile.value = it
+                } else if (userType == VirtualClassUseCase.USER_TYPE_LECTURER) {
+                    virtualClassUseCase.getLecturerByLecturerId(userId).collect {
+                        _lecturerProfile.value = it
                     }
                 }
             }
@@ -55,22 +55,24 @@ class ProfileSettingsViewModel(
 
             if (userId != null && userType != null) {
                 _updateProfileResult.value = Resource.Loading()
-                if (userType == VirtualClassUseCase.USER_TYPE_MAHASISWA) {
-                    val currentMahasiswa = mahasiswaProfile.value?.data
-                    if (currentMahasiswa != null) {
-                        val updatedMahasiswa = currentMahasiswa.copy(nama = nama, email = email)
-                        virtualClassUseCase.updateMahasiswaProfile(updatedMahasiswa).collect {
+                if (userType == VirtualClassUseCase.USER_TYPE_STUDENT) {
+                    val currentStudent = studentProfile.value?.data
+                    if (currentStudent != null) {
+                        val updatedStudent =
+                            currentStudent.copy(name = nama, email = email)
+                        virtualClassUseCase.updateStudentProfile(updatedStudent).collect {
                             _updateProfileResult.value = it
                         }
                     } else {
                         _updateProfileResult.value =
                             Resource.Error("Data mahasiswa tidak ditemukan")
                     }
-                } else if (userType == VirtualClassUseCase.USER_TYPE_DOSEN) {
-                    val currentDosen = dosenProfile.value?.data
-                    if (currentDosen != null) {
-                        val updatedDosen = currentDosen.copy(nama = nama, email = email)
-                        virtualClassUseCase.updateDosenProfile(updatedDosen).collect {
+                } else if (userType == VirtualClassUseCase.USER_TYPE_LECTURER) {
+                    val currentLecturer = lecturerProfile.value?.data
+                    if (currentLecturer != null) {
+                        val updatedLecturer =
+                            currentLecturer.copy(name = nama, email = email)
+                        virtualClassUseCase.updateLecturerProfile(updatedLecturer).collect {
                             _updateProfileResult.value = it
                         }
                     } else {

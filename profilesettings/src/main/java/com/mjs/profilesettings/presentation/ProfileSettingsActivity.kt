@@ -42,7 +42,7 @@ class ProfileSettingsActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        profileSettingsViewModel.mahasiswaProfile.observe(this) {
+        profileSettingsViewModel.studentProfile.observe(this) {
             when (it) {
                 is Resource.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -50,12 +50,12 @@ class ProfileSettingsActivity : AppCompatActivity() {
 
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    val mahasiswa = it.data
-                    binding.etProfileName.setText(mahasiswa?.nama)
-                    binding.etProfileEmail.setText(mahasiswa?.email)
+                    val student = it.data
+                    binding.etProfileName.setText(student?.name)
+                    binding.etProfileEmail.setText(student?.email)
                     Glide
                         .with(this)
-                        .load(mahasiswa?.fotoProfil)
+                        .load(student?.profilePicture)
                         .placeholder(R.drawable.profile_photo)
                         .error(R.drawable.profile_photo)
                         .into(binding.photoProfileSetting)
@@ -68,7 +68,7 @@ class ProfileSettingsActivity : AppCompatActivity() {
             }
         }
 
-        profileSettingsViewModel.dosenProfile.observe(this) {
+        profileSettingsViewModel.lecturerProfile.observe(this) {
             when (it) {
                 is Resource.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -76,12 +76,12 @@ class ProfileSettingsActivity : AppCompatActivity() {
 
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    val dosen = it.data
-                    binding.etProfileName.setText(dosen?.nama)
-                    binding.etProfileEmail.setText(dosen?.email)
+                    val lecturer = it.data
+                    binding.etProfileName.setText(lecturer?.name)
+                    binding.etProfileEmail.setText(lecturer?.email)
                     Glide
                         .with(this)
-                        .load(dosen?.fotoProfil)
+                        .load(lecturer?.profilePicture)
                         .placeholder(R.drawable.profile_photo)
                         .error(R.drawable.profile_photo)
                         .into(binding.photoProfileSetting)

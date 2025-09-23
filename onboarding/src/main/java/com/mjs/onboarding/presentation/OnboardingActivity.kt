@@ -57,12 +57,12 @@ class OnboardingActivity : AppCompatActivity() {
                 )
 
             btnLoginAsMahasiswaOnboarding.setOnClickListener {
-                val uri = "authentication://login_as_mahasiswa".toUri()
+                val uri = "authentication://login_as_student".toUri()
                 val intent = Intent(Intent.ACTION_VIEW, uri)
                 startActivity(intent, animationOptions.toBundle())
             }
             btnLoginAsDosenOnboarding.setOnClickListener {
-                val uri = "authentication://login_as_dosen".toUri()
+                val uri = "authentication://login_as_lecturer".toUri()
                 val intent = Intent(Intent.ACTION_VIEW, uri)
                 startActivity(intent, animationOptions.toBundle())
             }
